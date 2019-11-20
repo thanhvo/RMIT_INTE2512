@@ -22,6 +22,7 @@ import java.util.Scanner;
 
 public class ContactList {
     private ArrayList<Contact> contactList;
+    private static final String filePath  = "input/contacts.txt";
 
     public ContactList() {
         contactList = new ArrayList<Contact>();
@@ -76,7 +77,10 @@ public class ContactList {
     public List<Contact> getContactList(String keyWord) {
         ArrayList<Contact> list = new ArrayList<Contact>();
         for (Contact contact : contactList) {
-            if (contact.getName().toUpperCase().contains(keyWord.toUpperCase())) {
+            if (contact.getName().toUpperCase().contains(keyWord.toUpperCase()) ||
+                contact.getAddress().toUpperCase().contains(keyWord.toUpperCase()) ||
+                contact.getPhone().toUpperCase().contains(keyWord.toUpperCase()) ||
+                contact.getEmail().toUpperCase().contains(keyWord.toUpperCase())) {
                 list.add(contact);
             }
         }
