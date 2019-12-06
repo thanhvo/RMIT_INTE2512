@@ -53,6 +53,7 @@ public class ContactList {
         System.out.println();
     }
 
+    // Show the contacts from a list
     public void showContacts(List<Contact> list) {
         System.out.println();
         System.out.printf("%-4s%-21s%-15s%-25s%s\n", "Id","Name","Phone", "Email", "Address");

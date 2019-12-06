@@ -19,6 +19,7 @@ public class Main {
     private static String inputFilePath = "input/contacts.txt";
     private static String outputFilePath = "output/contacts.txt";
 
+    // Show the list of options
     private static void showMenu() {
         String menu = "1. Load contacts from file\n" +
                 "2. View all contacts\n" +
@@ -30,9 +31,9 @@ public class Main {
                 "8. Save contacts to file\n" +
                 "9. Quit\n" +
                 "\n" +
-                "Select a function (1-9):";
+                "Select a function (1-9): ";
 
-        System.out.println(menu);
+        System.out.print(menu);
     }
 
     // Check if a name is valid
@@ -90,18 +91,18 @@ public class Main {
         int id = scanner.nextInt();
         scanner.nextLine();
         Contact contact = contactList.getContact(id);
-        System.out.println("Enter new name: ");
+        System.out.println("Enter new name. Press Enter if you don't want to change it.");
         String newName = scanner.nextLine();
-        System.out.println("Enter new phone number: ");
+        System.out.println("Enter new phone number. Press Enter if you don't want to change it.");
         String newPhone = scanner.nextLine();
-        System.out.println("Enter new email: ");
+        System.out.println("Enter new email. Press Enter if you dont' want to change it.");
         String newEmail = scanner.nextLine();
-        System.out.println("Enter new address: ");
+        System.out.println("Enter new address. Press Enter if you don't want to change it.");
         String newAddress = scanner.nextLine();
-        contact.setName(newName);
-        contact.setPhone(newPhone);
-        contact.setEmail(newEmail);
-        contact.setAddress(newAddress);
+        if (!newName.isEmpty()) contact.setName(newName);
+        if (!newPhone.isEmpty()) contact.setPhone(newPhone);
+        if (!newEmail.isEmpty()) contact.setEmail(newEmail);
+        if (!newAddress.isEmpty()) contact.setAddress(newAddress);
     }
 
     // Delete a contact
@@ -141,6 +142,7 @@ public class Main {
         contactList.viewContacts();
     }
 
+    // The main program
     public static void main(String[] args) {
         ContactList contactList = new ContactList();
         // Declare the variables used in the switch
