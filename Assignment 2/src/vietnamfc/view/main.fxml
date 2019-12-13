@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.image.Image?>
 <GridPane fx:id="gridPane" alignment="center" hgap="10" vgap="10" xmlns:fx="http://javafx.com/fxml/1"
-          xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="vietnamfc.Controller">
+          xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="vietnamfc.controller.Controller">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -15,14 +15,5 @@
       <RowConstraints />
       <RowConstraints />
    </rowConstraints>
-    <!--
-    <Button layoutX="250.0" layoutY="150.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="Button!" textFill="BLUE">
-        <font>
-            <Font name="Avenir Next Regular" size="13.0" />
-        </font>
-        <graphic>
-            <ImageView fx:id="logo"/>
-        </graphic>
-    </Button>
-    -->
+
 </GridPane>
