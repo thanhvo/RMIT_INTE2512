@@ -19,7 +19,6 @@ import java.util.ArrayList;
  */
 public class Cell {
     private static final int BUTTON_SIZE = 200;
-    private int wait = 3;
     private int row;
     private int column;
     // To check if we show the image or not
@@ -48,6 +47,11 @@ public class Cell {
                     flip();
                     gameBoard.openCell(row, column);
                     if (gameBoard.checkOpenCells()) {
+                        gameBoard.findNewPair();
+                        // If the user wins the game, update the score
+                        if (gameBoard.win()) {
+                            gameBoard.winTheGame();
+                        }
                         ArrayList<Cell> openCells = gameBoard.getOpenCells();
                         openCells.get(0).stay();
                         openCells.get(1).stay();
@@ -55,20 +59,20 @@ public class Cell {
                         openCells.remove(0);
                     } else {
                         Timeline timeline = new Timeline(
-                                new KeyFrame(Duration.seconds(wait), null)
+                                new KeyFrame(Duration.seconds(gameBoard.getWaitTime()), event -> {
+                                    if (!stay) {
+                                        flip();
+                                        gameBoard.closeCell(row, column);
+                                    }
+                                })
                         );
                         timeline.play();
-                        timeline.setOnFinished(event -> {
-                            if (!stay) {
-                                flip();
-                                gameBoard.closeCell(row, column);
-                            }
-                        });
                     }
                 }
             }
         });
-        logoBackground = new Background(new BackgroundImage(new Image(new File("media/images/logo.jpg").toURI().toString()),
+        logoBackground = new Background(new BackgroundImage(new Image(
+                new File("media/images/logo.jpg").toURI().toString()),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                 new BackgroundSize(button.getWidth(), button.getHeight(), true, true, true, false)));
         setView();

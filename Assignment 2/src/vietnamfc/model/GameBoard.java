@@ -1,5 +1,9 @@
 package vietnamfc.model;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+import vietnamfc.controller.Controller;
 import vietnamfc.model.Cell;
 
 import java.lang.reflect.Array;
@@ -12,14 +16,90 @@ public class GameBoard {
     private final int ROWS = 4;
     private final int COLUMNS = 5;
     private final int CELL_NUM = ROWS * COLUMNS;
+    private final int MAX_TIME = 120;
     private ArrayList<Cell> cells;
-    private Map<Integer, Pair> table;
     private ArrayList<Cell> openCells;
+    private int level;
+    private int waitTime;
+    private int score;
+    private int totalScore;
+    private int foundPairs = 0;
+    private Controller controller;
 
     public GameBoard() {
         cells = new ArrayList<Cell>();
-        table = new HashMap<Integer, Pair>();
         openCells = new ArrayList<Cell>();
+        level = 1;
+        waitTime = 3;
+        score = 0;
+        score();
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
+    // Score the game by counting the seconds playing the game.
+    private void score() {
+        score = MAX_TIME;
+        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+            score--;
+        }), new KeyFrame(Duration.seconds(1))
+        );
+        clock.setCycleCount(MAX_TIME);
+        clock.play();
+    }
+
+    public void findNewPair() {
+        foundPairs++;
+    }
+
+    // Check if the user wins the game
+    public boolean win() {
+        return foundPairs == 1;
+    }
+
+    // Win the game
+    public void winTheGame() {
+        totalScore += score;
+        controller.winTheGame();
+    }
+
+    public void setLevel(int i) throws Exception{
+        this.level = i;
+        switch(i) {
+            case 1:
+                waitTime = 3;
+                break;
+            case 2:
+                waitTime = 2;
+                break;
+            case 3:
+                waitTime = 1;
+                break;
+            default:
+                throw new Exception("Wrong option for level!");
+        }
+    }
+
+    public int getWaitTime() {
+        return waitTime;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setTotalScore(int totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public int getTotalScore() {
+        return totalScore;
     }
 
     public void openCell(int row, int col) {
@@ -59,6 +139,7 @@ public class GameBoard {
         return (int)(Math.random() * num);
     }
 
+    // Check if the open pictures are the same
     public boolean checkOpenCells() {
         return (openCells.size() == 2 && openCells.get(0).getPlayer() == openCells.get(1).getPlayer());
     }
@@ -93,8 +174,6 @@ public class GameBoard {
             Cell secondCell = cells.get(indexes[secondIdx]);
             secondCell.setPlayer(playerId);
             swap(secondIdx, --num, indexes);
-            table.put(playerId, new Pair(firstCell, secondCell));
         }
-
     }
 }
