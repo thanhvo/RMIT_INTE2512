@@ -1,6 +1,5 @@
 package vietnamfc.controller;
 
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -9,11 +8,15 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import vietnamfc.model.GameBoard;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,14 +28,18 @@ public class Controller implements Initializable {
     private final int COLUMNS = 5;
     private final int IMAGE_SIZE = 20;
     private final int MAX_TIME = 120; // maximum time in seconds
+    private final int SOUND_BUTTON_SIZE = 10;
     @FXML
     private GridPane boardPane;
     private Text scoreText;
+    private ProgressBar timeBar;
     private GameBoard gameBoard;
-
-    private int getPlayerId(int row, int col) {
-        return (row * COLUMNS + col) % PLAYER_NUMBER + 1;
-    }
+    private AtomicInteger totalTime;
+    private static MediaPlayer mediaPlayer;
+    private Button soundButton;
+    private boolean music;
+    private Background soundBackground;
+    private Background muteBackground;
 
     private void addLevelBox() {
         ComboBox levelComboBox = new ComboBox();
@@ -60,23 +67,31 @@ public class Controller implements Initializable {
         boardPane.add(scoreLabel, COLUMNS * IMAGE_SIZE, ROWS * IMAGE_SIZE);
         scoreText = new Text(String.format("%06d",0));
         boardPane.add(scoreText, COLUMNS * IMAGE_SIZE + 4, ROWS * IMAGE_SIZE);
-
     }
 
     private void addTime() {
         Label timeLabel = new Label ("TIME:");
         boardPane.add(timeLabel, 0, ROWS * IMAGE_SIZE);
-        ProgressBar timeBar = new ProgressBar(1.0);
+        timeBar = new ProgressBar(1.0);
         boardPane.add(timeBar, IMAGE_SIZE, ROWS * IMAGE_SIZE);
         GridPane.setColumnSpan(timeBar, IMAGE_SIZE * 3);
-
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(timeBar.progressProperty(), 1.0)),
                 new KeyFrame(Duration.seconds(MAX_TIME), e-> {
                     System.out.println("Time is up!");
                 }, new KeyValue(timeBar.progressProperty(), 0))
         );
-        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+
+    private void resetTime() {
+        totalTime.set(MAX_TIME * 100);
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(timeBar.progressProperty(), 1.0)),
+                new KeyFrame(Duration.seconds(MAX_TIME), e-> {
+                    System.out.println("Time is up!");
+                }, new KeyValue(timeBar.progressProperty(), 0))
+        );
         timeline.play();
     }
 
@@ -85,7 +100,7 @@ public class Controller implements Initializable {
         AtomicInteger mins = new AtomicInteger(2);
         AtomicInteger seconds = new AtomicInteger();
         AtomicInteger hundredthSeconds = new AtomicInteger();
-        AtomicInteger totalTime = new AtomicInteger(MAX_TIME * 100);
+        totalTime = new AtomicInteger(MAX_TIME * 100);
         boardPane.add(timeText, 2 * IMAGE_SIZE, ROWS * IMAGE_SIZE);
         Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
                 totalTime.getAndDecrement();
@@ -106,8 +121,54 @@ public class Controller implements Initializable {
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.YES) {
-            //do stuff
+            resetGame();
         }
+    }
+
+    private void handleSound() {
+        if (music) {
+            mediaPlayer.play();
+        } else {
+            mediaPlayer.stop();
+        }
+    }
+
+    private void setSoundButton() {
+        if (music) {
+            soundButton.setBackground(soundBackground);
+        } else {
+            soundButton.setBackground(muteBackground);
+        }
+    }
+    private void addSound() {
+        music = false;
+        String musicFile = "media/sound/sound.mp3";
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        mediaPlayer = new MediaPlayer(sound);
+        handleSound();
+        soundButton = new Button();
+        soundButton.setPrefHeight(SOUND_BUTTON_SIZE);
+        soundButton.setPrefWidth(SOUND_BUTTON_SIZE);
+        soundBackground= new Background(new BackgroundImage(new Image(
+                new File("media/images/sound.jpg").toURI().toString()),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize(SOUND_BUTTON_SIZE, SOUND_BUTTON_SIZE, true, true, true, false)));
+        muteBackground= new Background(new BackgroundImage(new Image(
+                new File("media/images/mute.png").toURI().toString()),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize(SOUND_BUTTON_SIZE, SOUND_BUTTON_SIZE, true, true, true, false)));
+        setSoundButton();
+        soundButton.setOnAction(e -> {
+            music = !music;
+            handleSound();
+            setSoundButton();
+        });
+        boardPane.add(soundButton, 3 * IMAGE_SIZE, ROWS * IMAGE_SIZE);
+    }
+
+    public void resetGame() {
+        gameBoard.reset();
+        resetTime();
     }
 
     @Override
@@ -126,5 +187,6 @@ public class Controller implements Initializable {
         addScore();
         addTime();
         addClock();
+        addSound();
     }
 }

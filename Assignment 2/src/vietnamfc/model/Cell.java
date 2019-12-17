@@ -1,5 +1,6 @@
 package vietnamfc.model;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -13,6 +14,7 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /*
     This class to represent the information of a cell on the board
@@ -47,16 +49,18 @@ public class Cell {
                     flip();
                     gameBoard.openCell(row, column);
                     if (gameBoard.checkOpenCells()) {
-                        gameBoard.findNewPair();
-                        // If the user wins the game, update the score
-                        if (gameBoard.win()) {
-                            gameBoard.winTheGame();
-                        }
+
                         ArrayList<Cell> openCells = gameBoard.getOpenCells();
                         openCells.get(0).stay();
                         openCells.get(1).stay();
                         openCells.remove(1);
                         openCells.remove(0);
+
+                        gameBoard.findNewPair();
+                        // If the user wins the game, update the score
+                        if (gameBoard.win()) {
+                            gameBoard.winTheGame();
+                        }
                     } else {
                         Timeline timeline = new Timeline(
                                 new KeyFrame(Duration.seconds(gameBoard.getWaitTime()), event -> {
@@ -118,4 +122,6 @@ public class Cell {
     public void faceUp() {
         faceup = true;
     }
+
+    public void faceDown() { faceup = false;}
 }

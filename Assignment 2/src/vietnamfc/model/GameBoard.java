@@ -19,7 +19,6 @@ public class GameBoard {
     private final int MAX_TIME = 120;
     private ArrayList<Cell> cells;
     private ArrayList<Cell> openCells;
-    private int level;
     private int waitTime;
     private int score;
     private int totalScore;
@@ -29,7 +28,6 @@ public class GameBoard {
     public GameBoard() {
         cells = new ArrayList<Cell>();
         openCells = new ArrayList<Cell>();
-        level = 1;
         waitTime = 3;
         score = 0;
         score();
@@ -66,7 +64,6 @@ public class GameBoard {
     }
 
     public void setLevel(int i) throws Exception{
-        this.level = i;
         switch(i) {
             case 1:
                 waitTime = 3;
@@ -144,15 +141,18 @@ public class GameBoard {
         return (openCells.size() == 2 && openCells.get(0).getPlayer() == openCells.get(1).getPlayer());
     }
 
-    // Randomly populate the board
-    public void intialize() {
-        for (int i = 0; i < CELL_NUM; i++) {
-            int row = i / COLUMNS;
-            int col = i % COLUMNS;
-            Cell cell = new Cell(row, col);
-            addCell(cell);
+    public void reset() {
+        shuffleCards();
+        score = 0;
+        openCells.clear();
+        foundPairs = 0;
+        for (Cell cell : cells) {
+            cell.faceDown();
+            cell.setView();
         }
+    }
 
+    private void shuffleCards() {
         int[] indexes = new int[CELL_NUM];
         int[] players = new int[CELL_NUM/2];
         for (int i = 0; i < CELL_NUM; i++) {
@@ -175,5 +175,16 @@ public class GameBoard {
             secondCell.setPlayer(playerId);
             swap(secondIdx, --num, indexes);
         }
+    }
+
+    // Randomly populate the board
+    public void intialize() {
+        for (int i = 0; i < CELL_NUM; i++) {
+            int row = i / COLUMNS;
+            int col = i % COLUMNS;
+            Cell cell = new Cell(row, col);
+            addCell(cell);
+        }
+        shuffleCards();
     }
 }
