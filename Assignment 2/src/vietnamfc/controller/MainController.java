@@ -1,3 +1,15 @@
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Vo Van Thanh
+  ID: TA
+  Created  date: 11/12/2019
+  Last modified: 17/12/2019
+  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+
 package vietnamfc.controller;
 
 import javafx.animation.KeyFrame;
@@ -24,6 +36,7 @@ import vietnamfc.model.GameBoard;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Time;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -35,10 +48,11 @@ public class MainController implements Initializable {
     private final int ROWS = 4;
     private final int COLUMNS = 5;
     private final int IMAGE_SIZE = 20;
-    private final int MAX_TIME = 5; // maximum time in seconds
+    private final int MAX_TIME = 120; // maximum time in seconds
     private final int SOUND_BUTTON_SIZE = 10;
     @FXML
     private GridPane boardPane;
+    private Text timeText;
     private Text scoreText;
     private ProgressBar timeBar;
     private GameBoard gameBoard;
@@ -69,7 +83,6 @@ public class MainController implements Initializable {
         Label levelLabel = new Label("LEVEL:");
         boardPane.add(levelLabel, COLUMNS * IMAGE_SIZE, 0);
         boardPane.add(levelComboBox,COLUMNS * IMAGE_SIZE + 4, 0);
-
     }
 
     private void addScore() {
@@ -79,12 +92,7 @@ public class MainController implements Initializable {
         boardPane.add(scoreText, COLUMNS * IMAGE_SIZE + 4, ROWS * IMAGE_SIZE);
     }
 
-    private void addTime() {
-        Label timeLabel = new Label ("TIME:");
-        boardPane.add(timeLabel, 0, ROWS * IMAGE_SIZE);
-        timeBar = new ProgressBar(1.0);
-        boardPane.add(timeBar, IMAGE_SIZE, ROWS * IMAGE_SIZE);
-        GridPane.setColumnSpan(timeBar, IMAGE_SIZE * 3);
+    private void runTimeBar() {
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(timeBar.progressProperty(), 1.0)),
                 new KeyFrame(Duration.seconds(MAX_TIME), e-> {
@@ -94,20 +102,18 @@ public class MainController implements Initializable {
         timeline.play();
     }
 
-    private void timeUp() {
-        /*ButtonType play = new ButtonType("Play again", ButtonBar.ButtonData.OK_DONE);
-        ButtonType quit = new ButtonType("Quit", ButtonBar.ButtonData.CANCEL_CLOSE);
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Time is up! Do you want to play another game?",
-                play, quit);
-        alert.show();
+    private void addTime() {
+        Label timeLabel = new Label ("TIME:");
+        boardPane.add(timeLabel, 0, ROWS * IMAGE_SIZE);
+        timeBar = new ProgressBar(1.0);
+        boardPane.add(timeBar, IMAGE_SIZE, ROWS * IMAGE_SIZE);
+        GridPane.setColumnSpan(timeBar, IMAGE_SIZE * 3);
+        runTimeBar();
+    }
 
-        if (alert.getResult() == play) {
-            resetGame();
-        } else {
-            exit(0);
-        }*/
+    private void timeUp() {
         try {
-            showDialog("Time is up! Do you want to play another game?");
+            showDialog("Time is up! Do you want to play another game?\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,50 +121,38 @@ public class MainController implements Initializable {
 
     private void resetTime() {
         totalTime.set(MAX_TIME * 100);
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(timeBar.progressProperty(), 1.0)),
-                new KeyFrame(Duration.seconds(MAX_TIME), e-> {
-                    timeUp();
-                }, new KeyValue(timeBar.progressProperty(), 0))
-        );
-        timeline.play();
+        runClock();
+        runTimeBar();
     }
 
-    private void addClock() {
-        Text timeText = new Text("02:00:00");
+    private void runClock() {
         AtomicInteger mins = new AtomicInteger(2);
         AtomicInteger seconds = new AtomicInteger();
         AtomicInteger hundredthSeconds = new AtomicInteger();
-        totalTime = new AtomicInteger(MAX_TIME * 100);
-        boardPane.add(timeText, 2 * IMAGE_SIZE, ROWS * IMAGE_SIZE);
         Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-                totalTime.getAndDecrement();
-                mins.set(totalTime.intValue() / (60 * 100));
-                seconds.set((totalTime.intValue() - mins.intValue() * 60 * 100) / 100);
-                hundredthSeconds.set(totalTime.intValue() - mins.intValue() * 60 * 100 - seconds.intValue() * 100);
-                timeText.setText(String.format("%02d:%02d:%02d",mins.intValue(), seconds.intValue(), hundredthSeconds.intValue()));
-            }), new KeyFrame(Duration.millis(10))
+            totalTime.getAndDecrement();
+            mins.set(totalTime.intValue() / (60 * 100));
+            seconds.set((totalTime.intValue() - mins.intValue() * 60 * 100) / 100);
+            hundredthSeconds.set(totalTime.intValue() - mins.intValue() * 60 * 100 - seconds.intValue() * 100);
+            timeText.setText(String.format("%02d:%02d:%02d",mins.intValue(), seconds.intValue(), hundredthSeconds.intValue()));
+        }), new KeyFrame(Duration.millis(10))
         );
         clock.setCycleCount(MAX_TIME * 100);
         clock.play();
     }
 
+
+    private void addClock() {
+        timeText = new Text("02:00:00");
+        boardPane.add(timeText, 2 * IMAGE_SIZE, ROWS * IMAGE_SIZE);
+        totalTime = new AtomicInteger(MAX_TIME * 100);
+        runClock();
+    }
+
     public void winTheGame() {
         scoreText.setText(String.format("%06d", gameBoard.getTotalScore()));
-        /*ButtonType play = new ButtonType("Play again", ButtonBar.ButtonData.OK_DONE);
-        ButtonType quit = new ButtonType("Quit", ButtonBar.ButtonData.CANCEL_CLOSE);
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Congratulation! You won the game! Do you want to play another game?",
-                play, quit);
-        alert.getDialogPane().getScene().getWindow().centerOnScreen();
-        alert.showAndWait();
-
-        if (alert.getResult() == play) {
-            resetGame();
-        } else if (alert.getResult() == quit) {
-            exit(0);
-        }*/
         try {
-            showDialog("Congratulation! You won the game! Do you want to play another game?");
+            showDialog("Congratulation! You won the game!\nDo you want to play another game?\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -236,7 +230,7 @@ public class MainController implements Initializable {
         Parent parent = fxmlLoader.load();
         CloseGameController closeGameController = fxmlLoader.getController();
         closeGameController.setMessage(message);
-        //Parent parent = FXMLLoader.load(getClass().getResource("../view/closeGame.fxml"));
+        closeGameController.setMainController(this);
         Scene scene = new Scene(parent, 300, 200);
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);

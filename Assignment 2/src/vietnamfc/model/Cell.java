@@ -1,3 +1,15 @@
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Vo Van Thanh
+  ID: TA
+  Created  date: 11/12/2019
+  Last modified: 17/12/2019
+  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+
 package vietnamfc.model;
 
 import javafx.animation.Animation;

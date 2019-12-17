@@ -20,17 +20,18 @@
 
           </children>
       </DialogPane>
-       <VBox layoutX="131.0" layoutY="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+       <VBox alignment="CENTER" layoutX="131.0" layoutY="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
            <children>
                <Text fx:id="messageText" text="" />
+               <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                   <children>
+                       <Button fx:id="playButton" alignment="CENTER_LEFT" mnemonicParsing="false" text="Play again" onAction="#resetGame"/>
+                       <Button fx:id="closeButton" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Quit" onAction="#quit"/>
+                   </children>
+               </HBox>
            </children>
        </VBox>
-      <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-             <Button layoutX="5.0" layoutY="50.0" fx:id="playButton" alignment="CENTER_LEFT" mnemonicParsing="false" text="Play again" />
-             <Button layoutX="100.0" layoutY="50.0" fx:id="closeButton" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Quit" />
-         </children>
-      </HBox>
+
 
    </children>
 </AnchorPane>
