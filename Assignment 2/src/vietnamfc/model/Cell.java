@@ -82,6 +82,12 @@ public class Cell {
         setView();
     }
 
+    public void reset() {
+        stay = false;
+        faceup = false;
+        setView();
+    }
+
     public void stay() {
         stay = true;
     }

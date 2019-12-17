@@ -5,7 +5,7 @@
 
 <GridPane fx:id="boardPane" alignment="center" hgap="10" vgap="10"
           xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="vietnamfc.controller.Controller">
+          fx:controller="vietnamfc.controller.MainController">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>

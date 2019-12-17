@@ -6,28 +6,36 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import vietnamfc.model.GameBoard;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Controller implements Initializable {
+import static java.lang.System.exit;
+
+public class MainController implements Initializable {
 
     private final int PLAYER_NUMBER = 10;
     private final int ROWS = 4;
     private final int COLUMNS = 5;
     private final int IMAGE_SIZE = 20;
-    private final int MAX_TIME = 120; // maximum time in seconds
+    private final int MAX_TIME = 5; // maximum time in seconds
     private final int SOUND_BUTTON_SIZE = 10;
     @FXML
     private GridPane boardPane;
@@ -57,9 +65,11 @@ public class Controller implements Initializable {
                 }
             }
         });
+        levelComboBox.setValue("1");
         Label levelLabel = new Label("LEVEL:");
         boardPane.add(levelLabel, COLUMNS * IMAGE_SIZE, 0);
         boardPane.add(levelComboBox,COLUMNS * IMAGE_SIZE + 4, 0);
+
     }
 
     private void addScore() {
@@ -78,10 +88,29 @@ public class Controller implements Initializable {
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(timeBar.progressProperty(), 1.0)),
                 new KeyFrame(Duration.seconds(MAX_TIME), e-> {
-                    System.out.println("Time is up!");
+                    timeUp();
                 }, new KeyValue(timeBar.progressProperty(), 0))
         );
         timeline.play();
+    }
+
+    private void timeUp() {
+        /*ButtonType play = new ButtonType("Play again", ButtonBar.ButtonData.OK_DONE);
+        ButtonType quit = new ButtonType("Quit", ButtonBar.ButtonData.CANCEL_CLOSE);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Time is up! Do you want to play another game?",
+                play, quit);
+        alert.show();
+
+        if (alert.getResult() == play) {
+            resetGame();
+        } else {
+            exit(0);
+        }*/
+        try {
+            showDialog("Time is up! Do you want to play another game?");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void resetTime() {
@@ -89,7 +118,7 @@ public class Controller implements Initializable {
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(timeBar.progressProperty(), 1.0)),
                 new KeyFrame(Duration.seconds(MAX_TIME), e-> {
-                    System.out.println("Time is up!");
+                    timeUp();
                 }, new KeyValue(timeBar.progressProperty(), 0))
         );
         timeline.play();
@@ -116,12 +145,22 @@ public class Controller implements Initializable {
 
     public void winTheGame() {
         scoreText.setText(String.format("%06d", gameBoard.getTotalScore()));
+        /*ButtonType play = new ButtonType("Play again", ButtonBar.ButtonData.OK_DONE);
+        ButtonType quit = new ButtonType("Quit", ButtonBar.ButtonData.CANCEL_CLOSE);
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Congratulation! You won the game! Do you want to play another game?",
-                ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+                play, quit);
+        alert.getDialogPane().getScene().getWindow().centerOnScreen();
         alert.showAndWait();
 
-        if (alert.getResult() == ButtonType.YES) {
+        if (alert.getResult() == play) {
             resetGame();
+        } else if (alert.getResult() == quit) {
+            exit(0);
+        }*/
+        try {
+            showDialog("Congratulation! You won the game! Do you want to play another game?");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -140,6 +179,7 @@ public class Controller implements Initializable {
             soundButton.setBackground(muteBackground);
         }
     }
+
     private void addSound() {
         music = false;
         String musicFile = "media/sound/sound.mp3";
@@ -188,5 +228,20 @@ public class Controller implements Initializable {
         addTime();
         addClock();
         addSound();
+    }
+
+
+    void showDialog(String message) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/closeGame.fxml"));
+        Parent parent = fxmlLoader.load();
+        CloseGameController closeGameController = fxmlLoader.getController();
+        closeGameController.setMessage(message);
+        //Parent parent = FXMLLoader.load(getClass().getResource("../view/closeGame.fxml"));
+        Scene scene = new Scene(parent, 300, 200);
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        //stage.showAndWait();
+        stage.show();
     }
 }

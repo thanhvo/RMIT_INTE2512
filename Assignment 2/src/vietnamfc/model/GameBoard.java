@@ -3,13 +3,9 @@ package vietnamfc.model;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
-import vietnamfc.controller.Controller;
-import vietnamfc.model.Cell;
+import vietnamfc.controller.MainController;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 // The class to manage the state of the game
 public class GameBoard {
@@ -23,7 +19,7 @@ public class GameBoard {
     private int score;
     private int totalScore;
     private int foundPairs = 0;
-    private Controller controller;
+    private MainController controller;
 
     public GameBoard() {
         cells = new ArrayList<Cell>();
@@ -33,7 +29,7 @@ public class GameBoard {
         score();
     }
 
-    public void setController(Controller controller) {
+    public void setController(MainController controller) {
         this.controller = controller;
     }
 
@@ -143,12 +139,11 @@ public class GameBoard {
 
     public void reset() {
         shuffleCards();
-        score = 0;
+        score = MAX_TIME;
         openCells.clear();
         foundPairs = 0;
         for (Cell cell : cells) {
-            cell.faceDown();
-            cell.setView();
+            cell.reset();
         }
     }
 
