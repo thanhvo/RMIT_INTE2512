@@ -36,15 +36,11 @@ import vietnamfc.model.GameBoard;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Time;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static java.lang.System.exit;
-
 public class MainController implements Initializable {
 
-    private final int PLAYER_NUMBER = 10;
     private final int ROWS = 4;
     private final int COLUMNS = 5;
     private final int IMAGE_SIZE = 20;
@@ -111,6 +107,19 @@ public class MainController implements Initializable {
         runTimeBar();
     }
 
+    private void showDialog(String message) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/closeGame.fxml"));
+        Parent parent = fxmlLoader.load();
+        DialogController closeGameController = fxmlLoader.getController();
+        closeGameController.setMessage(message);
+        closeGameController.setMainController(this);
+        Scene scene = new Scene(parent, 300, 200);
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.show();
+    }
+
     private void timeUp() {
         try {
             showDialog("Time is up! Do you want to play another game?\n");
@@ -141,21 +150,11 @@ public class MainController implements Initializable {
         clock.play();
     }
 
-
     private void addClock() {
         timeText = new Text("02:00:00");
         boardPane.add(timeText, 2 * IMAGE_SIZE, ROWS * IMAGE_SIZE);
         totalTime = new AtomicInteger(MAX_TIME * 100);
         runClock();
-    }
-
-    public void winTheGame() {
-        scoreText.setText(String.format("%06d", gameBoard.getTotalScore()));
-        try {
-            showDialog("Congratulation! You won the game!\nDo you want to play another game?\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void handleSound() {
@@ -205,6 +204,15 @@ public class MainController implements Initializable {
         resetTime();
     }
 
+    public void winTheGame() {
+        scoreText.setText(String.format("%06d", gameBoard.getTotalScore()));
+        try {
+            showDialog("Congratulation! You won the game!\nDo you want to play another game?\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         gameBoard = new GameBoard();
@@ -224,18 +232,4 @@ public class MainController implements Initializable {
         addSound();
     }
 
-
-    void showDialog(String message) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/closeGame.fxml"));
-        Parent parent = fxmlLoader.load();
-        CloseGameController closeGameController = fxmlLoader.getController();
-        closeGameController.setMessage(message);
-        closeGameController.setMainController(this);
-        Scene scene = new Scene(parent, 300, 200);
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        //stage.showAndWait();
-        stage.show();
-    }
 }

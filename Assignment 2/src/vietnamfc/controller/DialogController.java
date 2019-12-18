@@ -19,13 +19,9 @@ import javafx.stage.Stage;
 
 import static java.lang.System.exit;
 
-public class CloseGameController {
-    @FXML
-    private DialogPane dialogPane;
+public class DialogController {
     @FXML
     private Button closeButton;
-    @FXML
-    private Button playButton;
     @FXML
     private Text messageText;
     private MainController mainController;

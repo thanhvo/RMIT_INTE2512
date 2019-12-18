@@ -45,17 +45,6 @@ public class GameBoard {
         this.controller = controller;
     }
 
-    // Score the game by counting the seconds playing the game.
-    private void score() {
-        score = MAX_TIME;
-        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-            score--;
-        }), new KeyFrame(Duration.seconds(1))
-        );
-        clock.setCycleCount(MAX_TIME);
-        clock.play();
-    }
-
     public void findNewPair() {
         foundPairs++;
     }
@@ -134,16 +123,6 @@ public class GameBoard {
         cells.add(cell);
     }
 
-    private void swap(int firstIdx, int secondIdx, int[] arr) {
-        int tmp = arr[firstIdx];
-        arr[firstIdx] = arr[secondIdx];
-        arr[secondIdx] = tmp;
-    }
-
-    private int getRandomNumber(int num) {
-        return (int)(Math.random() * num);
-    }
-
     // Check if the open pictures are the same
     public boolean checkOpenCells() {
         return (openCells.size() == 2 && openCells.get(0).getPlayer() == openCells.get(1).getPlayer());
@@ -159,6 +138,39 @@ public class GameBoard {
         }
     }
 
+    // Initialize the members of the class
+    public void intialize() {
+        for (int i = 0; i < CELL_NUM; i++) {
+            int row = i / COLUMNS;
+            int col = i % COLUMNS;
+            Cell cell = new Cell(row, col);
+            addCell(cell);
+        }
+        shuffleCards();
+    }
+
+    // Score the game by counting the seconds playing the game.
+    private void score() {
+        score = MAX_TIME;
+        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+            score--;
+        }), new KeyFrame(Duration.seconds(1))
+        );
+        clock.setCycleCount(MAX_TIME);
+        clock.play();
+    }
+
+    private void swap(int firstIdx, int secondIdx, int[] arr) {
+        int tmp = arr[firstIdx];
+        arr[firstIdx] = arr[secondIdx];
+        arr[secondIdx] = tmp;
+    }
+
+    private int getRandomNumber(int num) {
+        return (int)(Math.random() * num);
+    }
+
+    // Randomly populate the card board.
     private void shuffleCards() {
         int[] indexes = new int[CELL_NUM];
         int[] players = new int[CELL_NUM/2];
@@ -184,14 +196,4 @@ public class GameBoard {
         }
     }
 
-    // Randomly populate the board
-    public void intialize() {
-        for (int i = 0; i < CELL_NUM; i++) {
-            int row = i / COLUMNS;
-            int col = i % COLUMNS;
-            Cell cell = new Cell(row, col);
-            addCell(cell);
-        }
-        shuffleCards();
-    }
 }

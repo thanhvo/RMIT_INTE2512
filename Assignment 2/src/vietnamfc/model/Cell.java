@@ -137,9 +137,4 @@ public class Cell {
         return button;
     }
 
-    public void faceUp() {
-        faceup = true;
-    }
-
-    public void faceDown() { faceup = false;}
 }
