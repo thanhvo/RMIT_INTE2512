@@ -1,0 +1,408 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>binhphanquoc_</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff" style="margin-left:25">
+<HR>
+<H3><CENTER>Assignment2/src/sample/Controller.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Phan Quoc Binh
+  ID: 3715271
+  Created  date: 12/12/2019
+  Last modified: 18/12/2019
+<A NAME="1"></A>  Acknowledgement: https://asgteach.com/2011/10/javafx-animation-and-binding-simple-countdown-timer-2/
+*/
+
+<FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#1',2,'match38-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>package sample;
+
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+<A NAME="30"></A>import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import</B></FONT> javafx.scene.layout.Pane;
+<FONT color="#f9966b"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#30',2,'match38-top.html#30',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
+
+import java.net.URL;
+import java.util.Collections;
+
+public class Controller {
+    @FXML
+    private Pane menuPane, gameplayPane, difficultyPane, lockPane;
+
+    @FXML
+    private Button newGameButton, difficultyButton, mainMenuButton1, mainMenuButton2,
+            easyButton, mediumButton, hardButton,
+            playAgainButton, quitButton;
+
+    @FXML
+    private Label levelText, timeLeft, scoreLabel, messageLabel;
+
+    @FXML
+    private ImageView img00,img01,img02,img03,img04,
+            img10,img11,img12,img13,img14,
+            img20,img21,img22,img23,img24,
+            img30,img31,img32,img33,img34;
+    @FXML
+    private ImageView failedBackground;
+
+    PauseTransition checkFinish = new PauseTransition(Duration.seconds(120))</B></FONT>; //this variable to created to check if the game finishes after 2 minutes
+    int imageCounter = 0; //number of image clicked
+    ImageView currentImage, previousImage = null;
+    FadeTransition ftPrevious = null; //previous image's fade transition
+<A NAME="4"></A>    Game newGame = new Game();
+
+
+    <FONT color="#151b8d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#4',2,'match38-top.html#4',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>@FXML
+    private void handleButtonAction(ActionEvent event) { //This function handles system button events
+<A NAME="11"></A>        if (event.getSource() == newGameButton || event.getSource() == playAgainButton) { //if &quot;new game&quot; button or &quot;play again&quot; button is clicked
+            gameplayPane.toFront(); //transition to gameplay scene
+            initializer(); //set up new game
+        }</B></FONT> else <FONT color="#571b7e"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#11',2,'match38-top.html#11',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>if (event.getSource() == difficultyButton) { //if &quot;difficulty&quot; button is clicked
+            difficultyPane.toFront(); //transition to difficulty scene
+        } else if (event.getSource() == mainMenuButton1 || event.getSource() == mainMenuButton2) { //if &quot;menu&quot; button is clicked
+            menuPane.toFront(); //transition to menu scene
+<A NAME="27"></A>            checkFinish.stop(); //stop checking finished game
+            newGame.timer.stopTimer(); //stop timer
+        }</B></FONT> else if (event.getSource() == quitButton) { //if &quot;quit&quot; button is clicked
+            <FONT color="#e77471"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#27',2,'match38-top.html#27',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>System.exit(0); //exit program
+        }
+    }
+<A NAME="5"></A>
+    @FXML
+    private void handleDifficultyLevel(ActionEvent event) { //This function handles difficulty button events
+        if</B></FONT> (<FONT color="#c8c2a7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#5',2,'match38-top.html#5',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>event.getSource() == easyButton) { //if &quot;easy&quot; button is clicked
+            levelText.setText(&quot;Easy mode selected&quot;);
+            newGame.levelTime = 3000; //set game time to 3000 miliseconds
+        } else if (event.getSource() == mediumButton) { //if &quot;medium&quot; button is clicked
+            levelText.setText</B></FONT>(&quot;Medium mode selected&quot;);
+            newGame.levelTime = 2000; //set game time to 2000 miliseconds
+<A NAME="20"></A>        } else if (event.getSource() == hardButton) { //if &quot;hard&quot; button is clicked
+            levelText.setText(&quot;Hard mode selected&quot;);
+            newGame.levelTime = 1000; //set game time to 1000 miliseconds
+        <FONT color="#d4a017"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#20',2,'match38-top.html#20',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+    }
+
+    @FXML
+<A NAME="6"></A>    private void handleCardClicked(MouseEvent event) { //This function handles actions on clicked cards
+        ++imageCounter; //increase the number of image clicked
+        if (imageCounter &lt;= 2) {</B></FONT> //check if there are less than 2 image clicked
+            currentImage = (ImageView)<FONT color="#50ebec"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#6',2,'match38-top.html#6',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>event.getPickResult().getIntersectedNode();  //get the ImageView object of the clicked image
+            currentImage.setOpacity(1);  //show iamge
+            FadeTransition ft = new FadeTransition();
+            ft.setDuration(Duration.millis(1));
+            ft.setFromValue(1);
+            ft.setToValue(0);
+            ft.setDelay(Duration.millis(newGame.levelTime)); //delay fade transition time according to the selected level
+            ft.setNode(currentImage);
+            ft.setOnFinished</B></FONT>( e -&gt; {
+<A NAME="25"></A>                --imageCounter;
+            });
+            ft.playFromStart();
+            if (imageCounter == 2) <FONT color="#87f717"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#25',2,'match38-top.html#25',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>{ //check if 2 images are clicked
+                if (currentImage == previousImage) { //check if a image is clicked twice
+                    ft.stop(); //stop fade transition so the 2nd clicked to the image wont fade away
+                    --imageCounter; //decrease the number of image clicked so that another image can be clicked on
+                    return;
+                }
+                if (checkMatchingImage(previousImage,currentImage)) { //check if the two images clicked are the same
+                    imageCounter = 0;
+                    ft.stop</B></FONT>(); //stop current fade transition to reveal the image
+                    ftPrevious.stop(); //stop previous fade transition to reveal the image
+                    previousImage.setDisable(true); //disable the current image so it can't be clicked again
+                    currentImage.setDisable(true); //disable the previous image so it can't be clicked again
+                    newGame.matchedPair++; //increased the matched pair
+                    if (newGame.matchedPair == 10) {  //check if there are 10 matched pairs found
+                        checkFinish.stop();
+                        newGame.timer.stopTimer(); //stop the timer
+<A NAME="17"></A>                        newGame.score = newGame.score + newGame.timer.time / 100; //calculate score based on time took to finished
+                        scoreLabel.setText(Integer.toString(newGame.score));
+                        lockPane.toFront();
+                        <FONT color="#800517"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#17',2,'match38-top.html#17',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>return;
+                    }
+                }
+            }
+            previousImage = currentImage;
+            f</B></FONT>tPrevious = ft; //keep track of current/previous images and fade transitions
+        } else {
+            --imageCounter; //decrease the number of image clicked if 3 or more images are chosen
+        }
+<A NAME="16"></A>    }
+
+    final URL mediaURL = getClass().getResource(&quot;Audio/WorldCup2010.mp3&quot;); //get mp3 url
+    <FONT color="#3090c7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#16',2,'match38-top.html#16',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>final String path = mediaURL.toExternalForm(); /* These objects are instantiated outside of function so that the garbage collector */
+    Media media = new Media(path);                 /* wouldn't delete the mp3 while playing */
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    Boolean soundOnState = false; //variable to check if the sound is on or off
+    @FXML
+<A NAME="21"></A>    public void soundSettings(ActionEvent event) {</B></FONT>
+        if (soundOnState == false) { //if sound is off
+            mediaPlayer.play(); //play when clicked
+            <FONT color="#00ff00"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#21',2,'match38-top.html#21',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); //loop the mp3
+            soundOnState = true; //set the sound to on state
+        } else {
+            mediaPlayer.pause(); //pause the mp3
+            soundOnState = false; //set the sound to off state
+        }
+    }
+<A NAME="13"></A>
+    public void initializer() {</B></FONT> //This function sets up the GUI for the new game
+<A NAME="19"></A>        Collections.shuffle(newGame.cardDeck); //shuffle the card deck
+        img00.setImage(<FONT color="#842dce"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#13',2,'match38-top.html#13',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>new Image(getClass().getResource(newGame.cardDeck.get(0)).toExternalForm()));
+<A NAME="26"></A>        img01.setImage(new Image(getClass().getResource(newGame.cardDeck.get(1)).toExternalForm()));
+        img02.setImage</B></FONT>(new Image(<FONT color="#4e9258"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#19',2,'match38-top.html#19',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>getClass().getResource(newGame.cardDeck.get(2)).toExternalForm()));
+<A NAME="31"></A>        img03.setImage(new Image(getClass().getResource(newGame.cardDeck.get(3)).toExternalForm()));
+        img04.setImage</B></FONT>(new Image(<FONT color="#95b9c7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#26',2,'match38-top.html#26',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>getClass().getResource(newGame.cardDeck.get(4)).toExternalForm()));
+<A NAME="0"></A>        img10.setImage(new Image(getClass().getResource(newGame.cardDeck.get(5)).toExternalForm()));
+        img11.setImage</B></FONT>(new Image(<FONT color="#3ea99f"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#31',2,'match38-top.html#31',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>getClass().getResource(newGame.cardDeck.get(6)).toExternalForm()));
+<A NAME="2"></A>        img12.setImage(new Image(getClass().getResource(newGame.cardDeck.get(7)).toExternalForm()));
+        img13.setImage</B></FONT>(new Image(<FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#0',2,'match38-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>getClass().getResource(newGame.cardDeck.get(8)).toExternalForm()));
+<A NAME="10"></A>        img14.setImage(new Image(getClass().getResource(newGame.cardDeck.get(9)).toExternalForm()));
+        img20.setImage</B></FONT>(new Image(<FONT color="#77bfc7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#2',2,'match38-top.html#2',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>getClass().getResource(newGame.cardDeck.get(10)).toExternalForm()));
+<A NAME="12"></A>        img21.setImage(new Image(getClass().getResource(newGame.cardDeck.get(11)).toExternalForm()));
+        img22.setImage</B></FONT>(new Image(<FONT color="#b041ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#10',2,'match38-top.html#10',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>getClass().getResource(newGame.cardDeck.get(12)).toExternalForm()));
+<A NAME="23"></A>        img23.setImage(new Image(getClass().getResource(newGame.cardDeck.get(13)).toExternalForm()));
+        img24.setImage</B></FONT>(new Image(<FONT color="#3b9c9c"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#12',2,'match38-top.html#12',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>getClass().getResource(newGame.cardDeck.get(14)).toExternalForm()));
+<A NAME="3"></A>        img30.setImage(new Image(getClass().getResource(newGame.cardDeck.get(15)).toExternalForm()));
+        img31.setImage</B></FONT>(new Image(<FONT color="#f660ab"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#23',2,'match38-top.html#23',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>getClass().getResource(newGame.cardDeck.get(16)).toExternalForm()));
+        img32.setImage(new Image(getClass().getResource(newGame.cardDeck.get(17)).toExternalForm()));
+        img33.setImage</B></FONT>(new Image(<FONT color="#6cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#3',2,'match38-top.html#3',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>getClass().getResource(newGame.cardDeck.get(18)).toExternalForm()));
+        img34.setImage(new Image(getClass().getResource(newGame.cardDeck.get(19)).toExternalForm()));
+        img00.setOpacity(0);
+        img01.setOpacity(0);
+        img02.setOpacity(0);
+        img03.setOpacity(0);
+        img04.setOpacity(0);
+        img10.setOpacity(0);
+        img11.setOpacity(0);
+        img12.setOpacity(0);
+        img13.setOpacity(0);
+        img14.setOpacity(0);
+        img20.setOpacity(0);
+        img21.setOpacity(0);
+        img22.setOpacity(0);
+        img23.setOpacity(0);
+        img24.setOpacity(0);
+        img30.setOpacity(0);
+        img31.setOpacity(0);
+        img32.setOpacity(0);
+        img33.setOpacity(0);
+        img34.setOpacity(0);
+        img00.setDisable(false);
+        img01.setDisable(false);
+        img02.setDisable(false);
+        img03.setDisable(false);
+        img04.setDisable(false);
+        img10.setDisable(false);
+        img11.setDisable(false);
+        img12.setDisable(false);
+        img13.setDisable(false);
+        img14.setDisable(false);
+        img20.setDisable(false);
+        img21.setDisable(false);
+        img22.setDisable(false);
+        img23.setDisable(false);
+        img24.setDisable(false);
+        img30.setDisable(false);
+        img31.setDisable(false);
+        img32.setDisable(false);
+        img33.setDisable(false);
+        img34.setDisable(false);
+        messageLabel.setText(&quot;Your score:&quot;);
+        failedBackground.setImage</B></FONT>(new Image(getClass().getResource(&quot;Images/Background/background2.jpg&quot;).toExternalForm()));
+<A NAME="29"></A>        newGame.matchedPair = 0;
+        newGame.timer.setTimer(timeLeft);
+        checkFinishedGame();
+    <FONT color="#faafba"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#29',2,'match38-top.html#29',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+
+    public boolean checkMatchingImage(ImageView img1, ImageView img2) { //This function checks if two images clicked are the same
+        return img1.getImage().getUrl().equals(img2.getImage().getUrl());
+<A NAME="14"></A>    }
+
+    public void check</B></FONT>FinishedGame() { //This function checks if the game is finished
+        checkFinish.setOnFinished( <FONT color="#f52887"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#14',2,'match38-top.html#14',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>event -&gt; {
+            lockPane.toFront();
+            scoreLabel.setText(&quot;&quot;);
+            messageLabel.setText(&quot;&quot;);
+            failedBackground.setImage(new Image(getClass().getResource</B></FONT>(&quot;Images/Background/background3.png&quot;).toExternalForm()));
+            newGame.score = 0; //Reset score to 0;
+        });
+        checkFinish.playFromStart();
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/sample/Game.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Phan Quoc Binh
+  ID: 3715271
+  Created  date: 12/12/2019
+  Last modified: 18/12/2019
+  Acknowledgement: https://asgteach.com/2011/10/javafx-animation-and-binding-simple-countdown-timer-2/
+*/
+<A NAME="15"></A>
+package sample;
+
+<FONT color="#3bb9ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#15',2,'match38-top.html#15',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import java.util.ArrayList;
+
+public class Game {
+    int levelTime, score;
+    ArrayList&lt;String&gt; cardDeck = new ArrayList&lt;String&gt;(); //Array of cards' url
+    Timer timer;
+    int matchedPair;
+    Game()</B></FONT> {
+<A NAME="8"></A>        levelTime = 3000; //set default level time to 3000 miliseconds (easy mode)
+        score = 0;
+        matchedPair = 0;
+        <FONT color="#bce954"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#8',2,'match38-top.html#8',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>for (int a = 0; a &lt; 2; a++) {
+            for (int i = 1; i &lt;= 10; i++) {
+                cardDeck.add(&quot;Images/Card/&quot; + i + &quot;.jpg&quot;);
+            }
+        }</B></FONT>
+        timer = new Timer();
+    }
+
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/sample/Main.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Phan Quoc Binh
+  ID: 3715271
+  Created  date: 12/12/2019
+  Last modified: 18/12/2019
+<A NAME="28"></A>  Acknowledgement: https://asgteach.com/2011/10/javafx-animation-and-binding-simple-countdown-timer-2/
+*/
+
+<FONT color="#717d7d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#28',2,'match38-top.html#28',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>package sample;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.net.URL;
+
+
+public class Main extends Application {
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+<A NAME="24"></A>        Parent root = FXMLLoader.load</B></FONT>(getClass().getResource(&quot;sample.fxml&quot;));
+        primaryStage.setTitle(&quot;U22 Vietnam&quot;);
+        primaryStage.setScene(new Scene(root));
+        <FONT color="#ada96e"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#24',2,'match38-top.html#24',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>primaryStage.setResizable(false);
+        primaryStage.show();
+    }
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}</B></FONT>
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/sample/Timer.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Phan Quoc Binh
+  ID: 3715271
+  Created  date: 12/12/2019
+  Last modified: 18/12/2019
+<A NAME="18"></A>  Acknowledgement: https://asgteach.com/2011/10/javafx-animation-and-binding-simple-countdown-timer-2/
+*/
+
+<FONT color="#f62817"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#18',2,'match38-top.html#18',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>package sample;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.control.Label;
+import javafx.util.Duration;
+
+public class Timer {
+    private static final int STARTTIME = 12000; //game time (12000 centiseconds = 2 minutes)
+    private Timeline timeline;
+    public int time = STARTTIME;
+    public void setTimer(Label timeLeft) {
+        if (timeline != null) {</B></FONT> //stop timeline if it is still active
+            timeline.stop();
+        }
+        time = STARTTIME;
+
+        // update timerLabel
+        timeline = new Timeline();
+<A NAME="7"></A>        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.getKeyFrames().add(
+                new KeyFrame(Duration.millis(10),
+                        new EventHandler() <FONT color="#c58917"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#7',2,'match38-top.html#7',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>{
+                            // KeyFrame event handler
+                            int minutes, seconds, centiseconds;
+                            public void handle(Event event) {
+<A NAME="9"></A>                                --time;
+                                minutes = time / 6000;
+                                s</B></FONT>econds =  time % 6000 / 100;
+                                <FONT color="#f88017"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#9',2,'match38-top.html#9',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>centiseconds = time % 6000 % 100;
+                                // update timerLabel
+                                timeLeft.setText(minutes + &quot;:&quot; + formatTime(seconds) + &quot;:&quot; + formatTime(centiseconds) );
+                                if (time &lt;= 0) {
+                                    timeline.stop();
+<A NAME="22"></A>                                }
+                            }
+                        }</B></FONT>));
+        <FONT color="#4cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match38-0.html#22',2,'match38-top.html#22',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>timeline.playFromStart();
+    }
+    public void stopTimer() {
+            timeline.stop();
+    }
+    public String formatTime(int num) {
+        if (num &lt; 10) {
+            return &quot;0&quot; + num;
+        }</B></FONT>
+        return num + &quot;&quot;;
+    }
+}
+</PRE>
+
+</BODY>
+</HTML>

@@ -1,0 +1,878 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>hantranmachso</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>Assignment2/src/Assignment2/game/GameController.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Tran Mach So Han
+  ID: s3750789
+  Created  date: 16/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+
+package Assignment2.game;
+
+class GameController {
+<A NAME="33"></A>    private GameModel model;
+    private GameTheme theme;
+
+    <FONT color="#736aff"><A HREF="javascript:ZweiFrames('match46-1.html#33',3,'match46-top.html#33',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>GameController(GameModel model, GameTheme theme) {
+        this.model = model;
+        this.theme = theme;
+    }
+
+    void setName(String name){
+        model.setName(name);
+    }
+
+    void setRowIndex(short rowIndex){
+        model.setRowIndex(rowIndex);
+<A NAME="34"></A>    }
+
+    void setColIndex(short colIndex){</B></FONT>
+        <FONT color="#827d6b"><A HREF="javascript:ZweiFrames('match46-1.html#34',3,'match46-top.html#34',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model.setColIndex(colIndex);
+    }
+
+    void updateTheme(){
+        theme.addImage(model.getName(),model.getColIndex(),model.getRowIndex());
+    }</B></FONT>
+
+
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/Assignment2/game/GameMain.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Tran Mach So Han
+  ID: s3750789
+  Created  date: 16/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+<A NAME="35"></A>
+package Assignment2.game;
+
+<FONT color="#41a317"><A HREF="javascript:ZweiFrames('match46-1.html#35',3,'match46-top.html#35',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.animation.*;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
+import javafx.util.Duration;
+
+public class GameMain extends Pane {
+<A NAME="36"></A>    private final static String[] PLAYER = {&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;10&quot;};
+    private final static int[] lEVELSEC = {3,2,1};
+    private static String[] mazePic</B></FONT> ;
+    <FONT color="#ff00ff"><A HREF="javascript:ZweiFrames('match46-1.html#36',3,'match46-top.html#36',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>private static GameTheme theme ;
+    private static GameModel model = new GameModel();
+    private static GameController controller ;
+    private static short a = 0, b = 0, prev = 0;
+    private static short pair ;
+    private static int level ;
+    private static SequentialTransition prevTranistion;
+
+
+    public</B></FONT> GameMain() {
+        mazePic = new String[20];
+        theme = new GameTheme();
+<A NAME="37"></A>        pair = 10;
+        controller = new GameController(model, theme);
+        showBackImage();
+        <FONT color="#810541"><A HREF="javascript:ZweiFrames('match46-1.html#37',3,'match46-top.html#37',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>getChildren().add(theme);
+    }
+
+    public void setLevel(int level) {
+        GameMain.level = level;
+    }
+
+    private void showBackImage() {
+        arrayPic();
+        showPlayer</B></FONT>();
+        short rowIndex = 0, colIndex = 0;
+        for (int i = 0; i &lt; 20; i++) {
+            controller.setName(&quot;general&quot;);
+            controller.setRowIndex(rowIndex);
+<A NAME="38"></A>            controller.setColIndex(colIndex);
+            controller.updateTheme();
+            colIndex++;
+            <FONT color="#348781"><A HREF="javascript:ZweiFrames('match46-1.html#38',3,'match46-top.html#38',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (colIndex &gt; 4) {
+                colIndex = 0;
+                rowIndex++;
+            }
+        }
+    }
+
+<A NAME="39"></A>    public void clickAndTurn() {
+        final int[] cardShow = {0}</B></FONT>;
+        for (short i = 20; i &lt; 40; i++) {     //the front image 20-&gt;40
+            SequentialTransition seqTransition = <FONT color="#152dc6"><A HREF="javascript:ZweiFrames('match46-1.html#39',3,'match46-top.html#39',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>animation(theme.getChildren().get(i));
+            short finalI = i;
+            theme.getChildren().get(i).setOnMouseClicked(event -&gt; {
+<A NAME="40"></A>                if (cardShow[0] != 2) {
+                    seqTransition.play</B></FONT>();
+                    cardShow[0]++;
+                    <FONT color="#347235"><A HREF="javascript:ZweiFrames('match46-1.html#40',3,'match46-top.html#40',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (a == 0) {
+                        a += Integer.parseInt(mazePic[finalI - 20]);
+                        prev = finalI;
+<A NAME="41"></A>                    } else {
+                        if (finalI != prev){</B></FONT>
+                            b += Integer.parseInt(mazePic[finalI - 20]);
+                            <FONT color="#f87a17"><A HREF="javascript:ZweiFrames('match46-1.html#41',3,'match46-top.html#41',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (a == b) {
+                                theme.getChildren().get(finalI).setVisible(false);
+                                theme.getChildren().get(prev).setVisible(false);
+                                pair--;
+                                cardShow[0] = 0;
+                            }</B></FONT>
+                            a = 0;
+                            b = 0;
+<A NAME="42"></A>                            prev = 0;
+                            prevTranistion = seqTransition;
+                        }
+                    <FONT color="#c57717"><A HREF="javascript:ZweiFrames('match46-1.html#42',3,'match46-top.html#42',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+                } else if (!prevTranistion.getStatus().equals(Animation.Status.RUNNING)){
+                    cardShow[0] = 0;
+<A NAME="43"></A>                }</B></FONT>
+            });
+        }
+    <FONT color="#c22817"><A HREF="javascript:ZweiFrames('match46-1.html#43',3,'match46-top.html#43',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    public boolean isMatch() {
+        return pair == 0;
+    }
+
+    public void startPoint(){
+        for (short i = 20; i &lt; 40; i++){
+<A NAME="44"></A>            SequentialTransition sequentialTransition = animation</B></FONT>(theme.getChildren().get(i));
+            sequentialTransition.play();
+        }
+    <FONT color="#e57ded"><A HREF="javascript:ZweiFrames('match46-1.html#44',3,'match46-top.html#44',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    private SequentialTransition animation(Node backNode) {
+
+        FadeTransition fade = new FadeTransition(Duration.millis(1), backNode);
+        fade.setFromValue(1.0);
+        fade.setToValue(0);
+<A NAME="45"></A>
+        PauseTransition pause = new PauseTransition(Duration.millis</B></FONT>(lEVELSEC[level-1]*1000));
+
+        <FONT color="#79d867"><A HREF="javascript:ZweiFrames('match46-1.html#45',3,'match46-top.html#45',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>FadeTransition popUp = new FadeTransition(Duration.millis(1), backNode);
+        popUp.setFromValue(0);
+        popUp.setToValue(1.0);
+
+        return (new SequentialTransition(fade, pause, popUp));
+    }
+
+    private </B></FONT>void arrayPic() {
+        for (int i = 0; i &lt; mazePic.length; i++) {
+            if (i &gt; 9)
+                mazePic[i] = PLAYER[i - 10];
+<A NAME="46"></A>            else
+                mazePic[i] = PLAYER[i];
+        }
+        <FONT color="#92c7c7"><A HREF="javascript:ZweiFrames('match46-1.html#46',3,'match46-top.html#46',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>for (int index = mazePic.length - 1; index &gt; 0; index--) {
+            int rand = (int) (Math.random() * index);
+            String attempt = mazePic[index];
+            mazePic[index] = mazePic[rand];
+            mazePic[rand] = attempt;
+        }
+    }
+
+<A NAME="47"></A>    private void showPlayer() {</B></FONT>
+        short rowIndex = 0, colIndex = 0;
+        for (String s : mazePic) {
+            <FONT color="#d16587"><A HREF="javascript:ZweiFrames('match46-1.html#47',3,'match46-top.html#47',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>controller.setName(s);
+            controller.setRowIndex(rowIndex);
+            controller.setColIndex(colIndex);
+            controller.updateTheme();
+            colIndex++;
+            if (colIndex &gt; 4) {
+                colIndex = 0;
+                rowIndex++;
+            }
+        }</B></FONT>
+    }
+
+
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/Assignment2/game/GameModel.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Tran Mach So Han
+  ID: s3750789
+  Created  date: 16/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+
+package Assignment2.game;
+
+class GameModel {
+<A NAME="51"></A>    private String name;
+    private short colIndex, rowIndex;
+
+    GameModel() {<FONT color="#b38481"><A HREF="javascript:ZweiFrames('match46-1.html#51',3,'match46-top.html#51',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    void setName(String name) {
+        this.name = &quot;image/&quot;+name+&quot;.png&quot;;
+    }
+
+    void setColIndex(short colIndex) {
+        this.colIndex = colIndex;
+    }
+
+    void setRowIndex(short rowIndex) {
+        this.rowIndex = rowIndex;
+    }
+
+    String getName() {
+<A NAME="52"></A>        return name;
+    }
+
+    short getCo</B></FONT>lIndex() <FONT color="#2b60de"><A HREF="javascript:ZweiFrames('match46-1.html#52',3,'match46-top.html#52',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{
+        return colIndex;
+    }
+
+    short getRowIndex() {
+        return rowIndex;
+    }
+
+
+
+}</B></FONT>
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/Assignment2/game/GameTheme.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Tran Mach So Han
+  ID: s3750789
+  Created  date: 16/12/2019
+  Last modified: 16/12/2019
+<A NAME="48"></A>  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+
+<FONT color="#c57726"><A HREF="javascript:ZweiFrames('match46-1.html#48',3,'match46-top.html#48',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package Assignment2.game;
+
+import javafx.geometry.Insets;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+
+<A NAME="49"></A>class GameTheme extends GridPane {
+
+    void addImage(String string, short colIndex, short rowIndex){
+        createPane</B></FONT>(<FONT color="#8e35ef"><A HREF="javascript:ZweiFrames('match46-1.html#49',3,'match46-top.html#49',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>createImage(string),colIndex,rowIndex);
+    }
+
+<A NAME="50"></A>    private ImageView createImage(String string) {
+        ImageView imageView = new ImageView(string);
+        imageView.setFitWidth</B></FONT>(110);
+        <FONT color="#ff0000"><A HREF="javascript:ZweiFrames('match46-1.html#50',3,'match46-top.html#50',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>imageView.setFitHeight(110);
+        imageView.setSmooth(true);
+        return imageView;
+    }
+
+    private void createPane(ImageView imgv, short colIndex, short rowIndex){
+        Pane pane = new Pane();
+        pane.setStyle(&quot;-fx-border-color: black;&quot;);
+        pane.getChildren</B></FONT>().add(imgv);
+        pane.setPadding(new Insets(0,0,0,0));
+        add(pane,colIndex,rowIndex);
+        setHgap(10);
+        setVgap(10);
+        setPadding(new Insets(10,10,10,10));
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/Assignment2/level/LevelDisplay.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Tran Mach So Han
+  ID: s3750789
+  Created  date: 16/12/2019
+  Last modified: 16/12/2019
+<A NAME="20"></A>  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+
+<FONT color="#d4a017"><A HREF="javascript:ZweiFrames('match46-1.html#20',3,'match46-top.html#20',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package Assignment2.level;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+
+public class LevelDisplay extends Label {
+    //Create a label display level that user chooses
+
+<A NAME="21"></A>    public LevelDisplay(String text){
+        addLevel(text);
+        setPadding(new</B></FONT> Insets(10,10,0,10));
+    <FONT color="#00ff00"><A HREF="javascript:ZweiFrames('match46-1.html#21',3,'match46-top.html#21',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    private void addLevel(String text) {
+        setText(text);
+        setFont(Font.font(&quot;Times New Roman&quot;, FontWeight.EXTRA_BOLD,
+                FontPosture.REGULAR,40));
+        setStyle(&quot;-fx-background-color: lightblue;&quot;);
+        setAlignment(Pos.CENTER);
+    }</B></FONT>
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/Assignment2/main/Main.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Tran Mach So Han
+  ID: s3750789
+  Created  date: 16/12/2019
+  Last modified: 16/12/2019
+<A NAME="3"></A>  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+
+<FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match46-1.html#3',3,'match46-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package Assignment2.main;
+
+import Assignment2.game.GameMain;
+import Assignment2.level.LevelDisplay;
+import Assignment2.score.*;
+import Assignment2.sound.SoundController;
+import Assignment2.time.*;
+import javafx.animation.AnimationTimer;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+
+public class Main extends Application {
+    private Stage window;
+    //Set window stage to make it called in several method
+    private static GameMain gameMain ;
+    private static TimeController timeController ;
+<A NAME="4"></A>    private static TimeDisplay timeDisplay;
+    private static SoundController soundController = new SoundController()</B></FONT>;
+    private static AnimationTimer timer;
+    <FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match46-1.html#4',3,'match46-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>private ScoreView view = new ScoreView();
+    private ScoreModel model = new ScoreModel();
+    private ScoreController controller = new ScoreController(view,model);
+
+    public Main() {
+    }
+
+    @Over</B></FONT>ride
+<A NAME="5"></A>    public void start(Stage primaryStage) {
+        window = primaryStage;
+        //Set window is primaryStage of Assignment2.main
+        <FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match46-1.html#5',3,'match46-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>window.setTitle(&quot;Assignment 2&quot;);
+        window.show();
+        mainScene();
+    }
+
+    private void mainScene(){
+        BorderPane pane = new BorderPane();
+                    //Set in the Assignment2.main scene
+        pane.setPrefSize(500,400);
+        pane.setBackground</B></FONT>(new Background(new BackgroundFill(Color.BLANCHEDALMOND,
+<A NAME="6"></A>                new CornerRadii(1),new Insets(0.0,0.0,0.0,0.0))));
+        //Set back ground fill
+
+        <FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match46-1.html#6',3,'match46-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>Label start = new Label(&quot;GAME MEMORY&quot;);
+        start.setFont(Font.font(&quot;Arial&quot;,FontWeight.EXTRA_BOLD,FontPosture.REGULAR,50));
+        start.setTextFill(Color.BLUEVIOLET);
+        start.setAlignment(Pos.CENTER);
+        pane.setCenter(start);
+
+        VBox vBox = chooseLevel();
+        pane.setBottom</B></FONT>(vBox);
+<A NAME="7"></A>        //click on the pane, it will do action , set to scene choose level
+
+        Scene mainScene = new Scene(pane, 500, 400);
+        <FONT color="#c58917"><A HREF="javascript:ZweiFrames('match46-1.html#7',3,'match46-top.html#7',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>window.setScene(mainScene);
+        //In the beginning, Assignment2.main scene shows first
+    }
+
+    private VBox chooseLevel(){
+        //User can choose level they want from 1 -3
+        VBox pane = new VBox(20);
+        pane.setBackground(new</B></FONT> Background(new BackgroundFill(Color.WHITE,
+                new CornerRadii(1),new Insets(0.0,0.0,0.0,0.0))));
+        pane.setPadding(new Insets(15,5,5,5));
+        pane.setStyle(&quot;-fx-background-color: lightgreen&quot;);
+        Label label = new Label(&quot;Level&quot;);
+        label.setFont(Font.font(&quot;Times New Roman&quot;, 50));
+        pane.getChildren().add(label);
+
+        Button[] levelOption = {new Button(&quot;Level 1&quot;), new Button(&quot;Level 2&quot;),
+<A NAME="8"></A>                new Button(&quot;Level 3&quot;)};
+        //3 buttons of level are displayed
+
+        for (<FONT color="#bce954"><A HREF="javascript:ZweiFrames('match46-1.html#8',3,'match46-top.html#8',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>Button btn : levelOption){
+            btn.setAlignment(Pos.CENTER);
+            btn.translateXProperty().bind(pane.widthProperty().divide(2));
+            pane.getChildren().add(btn);
+            btn.setOnAction(e-&gt; {</B></FONT>
+                //Set action on each button in for loop
+                gameMain = new GameMain();
+                timeDisplay = new TimeDisplay();
+                timeController = new TimeController();
+                Scene sceneGame = new Scene(
+<A NAME="9"></A>                        addAll(btn.getText()),1000,700);
+                window.setScene(sceneGame);
+            });
+        <FONT color="#f88017"><A HREF="javascript:ZweiFrames('match46-1.html#9',3,'match46-top.html#9',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+        return pane;
+    }
+
+    private GridPane addAll(String text){
+        //Create new pane to have a new scene
+
+        GridPane gamePane = new GridPane();
+        LevelDisplay levelDisplay = new</B></FONT> LevelDisplay(text);
+        gameMain.setLevel(Integer.parseInt(text.replaceAll(&quot;[\\D]&quot;,&quot;&quot;)));
+            //Set level chosen by the user, get number
+        gamePane.add(levelDisplay,3,0);
+<A NAME="10"></A>        gamePane.add(gameMain,0,1);
+        gamePane.add(timeDisplay,0,2);
+        gamePane.add(timeController,1,2);
+        <FONT color="#b041ff"><A HREF="javascript:ZweiFrames('match46-1.html#10',3,'match46-top.html#10',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>gamePane.add(soundController,2,2);
+        gamePane.setPadding(new Insets(0,0,0,0));
+        gamePane.setHgap(20);
+        gamePane.setVgap(20);
+        BackgroundImage myBF = new BackgroundImage(new Image(&quot;image/background.jpeg&quot;,1250,
+                800,false,true), BackgroundRepeat.REPEAT,
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        gamePane.setBackground(new Background(myBF));
+<A NAME="11"></A>
+        gamePane.add(gameStart(),0,0);
+        gamePane.add(quitGame(),1,0);
+        gamePane.add</B></FONT>(<FONT color="#571b7e"><A HREF="javascript:ZweiFrames('match46-1.html#11',3,'match46-top.html#11',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>resartGame(),2,0);
+        gamePane.add(controller.updateScore(),3,3);
+        gameStop();
+        return gamePane;
+    }
+
+    private Button gameStart(){
+<A NAME="12"></A>        final boolean[] press = {false}</B></FONT>;
+        Button start = new Button(&quot;Start Game&quot;);
+        start.setStyle(&quot;-fx-fill: yellow&quot;);
+        start.setOnAction(event -&gt; <FONT color="#3b9c9c"><A HREF="javascript:ZweiFrames('match46-1.html#12',3,'match46-top.html#12',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{
+            if (!press[0]){
+                timeController.runTime();
+                timeDisplay.runBarTime();
+                gameMain.startPoint();
+                gameMain.clickAndTurn();
+                press[0] = true;
+<A NAME="13"></A>            }
+        }</B></FONT>);
+        return start;
+    <FONT color="#842dce"><A HREF="javascript:ZweiFrames('match46-1.html#13',3,'match46-top.html#13',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    private void gameStop(){
+<A NAME="14"></A>        timer = new AnimationTimer() {
+            @Override
+            public void handle(long now</B></FONT>) {
+                <FONT color="#f52887"><A HREF="javascript:ZweiFrames('match46-1.html#14',3,'match46-top.html#14',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (gameMain.isMatch()){
+                    timeController.stopTime();
+                    timeDisplay.pauseBarTime();
+                    displayMessage(&quot;Congrtulation&quot;,&quot;You win!&quot;);
+                    timer.stop();
+                    controller.setData((int) (controller.getData() + timeController.getRemainingSecond()));
+                }
+                if (timeController.isTimeOver()){
+                    displayMessage(&quot;Time is up&quot;,&quot;Too bad ! You lose&quot;);
+                    timer.stop</B></FONT>();
+<A NAME="15"></A>                }
+            }
+        };
+        <FONT color="#3bb9ff"><A HREF="javascript:ZweiFrames('match46-1.html#15',3,'match46-top.html#15',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>timer.start();
+    }
+
+    private void displayMessage(String title, String message){
+        Stage alertBox = new Stage();
+
+        alertBox.initModality(Modality.APPLICATION_MODAL);
+        alertBox.setTitle</B></FONT>(title);
+        alertBox.setMinWidth(250);
+
+        Label label = new Label(message);
+
+        HBox hBox = new HBox(30);
+
+<A NAME="16"></A>        Button closeButton = quitGame();
+
+        Button continueButton = new Button(&quot;New Game&quot;);
+        <FONT color="#3090c7"><A HREF="javascript:ZweiFrames('match46-1.html#16',3,'match46-top.html#16',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>continueButton.setOnAction(e -&gt; {
+            alertBox.close();
+            start(window);
+        });
+
+<A NAME="17"></A>        hBox.getChildren().addAll(closeButton, continueButton);
+
+        VBox vBox = new VBox(20)</B></FONT>;
+        <FONT color="#800517"><A HREF="javascript:ZweiFrames('match46-1.html#17',3,'match46-top.html#17',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>vBox.getChildren().addAll(label,hBox);
+        alertBox.setScene(new Scene(vBox));
+        alertBox.show();
+    }
+<A NAME="18"></A>
+    private Button quitGame() {
+        Button closeButton = new Button(&quot;Quit&quot;)</B></FONT>;
+        closeButton.setOnAction(e -&gt; <FONT color="#f62817"><A HREF="javascript:ZweiFrames('match46-1.html#18',3,'match46-top.html#18',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>System.exit(0));
+        return closeButton;
+    }
+
+    private Button resartGame(){
+        Button continueButton = new Button(&quot;Restart&quot;);
+<A NAME="19"></A>        continueButton.setOnAction</B></FONT>(e -&gt; {
+            start(window);
+        });
+        <FONT color="#4e9258"><A HREF="javascript:ZweiFrames('match46-1.html#19',3,'match46-top.html#19',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>return continueButton;
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}</B></FONT>
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/Assignment2/score/ScoreController.java</CENTER></H3><HR>
+<PRE>
+<A NAME="24"></A><FONT color="#ada96e"><A HREF="javascript:ZweiFrames('match46-1.html#24',3,'match46-top.html#24',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package Assignment2.score;
+
+import javafx.scene.control.Label;
+
+public class ScoreController {
+
+    private ScoreView view ;
+    private ScoreModel model;
+
+<A NAME="25"></A>    public ScoreController(ScoreView view, ScoreModel model) {
+        this.view = view;
+        t</B></FONT>his.model = model;
+    <FONT color="#87f717"><A HREF="javascript:ZweiFrames('match46-1.html#25',3,'match46-top.html#25',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    public int getData() {
+        return model.getData();
+    }
+
+    public void setData(int data) {
+        model.setData(data);
+    }
+
+    public Label updateScore(){
+        //update Score and return label
+        return (view.updateScore(model.getData()));
+    }</B></FONT>
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/Assignment2/score/ScoreModel.java</CENTER></H3><HR>
+<PRE>
+<A NAME="22"></A>package Assignment2.score;
+
+public class ScoreModel {
+    <FONT color="#4cc417"><A HREF="javascript:ZweiFrames('match46-1.html#22',3,'match46-top.html#22',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>private int data ;
+
+    int getData() {
+        return data;
+    }
+
+    void setData(int data) {
+        this.data = data;
+    }</B></FONT>
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/Assignment2/score/ScoreView.java</CENTER></H3><HR>
+<PRE>
+package Assignment2.score;
+
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+<A NAME="23"></A>
+public class ScoreView {
+
+    <FONT color="#f660ab"><A HREF="javascript:ZweiFrames('match46-1.html#23',3,'match46-top.html#23',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>Label updateScore(int number){
+        Label label = new Label();
+        label.setText(&quot;score&quot; + &quot; &quot; + number);
+        label.setTextFill(Color.RED);
+        label.setStyle(&quot;-fx-background-color: Green&quot;);
+        label.setFont(Font.font(40));
+        return label;
+    }</B></FONT>
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/Assignment2/sound/SoundController.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Tran Mach So Han
+  ID: s3750789
+  Created  date: 16/12/2019
+  Last modified: 16/12/2019
+<A NAME="0"></A>  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+
+<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match46-1.html#0',3,'match46-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package Assignment2.sound;
+
+import javafx.animation.Timeline;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
+
+import java.io.File;
+import java.nio.file.Paths;
+
+public class SoundController extends Button{
+    //Create sound to be heard by the player
+
+    public SoundController(){
+        playMusic();
+    }
+
+    private v</B></FONT>oid playMusic() {
+<A NAME="1"></A>        AudioClip audio = new AudioClip(
+                new File(&quot;src/sfx/jingle.mp3&quot;).toURI().toString());
+
+        <FONT color="#f63526"><A HREF="javascript:ZweiFrames('match46-1.html#1',3,'match46-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>audio.play();
+        ImageView play = new ImageView(&quot;sound/play.png&quot;);
+        play.setFitHeight(15);
+        play.setFitWidth(15);
+        ImageView mute = new ImageView(&quot;sound/mute.png&quot;);
+        mute.setFitHeight(15);
+        mute.setFitWidth(15);
+
+<A NAME="2"></A>        setText(&quot;&quot;);
+        setGraphic(play);
+
+        setOnMouseClicked</B></FONT>(<FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match46-1.html#2',3,'match46-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>event -&gt; {
+            //User can play or mute the sound
+            if (getGraphic() == mute ){
+                audio.play();
+                setGraphic(play);
+            }
+            else {
+                audio.stop();
+                setGraphic(mute);
+            }
+        }</B></FONT>);
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/Assignment2/time/TimeController.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Tran Mach So Han
+  ID: s3750789
+  Created  date: 16/12/2019
+  Last modified: 16/12/2019
+<A NAME="26"></A>  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+
+<FONT color="#95b9c7"><A HREF="javascript:ZweiFrames('match46-1.html#26',3,'match46-top.html#26',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package Assignment2.time;
+
+import javafx.animation.AnimationTimer;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
+
+import java.io.*;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+
+public class TimeController extends Label{
+    private static final int MILI_SECONDS_PER_MINUTE = 60000;
+    private static final int MILLIES = 1000;
+    private Duration duration;
+    private AnimationTimer timer;
+    private long lastTimerCall;
+    private boolean timeOver = false;
+    private int remainingMili;
+
+<A NAME="27"></A>    public TimeController(){</B></FONT>
+        //Show time running minute:second:miliseconds
+        setText(&quot;00:00:00&quot;);
+        <FONT color="#e77471"><A HREF="javascript:ZweiFrames('match46-1.html#27',3,'match46-top.html#27',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>setTextFill(Color.WHITE);
+        displayTime();
+    }
+
+    private void setRemainingMili(int remainingMili) {
+        this.remainingMili = remainingMili;
+    }
+
+    private void displayTime() {</B></FONT>
+<A NAME="28"></A>        duration = Duration.minutes(2);             //Limit time 2 minutes
+        lastTimerCall = System.nanoTime();
+        timer = new AnimationTimer() {
+            <FONT color="#717d7d"><A HREF="javascript:ZweiFrames('match46-1.html#28',3,'match46-top.html#28',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>@Override
+            public void handle(final long now) {
+                if (now &gt; lastTimerCall + 1_000_0001){
+                    duration = duration.subtract(Duration.millis(15));
+                    setRemainingMili((int) duration.toMillis</B></FONT>());
+                    int m = (remainingMili / MILI_SECONDS_PER_MINUTE);
+                    int s = ((remainingMili - m * MILI_SECONDS_PER_MINUTE ) / MILLIES);
+                    int mi = ((remainingMili - m * MILI_SECONDS_PER_MINUTE ) % MILLIES);
+
+                    if (m == 0 &amp;&amp; s == 0 &amp;&amp; mi == 0){
+                        setText(&quot;00:00:00&quot;);
+                        timer.stop();
+                        timeOver = true;
+                    }
+                    lastTimerCall = now;
+                    if (s &lt; 10)
+                        setText(&quot;0&quot; + m + &quot;:&quot; + &quot;0&quot;+s + &quot;:&quot; + mi/10);
+                    else
+                        setText(&quot;0&quot; + m + &quot;:&quot; + s + &quot;:&quot; + mi/10);
+<A NAME="29"></A>                }
+            }
+        };
+    <FONT color="#faafba"><A HREF="javascript:ZweiFrames('match46-1.html#29',3,'match46-top.html#29',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    public void runTime(){
+        timer.start();
+    }
+
+    public void stopTime(){
+        timer.stop();
+    }
+
+    public boolean isTimeOver(){
+        return timeOver;
+    }
+
+    public long getRem</B></FONT>ainingSecond(){
+        //To update score
+        return (120 - TimeUnit.MILLISECONDS.toSeconds(remainingMili));
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/Assignment2/time/TimeDisplay.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Tran Mach So Han
+  ID: s3750789
+  Created  date: 16/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+<A NAME="30"></A>
+package Assignment2.time;
+
+<FONT color="#f9966b"><A HREF="javascript:ZweiFrames('match46-1.html#30',3,'match46-top.html#30',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.animation.PathTransition;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.util.Duration;
+
+public class TimeDisplay extends Pane {
+    //To display time running
+    private PathTransition path ;
+    private Rectangle rect;
+
+    public TimeDisplay(){
+        timeDisplayBar();
+<A NAME="31"></A>    }
+
+    private void t</B></FONT>imeDisplayBar(){
+        rect = <FONT color="#3ea99f"><A HREF="javascript:ZweiFrames('match46-1.html#31',3,'match46-top.html#31',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>new Rectangle(30,30);
+        rect.setFill(Color.WHITE);
+        Line line = new Line();
+        line.setStartX(190);
+        line.setEndX(90);
+        line.setStrokeWidth(30);
+        line.setStroke(Color.RED);
+        rect.setVisible</B></FONT>(false);
+
+<A NAME="32"></A>        path = new PathTransition(Duration.minutes(2.2),line,rect);
+
+        Label label = new Label(&quot;Time&quot;);
+        <FONT color="#82cafa"><A HREF="javascript:ZweiFrames('match46-1.html#32',3,'match46-top.html#32',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>label.setFont(Font.font(&quot;Arial&quot;,30));
+        label.setStyle(&quot;-fx-background-color: white; -fx-fill: black&quot;);
+        getChildren().addAll(label,line,rect);
+    }
+
+    public void runBarTime(){
+        path.play();
+        rect.setVisible(true);
+    }
+
+    public void pauseBarTime(){
+        path.pause</B></FONT>();
+    }
+}
+</PRE>
+
+</BODY>
+</HTML>

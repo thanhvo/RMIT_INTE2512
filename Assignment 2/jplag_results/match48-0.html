@@ -1,0 +1,1496 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>minhle_157282</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/Controller/Controller.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+<A NAME="52"></A>    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+
+<FONT color="#2b60de"><A HREF="javascript:ZweiFrames('match48-1.html#52',3,'match48-top.html#52',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package Controller;
+
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import view.MyBorderPane;
+import view.PictureTile;
+
+import java.awt.*;
+
+public class Controller {
+
+<A NAME="53"></A>    private static Controller instance;
+    private int turnUpCharges = 1;
+    private int currentIndex = 0</B></FONT>;
+    <FONT color="#f88158"><A HREF="javascript:ZweiFrames('match48-1.html#53',3,'match48-top.html#53',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>private Integer[] turnUpPicId = {null, null};
+    private Integer[] turnUpPicIndex = {null, null};
+    private int level = 1;
+    private Stage primaryStage;
+    private MyBorderPane myBorderPane;
+    private int pairCounter;
+    private int score = 0;
+<A NAME="54"></A>    private int turnDelay</B></FONT>;
+
+    //default constructor for controller
+    private Controller()<FONT color="#4e8975"><A HREF="javascript:ZweiFrames('match48-1.html#54',3,'match48-top.html#54',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{
+        Dimension sceneSize =Toolkit.getDefaultToolkit().getScreenSize();
+<A NAME="55"></A>        double width = sceneSize.getWidth();
+        double height = sceneSize.getHeight();
+        m</B></FONT>yBorderPane = new MyBorderPane(width, height);
+        <FONT color="#4863a0"><A HREF="javascript:ZweiFrames('match48-1.html#55',3,'match48-top.html#55',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>primaryStage = new Stage();
+        primaryStage.setTitle(&quot;Place holder title&quot;);
+        primaryStage.setFullScreen(true);
+        primaryStage.setScene(new Scene(myBorderPane, width, height));
+    }
+
+    //get the controller instance
+<A NAME="56"></A>    public stat</B></FONT>ic Controller getInstance(){
+        if(instance == null)
+            instance = new Controller();
+        <FONT color="#52d017"><A HREF="javascript:ZweiFrames('match48-1.html#56',3,'match48-top.html#56',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>return instance;
+    }
+
+    //display the custom stage
+    public void update(){
+        primaryStage.show();
+    }
+
+    //handle event when user click on a picture
+    public void clickOnPic(int tileLocation){
+        if (turnUpCharges != -1) {
+            if</B></FONT> (currentIndex == 0)
+                currentIndex = 1;
+            else
+                currentIndex = 0;
+<A NAME="57"></A>
+            //save the info of clicked picture into 2 array
+            PictureTile clickedPictureTile = (PictureTile) myBorderPane.getPictureGrid().getChildren().get(tileLocation);
+            <FONT color="#980517"><A HREF="javascript:ZweiFrames('match48-1.html#57',3,'match48-top.html#57',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>turnUpPicIndex[currentIndex] = tileLocation;
+            turnUpPicId[currentIndex] = clickedPictureTile.getPictureId();
+
+            //check if there are 2 face up picture
+            if (turnUpPicId[0] != null &amp;&amp; turnUpPicId[1] != null){
+                checkMatchedPic(currentIndex);
+<A NAME="58"></A>            }
+            else{</B></FONT>
+                clickedPictureTile.turnPicture(currentIndex);
+            <FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match48-1.html#58',3,'match48-top.html#58',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+        }
+    }
+
+    public int getPairCounter(){
+        return pairCounter;
+    }
+    public int getTurnDelay(){
+        return this.turnDelay;
+    }
+
+    //handle event when player click on start button
+    public void clickStart(){</B></FONT>
+        pairCounter = 0;
+
+        // set the delay between a picture turn face up and turn face down
+        if (level == 1)
+           turnDelay = 3000;
+<A NAME="59"></A>        else if (level == 2)
+            turnDelay = 2000;
+        else
+            turnDelay = 1000<FONT color="#f63526"><A HREF="javascript:ZweiFrames('match48-1.html#59',3,'match48-top.html#59',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>;
+
+        //start game counter and reset the picture grid
+        myBorderPane.getCountDown().startCountdown(1,59,100);
+        myBorderPane.resetBorderPane();
+    }
+<A NAME="60"></A>
+    //handle event when the game ended via player complete 10 picture pair or the timer run out and display the updated score of the player
+    public void finish(boolean playerWin, int roundScore){</B></FONT>
+        <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match48-1.html#60',3,'match48-top.html#60',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>myBorderPane.getPictureGrid().setVisible(false);
+        myBorderPane.getMenu().getDifficultyMenu().setVisible(true);
+        if (playerWin){
+            score += roundScore;
+            myBorderPane.getResultPane().showResultScene(true, &quot; YOUR CURRENT SCORE: &quot; + score);
+        }
+        else {
+            score -= 30;
+            myBorderPane.getResultPane().showResultScene(false, &quot; YOUR CURRENT SCORE: &quot; + score);
+        }
+        myBorderPane.showResultScene</B></FONT>();
+    }
+
+    public void increaseLevel(){
+        if (level &lt; 3)
+            level++;
+        myBorderPane.getCountDown().setLevelLabel(level);
+    }
+<A NAME="61"></A>
+    public void decreaseLevel(){
+        if (level &gt; 1)
+            level--<FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match48-1.html#61',3,'match48-top.html#61',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>;
+        myBorderPane.getCountDown().setLevelLabel(level);
+    }
+<A NAME="62"></A>
+    public void changeSoundSetting(){
+        myBorderPane.getCountDown</B></FONT>().changeSoundSetting();
+    <FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match48-1.html#62',3,'match48-top.html#62',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    public void addTurnUpCharge(){
+        turnUpCharges++;
+    }
+
+    public void removeTurnUpCharge(){
+        turnUpCharges--;
+    }
+
+    public Integer[] getTurnUpPicId(){
+        return turnUpPicId;
+    }
+
+    public Integer[] getTurnUpPicIndex(){
+        return turnUpPicIndex;
+    }
+
+    public String getLevel(){
+        return &quot;LEVEL &quot; + level;
+    }
+
+<A NAME="63"></A>    //check if the 2 picture turn up is the same.
+    // If 2 picture are the same then perform special animation for the 2 cards, if not then set the regular turn animation for the most recent turn up picture
+    private void ch</B></FONT>eckMatchedPic(int currentIndex){
+        <FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match48-1.html#63',3,'match48-top.html#63',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (turnUpPicId[0] == turnUpPicId[1]){
+            PictureTile pictureTile2 = (PictureTile) myBorderPane.getPictureGrid().getChildren().get(turnUpPicIndex[0]);
+            PictureTile pictureTile1 = (PictureTile) myBorderPane.getPictureGrid().getChildren().get(turnUpPicIndex[1]);
+            pictureTile1.matchedCard();
+            pictureTile2.matchedCard</B></FONT>();
+            for (int i = 0; i &lt; turnUpPicId.length;  i++)
+                turnUpPicId[i] = null;
+            for (int i = 0; i &lt; turnUpPicIndex.length;  i++)
+<A NAME="64"></A>                turnUpPicIndex[i] = null;
+            turnUpCharges = 1;
+            pairCounter++;
+        <FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match48-1.html#64',3,'match48-top.html#64',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+        else {
+            PictureTile pictureTile = (PictureTile) myBorderPane.getPictureGrid().getChildren().get(turnUpPicIndex[currentIndex]);
+            pictureTile.turnPicture(currentIndex);
+        }
+    }</B></FONT>
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/Main.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+
+import Controller.Controller;
+import javafx.application.Application;
+import javafx.stage.Stage;
+<A NAME="0"></A>
+public class Main extends Application{
+
+    <FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match48-1.html#0',3,'match48-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>@Override
+    public void start(Stage primaryStage){
+        Controller controller = Controller.getInstance();
+        controller.update();
+    }
+
+
+    public static void main(String[] args</B></FONT>) {
+        launch(args);
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/util/FileIO.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+
+package util;
+import java.io.File;
+import java.net.URI;
+
+public class FileIO {
+<A NAME="65"></A>    public static final String PICTURE_PATH = System.getProperty(&quot;user.dir&quot;) + File.separator + &quot;src&quot; + File.separator + &quot;picture&quot; + File.separator;
+    public static final String MUSIC_PATH = System.getProperty(&quot;user.dir&quot;) + File.separator + &quot;src&quot; + File.separator + &quot;music&quot; + File.separator + &quot;background_music.mp3&quot;;
+
+    <FONT color="#c58917"><A HREF="javascript:ZweiFrames('match48-1.html#65',3,'match48-top.html#65',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>public static String getFilePath(String fileName){
+        return PICTURE_PATH + fileName;
+    }
+
+    //convert regular path of the music file into URI (use in MediaPlayer)
+    public static URI getMusicURI(){
+        File file = new</B></FONT> File(MUSIC_PATH);
+        return file.toURI();
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/CountdownBar.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+<A NAME="1"></A>
+package view;
+
+<FONT color="#f63526"><A HREF="javascript:ZweiFrames('match48-1.html#1',3,'match48-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import Controller.Controller;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.geometry.Pos;
+import javafx.scene.layout.HBox;
+import javafx.util.Duration;
+import view.buttons.SoundButton;
+import view.label.CountdownLabel;
+import view.label.LevelLabel;
+
+public class CountdownBar extends HBox {
+    private Timeline timeline;
+    private Integer minute = 1;
+    private Integer second = 59;
+    private Integer hundredthsOFSec = 100;
+    private LevelLabel levelLabel;
+    private CountdownLabel countDownLabel;
+    private SoundButton soundButton;
+
+<A NAME="2"></A>
+     public CountdownBar(double width, double height){
+         super</B></FONT>();
+         <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match48-1.html#2',3,'match48-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>super.setPrefSize(width, height);
+         super.setAlignment(Pos.CENTER);
+         super.setSpacing(width * 0.15);
+         levelLabel = new LevelLabel(width * 0.2 , height) ;
+         countDownLabel = new CountdownLabel(&quot;REMAINING TIME: 2:00:00&quot;, width * 0.45, height);
+         soundButton = new</B></FONT> SoundButton(height);
+         super.getChildren().addAll(levelLabel, countDownLabel, soundButton);
+<A NAME="3"></A>     }
+
+     //set the timer and start the stop clock animation
+     <FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match48-1.html#3',3,'match48-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>public void startCountdown(int minute, int second, int hundredthsOFSec){
+         this.minute = minute;
+         this.second = second;
+         this.hundredthsOFSec = hundredthsOFSec;
+         animateCountdown();
+<A NAME="4"></A>     }
+
+     public void change</B></FONT>SoundSetting(){
+         <FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match48-1.html#4',3,'match48-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>soundButton.changeSoundSetting();
+     }
+
+     public void animateCountdown(){
+<A NAME="5"></A>         if (timeline != null)
+             timeline.stop();
+         t</B></FONT>imeline = new Timeline();
+         <FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match48-1.html#5',3,'match48-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>timeline.setCycleCount(Timeline.INDEFINITE);
+         timeline.getKeyFrames().add(getCountDown());
+         timeline.playFromStart();
+     }
+
+     public void setLevelLabel(int level){
+         levelLabel.setText(&quot;LEVEL &quot; + level);
+     }
+
+//     public void setCountDownLabel(){
+//         String level = Controller.getInstance().getLevel();
+//         switch (level){
+//             case &quot;LEVEL 1&quot;:
+//                 countDownLabel.setText(&quot;REMAINING TIME: 2:00:00&quot;);
+//                 break;
+//             case &quot;LEVEL 2&quot;:
+//                 countDownLabel.setText(&quot;REMAINING TIME: 1:30:00&quot;);
+//                 break;
+//             case &quot;LEVEL 3&quot;:
+//                 countDownLabel.setText(&quot;REMAINING TIME: 1:00:00&quot;);
+//         }
+//     }
+
+    //generate the Keyframe for the countdown clock also set up stop condition for the clock
+<A NAME="6"></A>     private KeyFrame getCountDown(){</B></FONT>
+         KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.01), e -&gt; {
+             hundredthsOFSec--;
+             <FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match48-1.html#6',3,'match48-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>countDownLabel.setTimer(minute, second, hundredthsOFSec);
+             if (Controller.getInstance().getPairCounter() == 10){
+<A NAME="7"></A>                 timeline.stop();
+                 Controller.getInstance().finish(true, countDownLabel.getTimeScore());
+             }</B></FONT>
+             if (hundredthsOFSec == 0 )<FONT color="#c58917"><A HREF="javascript:ZweiFrames('match48-1.html#7',3,'match48-top.html#7',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{
+                 if (minute == 0 &amp;&amp; second ==0) {
+                     timeline.stop();
+                     Controller.getInstance().finish(false, 0);
+                 }
+                 else if (second == 0 &amp;&amp; minute != 0){</B></FONT>
+                     minute--;
+                     second = 60;
+                 }
+                 else
+                     second--;
+                 hundredthsOFSec = 100;
+             }
+         });
+         return keyFrame;
+     }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/Menu.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+<A NAME="14"></A>
+package view;
+
+<FONT color="#f52887"><A HREF="javascript:ZweiFrames('match48-1.html#14',3,'match48-top.html#14',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import view.buttons.DecreaseDifButton;
+import view.buttons.IncreaseDifButton;
+import view.buttons.QuitButton;
+import view.buttons.StartButton;
+
+public class Menu extends VBox {
+
+    private VBox difficultyMenu;
+    private VBox quitGame;
+
+    public Menu(double width, double height){
+        super</B></FONT>();
+<A NAME="15"></A>        super.setPrefSize(width, height);
+        difficultyMenu = initDifficultyMenu(width, height*0.8);
+        quitGame = initQuitMenu(width, height * 0.2);
+        <FONT color="#3bb9ff"><A HREF="javascript:ZweiFrames('match48-1.html#15',3,'match48-top.html#15',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>super.getChildren().addAll(difficultyMenu, quitGame);
+        super.setSpacing(width*0.1);
+    }
+
+    public VBox getDifficultyMenu(){
+        return this.difficultyMenu;
+<A NAME="16"></A>    }
+
+    private VBox initDifficultyMenu(double width, double height) {</B></FONT>
+        <FONT color="#3090c7"><A HREF="javascript:ZweiFrames('match48-1.html#16',3,'match48-top.html#16',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>VBox difficultyMenu = new VBox();
+        difficultyMenu.setPrefSize(width, height);
+        difficultyMenu.setAlignment(Pos.CENTER);
+        difficultyMenu.setSpacing(20);
+        difficultyMenu.getChildren().addAll(new IncreaseDifButton(), new</B></FONT> DecreaseDifButton(), new StartButton());
+        for (Node node : difficultyMenu.getChildren()) {
+<A NAME="17"></A>            ((Button) node).setPrefSize(width, height / 3);
+        }
+        return difficultyMenu;
+    <FONT color="#800517"><A HREF="javascript:ZweiFrames('match48-1.html#17',3,'match48-top.html#17',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    private VBox initQuitMenu(double width, double height){
+        VBox quit = new VBox();
+        quit.setPrefSize(width, height );
+        quit.setAlignment(Pos.CENTER);
+        quit.setSpacing(20);
+        quit.getChildren</B></FONT>().addAll(new QuitButton());
+        ((Button) quit.getChildren().get(0)).setPrefSize(width, height-40);
+        return quit;
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/MyBorderPane.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+<A NAME="8"></A>
+package view;
+
+<FONT color="#bce954"><A HREF="javascript:ZweiFrames('match48-1.html#8',3,'match48-top.html#8',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+import util.FileIO;
+
+public class MyBorderPane extends BorderPane {
+    private PictureGrid pictureGrid;
+    private CountdownBar countDown;
+    private Menu menu;
+    private ResultPane resultPane;
+
+<A NAME="9"></A>    public MyBorderPane(double width, double height){
+        super();
+        p</B></FONT>ictureGrid = new PictureGrid(width * 0.9, height * 0.85);
+        <FONT color="#f88017"><A HREF="javascript:ZweiFrames('match48-1.html#9',3,'match48-top.html#9',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>resultPane = new ResultPane(width * 0.9, height * 0.85);
+        countDown = new CountdownBar(width * 0.9, height * 0.15);
+        menu = new Menu(width*0.1, height);
+        super.setPrefSize(width, height);
+        super.setTop(countDown);
+        super.setLeft(pictureGrid);
+        super.setRight</B></FONT>(menu);
+<A NAME="10"></A>        BackgroundImage bg= new BackgroundImage(new Image(&quot;file:&quot; + FileIO.getFilePath(&quot;background.png&quot;), width, height, true, true),
+                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
+                BackgroundSize.DEFAULT);
+        <FONT color="#b041ff"><A HREF="javascript:ZweiFrames('match48-1.html#10',3,'match48-top.html#10',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>super.setBackground(new Background(bg));
+    }
+
+    public PictureGrid getPictureGrid(){
+        return this.pictureGrid;
+    }
+
+    public ResultPane getResultPane(){
+        return this.resultPane;
+    }
+
+    public CountdownBar getCountDown(){
+        return this.countDown;
+    }
+
+    public Menu getMenu(){
+        return this.menu;
+    }
+<A NAME="11"></A>
+    //reset the borderPane to be use again
+    public void resetBorderPane(){</B></FONT>
+        <FONT color="#571b7e"><A HREF="javascript:ZweiFrames('match48-1.html#11',3,'match48-top.html#11',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>resetPictureGrid();
+        pictureGrid.setVisible(true);
+        menu.getDifficultyMenu().setVisible(false);
+    }
+
+    //display the result pane in place of the pictureGrid
+    public void showResultScene(){
+        menu.setVisible(true);
+        super.setLeft(resultPane);
+    }
+
+    //generate a new picture grid (randomize) and set the picture grid to the borderPane
+    private void resetPictureGrid(){</B></FONT>
+        pictureGrid = new PictureGrid(super.getWidth() * 0.9, super.getHeight() * 0.85);
+        super.setLeft(pictureGrid);
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/MyImageView.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+<A NAME="12"></A>    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+
+<FONT color="#3b9c9c"><A HREF="javascript:ZweiFrames('match48-1.html#12',3,'match48-top.html#12',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package view;
+
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import util.FileIO;
+
+<A NAME="13"></A>public class MyImageView extends ImageView {
+    public MyImageView(double height, String fileName){
+        super</B></FONT>();
+        Image image = new Image(&quot;file:&quot; + <FONT color="#842dce"><A HREF="javascript:ZweiFrames('match48-1.html#13',3,'match48-top.html#13',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>FileIO.getFilePath(fileName + &quot;.png&quot;));
+        super.setFitHeight(height);
+        super.setPreserveRatio(true);
+        super.setSmooth(true);
+        super.setImage(image);
+    }
+
+    public void changeImage(String fileName){
+        Image image = new Image(&quot;file:&quot; + FileIO.getFilePath(fileName + &quot;.png&quot;));
+        super.setImage</B></FONT>(image);
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/PictureGrid.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+<A NAME="31"></A>    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+
+<FONT color="#3ea99f"><A HREF="javascript:ZweiFrames('match48-1.html#31',3,'match48-top.html#31',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package view;
+
+import Controller.Controller;
+import javafx.scene.layout.Pane;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class PictureGrid extends Pane {
+
+    private static final int NUM_PER_ROW = 4;
+    private static final int NUM_OF_PAIR = 10;
+    double width, height;
+
+    public PictureGrid(double x, double y){
+        super</B></FONT>();
+        super.setPrefSize(x, y);
+        super.setVisible(false);
+        this.width = x;
+        this.height = y;
+<A NAME="32"></A>
+        List&lt;PictureTile&gt; pictureTiles = initTiles();
+        Collections.shuffle(pictureTiles);
+        <FONT color="#82cafa"><A HREF="javascript:ZweiFrames('match48-1.html#32',3,'match48-top.html#32',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>setTilesLayout(pictureTiles);
+    }
+
+    //Move each tile to the designated position in the grid and add them to the pane
+<A NAME="33"></A>    private void setTilesLayout(List&lt;PictureTile&gt; pictureTiles){
+        for (int i = 0; i &lt; pictureTiles.size(); i++){
+            int index = i</B></FONT>;
+            <FONT color="#736aff"><A HREF="javascript:ZweiFrames('match48-1.html#33',3,'match48-top.html#33',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>PictureTile pictureTile = pictureTiles.get(i);
+            pictureTile.setTranslateX((width/4) * (i % NUM_PER_ROW));
+            pictureTile.setTranslateY((height * 0.2) * (i / NUM_PER_ROW));
+<A NAME="34"></A>            getChildren().add(pictureTile);
+            pictureTile.setOnMouseClicked(e -&gt; Controller.getInstance</B></FONT>().clickOnPic(index));
+        }
+    <FONT color="#827d6b"><A HREF="javascript:ZweiFrames('match48-1.html#34',3,'match48-top.html#34',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    //generate number of tiles base on number of pairs needed
+    private List&lt;PictureTile&gt; initTiles(){
+        List&lt;PictureTile&gt; pictureTiles = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt; NUM_OF_PAIR; i++){
+            pictureTiles.add</B></FONT>(new PictureTile(i, width * 0.25, height * 0.18));
+            pictureTiles.add(new PictureTile(i, width * 0.25,height * 0.18));
+        }
+        return pictureTiles;
+    }
+
+
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/PictureTile.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+<A NAME="20"></A>    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+
+<FONT color="#d4a017"><A HREF="javascript:ZweiFrames('match48-1.html#20',3,'match48-top.html#20',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package view;
+
+import Controller.Controller;
+import javafx.animation.KeyFrame;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
+import javafx.geometry.Pos;
+import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
+
+public class PictureTile extends StackPane {
+    private MyImageView faceUp, faceDown;
+    private int pictureId;
+    private Timeline timeline;
+<A NAME="21"></A>    private int transitionCounter = 0;
+    private boolean inTransit, isTurnUp;
+
+    public</B></FONT> PictureTile(<FONT color="#00ff00"><A HREF="javascript:ZweiFrames('match48-1.html#21',3,'match48-top.html#21',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>int index, double x, double height){
+        super.setPrefSize(x, height);
+        inTransit = false;
+<A NAME="22"></A>        isTurnUp = false;
+        this.pictureId = index;
+        f</B></FONT>aceDown = new MyImageView(height, &quot;placeholder&quot;);
+        <FONT color="#4cc417"><A HREF="javascript:ZweiFrames('match48-1.html#22',3,'match48-top.html#22',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>faceUp = new MyImageView(height, index + &quot;&quot;);
+        faceUp.setScaleX(0);
+        setAlignment(Pos.CENTER);
+        getChildren().addAll(faceDown, faceUp);
+    }
+
+    public int getPictureId(){
+        return this.pictureId;
+    }
+
+    //start special turning animation when the card are matched with another
+    public void matchedCard(){</B></FONT>
+        if (timeline != null)
+            timeline.stop();
+        inTransit = false;
+<A NAME="23"></A>        transitionCounter = 0;
+        timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        <FONT color="#f660ab"><A HREF="javascript:ZweiFrames('match48-1.html#23',3,'match48-top.html#23',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>timeline.getKeyFrames().add(getMatchKeyFrame());
+        timeline.playFromStart();
+    }
+
+    //start the regular turning animation
+    public void turnPicture(int index){
+        if (!inTransit) {
+            if (timeline != null)
+<A NAME="24"></A>                timeline.stop</B></FONT>();
+            transitionCounter = 0;
+            timeline = new Timeline();
+            <FONT color="#ada96e"><A HREF="javascript:ZweiFrames('match48-1.html#24',3,'match48-top.html#24',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.getKeyFrames().add(getTurnKeyFrame(index));
+            timeline.playFromStart();
+        }
+    }
+
+    //Special KeyFrame animation for when this card are matched with another card. The card are 1st turn up and then disappear
+    //from the player screen
+    private KeyFrame getMatchKeyFrame(){
+        KeyFrame keyFrame = new KeyFrame(Duration.millis</B></FONT>(50), e -&gt; {
+            inTransit  = true;
+            transitionCounter++;
+            if (!isTurnUp){
+<A NAME="25"></A>                hidePicture(faceDown, faceUp);
+                isTurnUp = true;
+            }
+            <FONT color="#87f717"><A HREF="javascript:ZweiFrames('match48-1.html#25',3,'match48-top.html#25',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (transitionCounter == 30) {
+                super.setVisible(false);
+                timeline.stop();
+            }
+        });
+        return keyFrame;
+    }
+
+    //Generate the KeyFrame for each card. The card are 1st turn face up and then wait for a certain duration base on setting in the controller
+<A NAME="26"></A>    // after the duration the card is then turn face down again
+    private KeyFrame getTurnKeyFrame(int index){</B></FONT>
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(50), e-&gt;{
+            <FONT color="#95b9c7"><A HREF="javascript:ZweiFrames('match48-1.html#26',3,'match48-top.html#26',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>inTransit = true;
+            transitionCounter++;
+            if (transitionCounter == 1) {
+                hidePicture(faceDown, faceUp);
+                isTurnUp = true;
+                Controller.getInstance().removeTurnUpCharge();
+<A NAME="27"></A>            }
+            //get input from controller for how long the wait will be. the current setup each card are running at 20 frame per second
+            else if</B></FONT> (transitionCounter == Controller.getInstance().getTurnDelay() / 50){
+                <FONT color="#e77471"><A HREF="javascript:ZweiFrames('match48-1.html#27',3,'match48-top.html#27',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>hidePicture(faceUp, faceDown);
+                isTurnUp = false;
+                inTransit = false;
+                Controller.getInstance().addTurnUpCharge();
+<A NAME="28"></A>                Controller.getInstance().getTurnUpPicId()[index] = null;
+                Controller.getInstance().getTurnUpPicIndex()[index] = null;
+                timeline.stop</B></FONT>();
+            <FONT color="#717d7d"><A HREF="javascript:ZweiFrames('match48-1.html#28',3,'match48-top.html#28',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+        });
+        return keyFrame;
+    }
+<A NAME="29"></A>
+    //scale animation imitating the flipping animation. this part hiding the side currently facing up
+    private void hidePicture(MyImageView picBefore, MyImageView picAfter){
+        ScaleTransition transition = new ScaleTransition(<FONT color="#faafba"><A HREF="javascript:ZweiFrames('match48-1.html#29',3,'match48-top.html#29',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>Duration.millis(200), picBefore)</B></FONT>;
+        transition.setFromX(1);
+        transition.setToX(0);
+        transition.setOnFinished(e -&gt; showPicture(picAfter));
+        transition.play();
+    }
+
+<A NAME="30"></A>    //the second part of the scale animation. This part show the size that were facing down
+    private void showPicture(MyImageView picture){
+        picture.setScaleX</B></FONT>(0);
+        <FONT color="#f9966b"><A HREF="javascript:ZweiFrames('match48-1.html#30',3,'match48-top.html#30',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>ScaleTransition transition = new ScaleTransition(Duration.millis(200), picture);
+        transition.setFromX(0);
+        transition.setToX(1);
+        transition.play();
+    }
+}</B></FONT>
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/ResultPane.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+<A NAME="18"></A>    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+
+<FONT color="#f62817"><A HREF="javascript:ZweiFrames('match48-1.html#18',3,'match48-top.html#18',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package view;
+
+import javafx.geometry.Pos;
+import javafx.scene.layout.VBox;
+import view.label.LevelLabel;
+
+public class ResultPane extends VBox {
+
+    private MyImageView resultImage;
+    private LevelLabel scoreLabel;
+
+    public ResultPane(double width, double height){</B></FONT>
+        super();
+        super.setPrefSize(width, height);
+        resultImage = new MyImageView(height * 0.7, &quot;you_win&quot;);
+<A NAME="19"></A>        scoreLabel = new LevelLabel(width, height * 0.2);
+        super.setAlignment(Pos.CENTER);
+        super.setSpacing(10);
+        <FONT color="#4e9258"><A HREF="javascript:ZweiFrames('match48-1.html#19',3,'match48-top.html#19',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>super.getChildren().addAll(resultImage, scoreLabel);
+    }
+
+    public void showResultScene(boolean winner,String score){
+        scoreLabel.setText(score);
+        setImage(winner);
+    }
+
+    //change the display to show the image base on the status of the player
+    private void setImage(boolean winner){
+        if (winner)
+            resultImage.changeImage</B></FONT>(&quot;you_win&quot;);
+        else
+            resultImage.changeImage(&quot;you_lose&quot;);
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/buttons/DecreaseDifButton.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+
+package view.buttons;
+
+import Controller.Controller;
+<A NAME="50"></A>
+public class DecreaseDifButton extends MyButton{
+    public DecreaseDifButton(){
+        <FONT color="#ff0000"><A HREF="javascript:ZweiFrames('match48-1.html#50',3,'match48-top.html#50',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>super(&quot;DECREASE DIFFICULTY&quot;, &quot;1&quot;);
+        super.setOnMouseClicked(e -&gt; {
+            Controller.getInstance().decreaseLevel();
+        });
+    }</B></FONT>
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/buttons/IncreaseDifButton.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+
+package view.buttons;
+
+import Controller.Controller;
+<A NAME="48"></A>
+public class IncreaseDifButton extends MyButton{
+    public IncreaseDifButton(){
+        <FONT color="#c57726"><A HREF="javascript:ZweiFrames('match48-1.html#48',3,'match48-top.html#48',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>super(&quot;INCREASE DIFFICULTY&quot;, &quot;0&quot;);
+        super.setOnMouseClicked(e-&gt; {
+            Controller.getInstance().increaseLevel();
+        });
+    }</B></FONT>
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/buttons/MyButton.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+
+<A NAME="51"></A>package view.buttons;
+
+
+<FONT color="#b38481"><A HREF="javascript:ZweiFrames('match48-1.html#51',3,'match48-top.html#51',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.Control;
+
+abstract class MyButton extends Button {
+
+    protected MyButton(String text, String id){
+        super();
+        super.setText</B></FONT>(text);
+        super.setId(id);
+        super.setPadding(new Insets(0.5,0.5,0.5,0.5));
+        super.setPrefSize(Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/buttons/QuitButton.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+
+package view.buttons;
+
+import javafx.application.Platform;
+<A NAME="41"></A>
+public class QuitButton extends MyButton{
+    public QuitButton(){
+        <FONT color="#f87a17"><A HREF="javascript:ZweiFrames('match48-1.html#41',3,'match48-top.html#41',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>super(&quot;QUIT&quot;, &quot;3&quot;);
+        super.setOnMouseClicked(e-&gt;{
+            Platform.exit();
+            System.exit(0);
+        });
+    }
+}</B></FONT>
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/buttons/SoundButton.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+<A NAME="42"></A>
+package view.buttons;
+
+<FONT color="#c57717"><A HREF="javascript:ZweiFrames('match48-1.html#42',3,'match48-top.html#42',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import Controller.Controller;
+import javafx.animation.Timeline;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import util.FileIO;
+
+public class SoundButton extends ImageView {
+
+    private Image soundOn, soundOff;
+    private boolean isOn;
+    private GameMusic gameMusic;
+
+    public SoundButton(double height){
+        super();
+<A NAME="43"></A>        s</B></FONT>oundOn = new Image(&quot;file:&quot; + FileIO.getFilePath(&quot;sound_on.png&quot;));
+        soundOff = new Image(&quot;file:&quot; + FileIO.getFilePath(&quot;sound_off.png&quot;));
+        isOn = true;
+        <FONT color="#c22817"><A HREF="javascript:ZweiFrames('match48-1.html#43',3,'match48-top.html#43',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>gameMusic = new GameMusic();
+
+        super.setPreserveRatio(true);
+        super.setFitHeight(height);
+
+        super.setImage(soundOn);
+<A NAME="44"></A>        super.setOnMouseClicked(event -&gt; {
+            Controller.getInstance().changeSoundSetting();
+        }</B></FONT>);
+    <FONT color="#e57ded"><A HREF="javascript:ZweiFrames('match48-1.html#44',3,'match48-top.html#44',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    //flip between 2 image representing &quot;sound off&quot; and &quot;sound on&quot;. The selection is base on the current state of the player
+    public void changeSoundSetting(){
+        if (isOn) {
+            super.setImage(soundOff);
+            gameMusic.stopMusic();
+            isOn = false;
+
+<A NAME="45"></A>        }</B></FONT>
+        else {
+            super.setImage(soundOn);
+            <FONT color="#79d867"><A HREF="javascript:ZweiFrames('match48-1.html#45',3,'match48-top.html#45',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>gameMusic.playMusic();
+            isOn = true;
+        }
+    }
+
+    //Music class responsible to play the music.
+    //Nested class due to the only class has interaction with the player is the sound button
+    private class GameMusic {
+
+<A NAME="46"></A>        private Media musicFile;
+        private final MediaPlayer PLAYER</B></FONT>;
+
+        <FONT color="#92c7c7"><A HREF="javascript:ZweiFrames('match48-1.html#46',3,'match48-top.html#46',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>private GameMusic(){
+<A NAME="47"></A>            musicFile = new Media(FileIO.getMusicURI().toString());
+            PLAYER = new MediaPlayer(musicFile);
+            PLAYER.setAutoPlay</B></FONT>(true);
+            <FONT color="#d16587"><A HREF="javascript:ZweiFrames('match48-1.html#47',3,'match48-top.html#47',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>PLAYER.setVolume(0.2);
+            PLAYER.setCycleCount(Timeline.INDEFINITE);
+        }
+
+        private void stopMusic(){
+            if (PLAYER != null)
+                PLAYER.pause();
+        }
+
+        private void playMusic(){
+            if (PLAYER != null)
+                PLAYER.play();
+        }</B></FONT>
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/buttons/StartButton.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+
+package view.buttons;
+
+import Controller.Controller;
+<A NAME="49"></A>
+public class StartButton extends MyButton{
+    public StartButton(){
+        <FONT color="#8e35ef"><A HREF="javascript:ZweiFrames('match48-1.html#49',3,'match48-top.html#49',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>super(&quot;START GAME&quot;, &quot;2&quot;);
+        super.setOnMouseClicked( e -&gt; {
+            Controller.getInstance().clickStart();
+        });
+    }</B></FONT>
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/label/CountdownLabel.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+<A NAME="35"></A>
+package view.label;
+
+<FONT color="#41a317"><A HREF="javascript:ZweiFrames('match48-1.html#35',3,'match48-top.html#35',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+
+public class CountdownLabel extends Label {
+    private StringBuilder timer;
+<A NAME="36"></A>
+    public CountdownLabel(String time, double width, double height){
+        super</B></FONT>();
+        timer = <FONT color="#ff00ff"><A HREF="javascript:ZweiFrames('match48-1.html#36',3,'match48-top.html#36',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>new StringBuilder(time);
+        super.setPrefSize(width, height);
+        super.setAlignment(Pos.CENTER);
+        super.setText(timer.toString());
+        super.setFont(Font.font(&quot;Verdana&quot;,50));
+<A NAME="37"></A>        super.setTextFill(Color.RED);
+        super.setBorder(new Border(new</B></FONT> BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        <FONT color="#810541"><A HREF="javascript:ZweiFrames('match48-1.html#37',3,'match48-top.html#37',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>super.setBackground(new Background(new BackgroundFill(Color.CYAN, CornerRadii.EMPTY, new Insets(0,0,0,0))));
+    }
+
+    //set the timer display if the number are less than 10 then display that number with a 0 in front
+    public void setTimer(Integer minute, Integer second, Integer hundredOfSec){</B></FONT>
+        String string_sec, string_hundredsOfSec;
+        if (second &lt; 10)
+            string_sec = &quot;0&quot; + second.toString();
+        else
+            string_sec = second.toString();
+        if (hundredOfSec &lt; 10)
+<A NAME="38"></A>            string_hundredsOfSec = &quot;0&quot; + hundredOfSec.toString();
+        else
+            string_hundredsOfSec = hundredOfSec.toString();
+        timer = new StringBuilder(&quot;REMAINING TIME: &quot; + <FONT color="#348781"><A HREF="javascript:ZweiFrames('match48-1.html#38',3,'match48-top.html#38',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>minute.toString() + &quot;:&quot; + string_sec + &quot;:&quot; + string_hundredsOfSec);
+        super.setText(timer.toString());
+    }
+
+    public int getTimeScore(){
+        String text = super.getText().substring(16);
+        String[] times = text.split</B></FONT>(&quot;:&quot;);
+        int result = (Integer.valueOf(times[0]) * 60) + Integer.valueOf(times[1]);
+        return result;
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_v2.0/src/view/label/LevelLabel.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Minh Le
+  ID: s3757324
+  Created  date: 20/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+    Credit for all the picture use in the game
+    dog picture:    https://www.ravenshuskyhavenandrescue.org/
+                    https://www.womansday.com/life/pet-care/g26418410/small-dog-breeds/?slide=1
+                    https://www.amazon.in/Sweet-Happy-Fluffy-White-Journal/dp/1544710909
+                    https://www.pinterest.at/pin/515802963566662653/
+                    https://www.freepik.com/free-psd/portrait-labrador-retriever-dog_3730283.htm
+                    https://www.warrenphotographic.co.uk/41135-cute-yellow-labrador-puppy-with-paws-over
+                    https://www.k9web.com/breeds/red-nose-pitbull/
+                    https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR90Eg3NskmbjmtjlPVk3xSt5gWYX3KzmAh27nzlM13t3FbEAnc&amp;s
+                    http://www.vetstreet.com/dogs/bernese-mountain-dog
+                    https://www.pinterest.com/jody_rael/dog/ placeholder
+    Background picture:
+                    https://janesvillevetclinic.com/aaha-coloring-challenge/pawprint-background/
+    Volume on and off icon:
+                    https://www.iconfinder.com/icons/1489330/audio_dynamic_high_volume_loud_sound_volume_icon
+    &quot;You win&quot; and &quot;you lost&quot; picture:
+                    http://thebenefitsourcellc.com/2018/02/20/inflation-you-lose/
+                    https://www.freepik.com/premium-vector/cartoon-hand-drawn-win-symbol-with-stars-salute_4768343.htm
+<A NAME="39"></A>    Credit for the music use in the game: Athletic Theme - Yoshi's Island by Koji Kondo
+*/
+
+<FONT color="#152dc6"><A HREF="javascript:ZweiFrames('match48-1.html#39',3,'match48-top.html#39',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package view.label;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+
+public class LevelLabel extends Label {
+<A NAME="40"></A>
+    public LevelLabel(double width, double height){
+        super</B></FONT>();
+        <FONT color="#347235"><A HREF="javascript:ZweiFrames('match48-1.html#40',3,'match48-top.html#40',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>super.setPrefSize(width, height);
+        super.setAlignment(Pos.CENTER);
+        super.setFont(Font.font(&quot;Verdana&quot;, 40));
+        super.setTextFill(Color.BLUE);
+        super.setBorder(new Border(new BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        super.setBackground</B></FONT>(new Background(new BackgroundFill(Color.CYAN, CornerRadii.EMPTY, new Insets(0,0,0,0))));
+        super.setText(&quot;LEVEL 1&quot;);
+    }
+}
+</PRE>
+
+</BODY>
+</HTML>

@@ -1,0 +1,846 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>nguyentien_15</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>CardGame/src/CardGame.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Nguyen Thi Thuy Tien
+  ID: s3757934
+  Created  date: 9/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+   T.Phạm, &quot;Lấy vàng SEA Games 30, 11 cầu thủ &quot;hot&quot; nhất U22 Việt Nam viết gì trên Facebook?&quot;, December 11, 2019. Available: &quot;https://www.24h.com.vn/cong-nghe-thong-tin/lay-vang-sea-games-30-11-cau-thu-hot-nhat-u22-viet-nam-viet-gi-tren-facebook-c55a1107519.html&quot;
+  T.Nhi, &quot;'Linh phá đội', 'Toản bánh bao' và biệt danh của cầu thủ U22 Việt Nam&quot;, December 7, 2019. Available: &quot;https://news.zing.vn/linh-pha-doi-toan-banh-bao-va-biet-danh-cua-cau-thu-u22-viet-nam-post1022089.html&quot;
+  T.Nhi, &quot;Văn Hậu, Văn Toản và các cầu thủ hơn 1,80 m của U22 Việt Nam&quot;, December 5, 2019. Available: &quot;https://news.zing.vn/van-hau-van-toan-va-cac-cau-thu-hon-1-80-m-cua-u22-viet-nam-post1021386.html&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=nPnWBNcFh3sbgM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=3wT4sfK0bfy5_M:&quot;
+  Available:  &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=Hg0Yc_JuqQ5cHM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=8UrEHkKlaZwfbM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=7iiXQyglplf2GM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=Yyl_tCobFWMi5M:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=nhIUKvI6gp_7nM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=lw2XqUkvWxQTnM:&quot;
+  Available: &quot;https://www.google.com/search?sa=G&amp;hl=en-VN&amp;q=zebra+oreo&amp;tbm=isch&amp;source=iu&amp;ictx=1&amp;tbs=simg:CAESmgIJe7zJ-MYARJwajgILELCMpwgaYgpgCAMSKJkH6BLLAqcHkxKvB8wCpR2nHY0GuTeSJO83nCfgNPMs-zmRKaE3gzUaMLEewnHn2FLd01iZcKQfEZBwLSAXnTZOQF81w97UUNS0JAAc2lBJYOVEs7O1sIu2EyAEDAsQjq7-CBoKCggIARIEod8xiQwLEJ3twQkahgEKFwoFemVicmHapYj2AwoKCC9tLzA4OThiChoKB2dyYXppbmfapYj2AwsKCS9tLzAzaGgyawoZCgZzYWZhcmnapYj2AwsKCS9tLzAxOTliMAoYCgVncmFzc9qliPYDCwoJL20vMDh0OWNfChoKB3NhdmFubmHapYj2AwsKCS9tLzAxYzdkMww&amp;fir=s5Ah6MdpkKLEsM%253A%252Ce0KYp3xiPV-j2M%252C_&amp;vet=1&amp;usg=AI4_-kRPLDxYEPjwtovaISXBKHndiUaXpw&amp;ved=2ahUKEwik077blrrmAhWLOnAKHZsFAHUQ9QEwAnoECAEQBA#imgrc=s5Ah6MdpkKLEsM:&quot;
+<A NAME="13"></A>  Available: &quot;https://www.google.com/imgres?imgurl=https://zoo.sandiegozoo.org/sites/default/files/styles/landing_page_view_thumbnail/public/2019-01/thumb-amurleopard_0.jpg%3Fitok%3D2V5hBqxr&amp;imgrefurl=https://pixlcorps.com/info/animal-pictures&amp;h=540&amp;w=668&amp;tbnid=1Z2eb-yIs2UVHM&amp;tbnh=202&amp;tbnw=250&amp;usg=K_7zNEXOlHRdg1QQtf30mjb6wwQzo=&amp;hl=en-VN&amp;docid=gOOFMk57YY4rJM&amp;itg=1&quot;
+*/
+
+<FONT color="#842dce"><A HREF="javascript:ZweiFrames('match19-1.html#13',3,'match19-top.html#13',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class CardGame extends Application {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = (new FXMLLoader(getClass().getResource(&quot;GameView.fxml&quot;))).load</B></FONT>();
+        Scene scene = new Scene(root);
+        primaryStage.setTitle(&quot;U22 Card Game&quot;);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>CardGame/src/Cards.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Nguyen Thi Thuy Tien
+  ID: s3757934
+  Created  date: 9/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+   T.Phạm, &quot;Lấy vàng SEA Games 30, 11 cầu thủ &quot;hot&quot; nhất U22 Việt Nam viết gì trên Facebook?&quot;, December 11, 2019. Available: &quot;https://www.24h.com.vn/cong-nghe-thong-tin/lay-vang-sea-games-30-11-cau-thu-hot-nhat-u22-viet-nam-viet-gi-tren-facebook-c55a1107519.html&quot;
+  T.Nhi, &quot;'Linh phá đội', 'Toản bánh bao' và biệt danh của cầu thủ U22 Việt Nam&quot;, December 7, 2019. Available: &quot;https://news.zing.vn/linh-pha-doi-toan-banh-bao-va-biet-danh-cua-cau-thu-u22-viet-nam-post1022089.html&quot;
+  T.Nhi, &quot;Văn Hậu, Văn Toản và các cầu thủ hơn 1,80 m của U22 Việt Nam&quot;, December 5, 2019. Available: &quot;https://news.zing.vn/van-hau-van-toan-va-cac-cau-thu-hon-1-80-m-cua-u22-viet-nam-post1021386.html&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=nPnWBNcFh3sbgM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=3wT4sfK0bfy5_M:&quot;
+  Available:  &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=Hg0Yc_JuqQ5cHM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=8UrEHkKlaZwfbM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=7iiXQyglplf2GM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=Yyl_tCobFWMi5M:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=nhIUKvI6gp_7nM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=lw2XqUkvWxQTnM:&quot;
+  Available: &quot;https://www.google.com/search?sa=G&amp;hl=en-VN&amp;q=zebra+oreo&amp;tbm=isch&amp;source=iu&amp;ictx=1&amp;tbs=simg:CAESmgIJe7zJ-MYARJwajgILELCMpwgaYgpgCAMSKJkH6BLLAqcHkxKvB8wCpR2nHY0GuTeSJO83nCfgNPMs-zmRKaE3gzUaMLEewnHn2FLd01iZcKQfEZBwLSAXnTZOQF81w97UUNS0JAAc2lBJYOVEs7O1sIu2EyAEDAsQjq7-CBoKCggIARIEod8xiQwLEJ3twQkahgEKFwoFemVicmHapYj2AwoKCC9tLzA4OThiChoKB2dyYXppbmfapYj2AwsKCS9tLzAzaGgyawoZCgZzYWZhcmnapYj2AwsKCS9tLzAxOTliMAoYCgVncmFzc9qliPYDCwoJL20vMDh0OWNfChoKB3NhdmFubmHapYj2AwsKCS9tLzAxYzdkMww&amp;fir=s5Ah6MdpkKLEsM%253A%252Ce0KYp3xiPV-j2M%252C_&amp;vet=1&amp;usg=AI4_-kRPLDxYEPjwtovaISXBKHndiUaXpw&amp;ved=2ahUKEwik077blrrmAhWLOnAKHZsFAHUQ9QEwAnoECAEQBA#imgrc=s5Ah6MdpkKLEsM:&quot;
+  Available: &quot;https://www.google.com/imgres?imgurl=https://zoo.sandiegozoo.org/sites/default/files/styles/landing_page_view_thumbnail/public/2019-01/thumb-amurleopard_0.jpg%3Fitok%3D2V5hBqxr&amp;imgrefurl=https://pixlcorps.com/info/animal-pictures&amp;h=540&amp;w=668&amp;tbnid=1Z2eb-yIs2UVHM&amp;tbnh=202&amp;tbnw=250&amp;usg=K_7zNEXOlHRdg1QQtf30mjb6wwQzo=&amp;hl=en-VN&amp;docid=gOOFMk57YY4rJM&amp;itg=1&quot;
+*/
+
+import java.util.ArrayList;
+
+public class Cards {
+    private int[] cardNumber = new int[20];
+    private ArrayList&lt;Integer&gt; pickedCard = new ArrayList&lt;&gt;();
+    private int numberOfMatchedCards = 0;
+
+    //get 20 card names
+    public int[] getCardsName() {
+        resetCardName();
+        return this.cardNumber;
+    }
+
+    //get again 20 cards name for the set of card (shuffle the deck)
+    private void resetCardName() {
+        for(int cardIndex = 0; cardIndex &lt; 20 ; ++cardIndex) {
+            cardNumber[cardIndex] = getOneRandomCardNames();
+            if (isDuplicate(cardIndex)) {
+                --cardIndex;
+            }
+        }
+    }
+
+    //get one random card name
+    private int getOneRandomCardNames() {
+        //the card names in the images file are from 1 to 10
+        return (int)Math.ceil(Math.random() * 10.0);
+    }
+
+    //check if more than 2 cards have the same number
+    private boolean isDuplicate(int newCardIndex) {
+        int count = 0;
+        for(int cardIndex = 0; cardIndex &lt; newCardIndex; ++cardIndex) {
+            if (cardNumber[cardIndex] == cardNumber[newCardIndex]) {
+                ++count;
+                if (count &gt; 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //add the card has just been picked to the list of picked cards
+    public void addCardPicked(int cardIndex) {
+        pickedCard.add(cardIndex);
+    }
+
+<A NAME="12"></A>    //get number of cards have been picked
+    public int getNumberOfCardPicked() {
+        return pickedCard.size();
+    <FONT color="#3b9c9c"><A HREF="javascript:ZweiFrames('match19-1.html#12',3,'match19-top.html#12',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    //get the list of picked cards
+    public ArrayList&lt;Integer&gt; getPickedCard() {
+        return pickedCard;
+    }
+
+    //get the index of the newest card has just been picked
+    public int getNewestCardPickedIndex() {
+        return</B></FONT> pickedCard.get(pickedCard.size() - 1);
+    }
+
+    //check if 2 picked cards are matched
+    public boolean checkMatched() {
+        if (cardNumber[pickedCard.get(0)] == cardNumber[pickedCard.get(1)]) {
+            addNumberOfMatchedCards();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //get the number of matched pair of cards
+    public int getNumberOfMatchedCards() {
+        return numberOfMatchedCards;
+    }
+
+    //increase 1 to the total number of matched pair of cards
+    public void addNumberOfMatchedCards() {
+        ++numberOfMatchedCards;
+    }
+
+    //reset the number of matched pair of cards to zero
+    public void resetNumberOfMatchedCards() {
+        numberOfMatchedCards = 0;
+    }
+
+    //empty the list of picked card
+    public void emptyCardPicked() {
+        pickedCard.clear();
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>CardGame/src/GameController.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Nguyen Thi Thuy Tien
+  ID: s3757934
+  Created  date: 9/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+   T.Phạm, &quot;Lấy vàng SEA Games 30, 11 cầu thủ &quot;hot&quot; nhất U22 Việt Nam viết gì trên Facebook?&quot;, December 11, 2019. Available: &quot;https://www.24h.com.vn/cong-nghe-thong-tin/lay-vang-sea-games-30-11-cau-thu-hot-nhat-u22-viet-nam-viet-gi-tren-facebook-c55a1107519.html&quot;
+  T.Nhi, &quot;'Linh phá đội', 'Toản bánh bao' và biệt danh của cầu thủ U22 Việt Nam&quot;, December 7, 2019. Available: &quot;https://news.zing.vn/linh-pha-doi-toan-banh-bao-va-biet-danh-cua-cau-thu-u22-viet-nam-post1022089.html&quot;
+  T.Nhi, &quot;Văn Hậu, Văn Toản và các cầu thủ hơn 1,80 m của U22 Việt Nam&quot;, December 5, 2019. Available: &quot;https://news.zing.vn/van-hau-van-toan-va-cac-cau-thu-hon-1-80-m-cua-u22-viet-nam-post1021386.html&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=nPnWBNcFh3sbgM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=3wT4sfK0bfy5_M:&quot;
+  Available:  &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=Hg0Yc_JuqQ5cHM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=8UrEHkKlaZwfbM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=7iiXQyglplf2GM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=Yyl_tCobFWMi5M:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=nhIUKvI6gp_7nM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=lw2XqUkvWxQTnM:&quot;
+  Available: &quot;https://www.google.com/search?sa=G&amp;hl=en-VN&amp;q=zebra+oreo&amp;tbm=isch&amp;source=iu&amp;ictx=1&amp;tbs=simg:CAESmgIJe7zJ-MYARJwajgILELCMpwgaYgpgCAMSKJkH6BLLAqcHkxKvB8wCpR2nHY0GuTeSJO83nCfgNPMs-zmRKaE3gzUaMLEewnHn2FLd01iZcKQfEZBwLSAXnTZOQF81w97UUNS0JAAc2lBJYOVEs7O1sIu2EyAEDAsQjq7-CBoKCggIARIEod8xiQwLEJ3twQkahgEKFwoFemVicmHapYj2AwoKCC9tLzA4OThiChoKB2dyYXppbmfapYj2AwsKCS9tLzAzaGgyawoZCgZzYWZhcmnapYj2AwsKCS9tLzAxOTliMAoYCgVncmFzc9qliPYDCwoJL20vMDh0OWNfChoKB3NhdmFubmHapYj2AwsKCS9tLzAxYzdkMww&amp;fir=s5Ah6MdpkKLEsM%253A%252Ce0KYp3xiPV-j2M%252C_&amp;vet=1&amp;usg=AI4_-kRPLDxYEPjwtovaISXBKHndiUaXpw&amp;ved=2ahUKEwik077blrrmAhWLOnAKHZsFAHUQ9QEwAnoECAEQBA#imgrc=s5Ah6MdpkKLEsM:&quot;
+  Available: &quot;https://www.google.com/imgres?imgurl=https://zoo.sandiegozoo.org/sites/default/files/styles/landing_page_view_thumbnail/public/2019-01/thumb-amurleopard_0.jpg%3Fitok%3D2V5hBqxr&amp;imgrefurl=https://pixlcorps.com/info/animal-pictures&amp;h=540&amp;w=668&amp;tbnid=1Z2eb-yIs2UVHM&amp;tbnh=202&amp;tbnw=250&amp;usg=K_7zNEXOlHRdg1QQtf30mjb6wwQzo=&amp;hl=en-VN&amp;docid=gOOFMk57YY4rJM&amp;itg=1&quot;
+<A NAME="0"></A>*/
+
+import javafx.animation.KeyFrame;
+<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match19-1.html#0',3,'match19-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.animation.KeyValue;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+import javafx.scene.Node;
+
+public class GameController {
+    @FXML
+    private Button musicOnBtn, musicOffBtn, startNewGameBtn;
+    @FXML
+    private VBox setUpInterface, restartBox, winBox;
+    @FXML
+    private GridPane upCardGrid, downCardGrid;
+    @FXML
+    private StackPane cardGrid, confirmQuitBox;
+    @FXML
+    private Label timer, gameScore, loseBox, scoreResult;
+    @FXML
+    private ProgressBar timeProgress;
+    @FXML
+    private Slider gameLevelSlider;
+    @FXML
+    private ImageView quitGameImg, inGameImg, startGameImg;
+    @FXML
+    private HBox scoreBox;
+    @FXML
+    private ToggleButton animalToggleBtn, U22ToggleBtn;
+
+    private GameModel model = new GameModel()</B></FONT>;
+    private GameView view = new GameView();
+    private Timeline textTimeline = new Timeline();
+    private Timeline barTimeline = new Timeline();
+    private PauseTransition[] pause = new PauseTransition[2];
+<A NAME="1"></A>
+    //notify the U22 theme is selected
+    public void U22Selected(ActionEvent event) {
+        <FONT color="#f63526"><A HREF="javascript:ZweiFrames('match19-1.html#1',3,'match19-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>getSelectedThemeBtn();
+    }
+
+    //notify the animals theme is selected
+    public void animalsSelected(ActionEvent event) {
+        getSelectedThemeBtn();
+    }</B></FONT>
+
+    //notify the theme that has been selected
+    private void getSelectedThemeBtn() {
+        if (animalToggleBtn.isSelected()) {
+            view.animalsSelected(animalToggleBtn, U22ToggleBtn);
+        } else {
+            view.U22Selected(animalToggleBtn, U22ToggleBtn);
+        }
+    }
+
+    //get to in game interface for the first game
+    public void startNewGame(ActionEvent event) {
+        String theme = animalToggleBtn.isSelected() ? &quot;animals&quot; : &quot;U22cards&quot;;
+        view.newGame(quitGameImg, inGameImg, startGameImg, startNewGameBtn, setUpInterface, restartBox, downCardGrid, upCardGrid, model.getCardsNumber(), theme);
+        timeCountDown();
+    }
+
+<A NAME="2"></A>    //get to in game interface for the later games when press restart
+    public void restartGame(ActionEvent event) {
+        String theme = animalToggleBtn.isSelected() ? &quot;animals&quot; : &quot;U22cards&quot;;
+        <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match19-1.html#2',3,'match19-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>view.restartGame(quitGameImg, inGameImg, cardGrid, setUpInterface, downCardGrid, upCardGrid, model.getCardsNumber(), theme);
+        timeCountDown();
+    }
+
+    //visualize time counting down
+    private void timeCountDown() {
+        barCountDown();
+        textCountDown();
+    }
+
+    //change the text according to the time
+    private void textCountDown() {</B></FONT>
+        textTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1.0/100), e -&gt; countDownText(timer)));
+        textTimeline.setCycleCount(textTimeline.INDEFINITE);
+        textTimeline.playFromStart();
+    }
+
+    //display time counted down text
+<A NAME="3"></A>    private void countDownText(Label timer) {
+        if (model.getTime().equals(&quot;00 : 00 : 00&quot;)) {
+            loseGame();
+        } else <FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match19-1.html#3',3,'match19-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{
+            view.setTimerText(model.countDownText(), timer);
+        }
+    }
+
+    //change the bar progress according to the time
+<A NAME="4"></A>    private void barCountDown() {</B></FONT>
+        barTimeline.getKeyFrames().addAll(
+                new KeyFrame(Duration.ZERO, new KeyValue(timeProgress.progressProperty(), 1)),
+                new KeyFrame(Duration.minutes(2), new KeyValue(<FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match19-1.html#4',3,'match19-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>timeProgress.progressProperty(), 0))
+        );
+        barTimeline.setCycleCount(1);
+        barTimeline.playFromStart();
+    }
+
+    //turn on sound
+    public void playSound(ActionEvent event) {
+        view.soundOn(musicOffBtn, musicOnBtn);
+    }
+
+    //turn off sound
+    public void muteSound(ActionEvent event) {</B></FONT>
+        view.soundOff(musicOffBtn, musicOnBtn);
+    }
+
+    //check clicked card
+    public void cardFlip(MouseEvent event) {
+        if (validCardClicked(event)) {
+            checkingCards(model.getNewestCardPickedIndex());
+        }
+    }
+
+    //check if the clicked card is valid to turn up
+    private boolean validCardClicked(MouseEvent event) {
+        //clicked is valid if pressed and release in the place (not moving cursor)
+        if (event.isStillSincePress()) {
+            Node clickedNode = (Node) event.getPickResult().getIntersectedNode();
+            Integer column = GridPane.getColumnIndex(clickedNode);
+            Integer row = GridPane.getRowIndex(clickedNode);
+            if (column != null &amp;&amp; row != null &amp;&amp; model.getNumberOfCardPicked() &lt; 2) {
+                model.addCardPicked(row*5 + column);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //checking turned up picked cards
+    private void checkingCards(int index) {
+        int time = model.getCardUpTime((int) gameLevelSlider.getValue());
+        view.openCard(downCardGrid, index);
+        if (model.getNumberOfCardPicked() == 1) {
+            waitingTime(time, index);
+        } else if (model.getNumberOfCardPicked() == 2) {
+            //stop waiting time of first picked card
+            pause[0].stop();
+            //turn down cards if not matched
+            if (!model.checkMatchedCard()) {
+                closeCard(model.getPickedCard().get(0));
+                closeCard(model.getPickedCard().get(1));
+            } else if (model.getNumberOfMatchedCards() == 10) {
+                //win game if match all pairs
+                winGame();
+                model.emptyCardPicked();
+            } else {
+                model.emptyCardPicked();
+            }
+        }
+    }
+<A NAME="5"></A>
+    //set time a card turn up according to level
+    private void waitingTime(int time, int index) {
+        pause[0] = <FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match19-1.html#5',3,'match19-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>new PauseTransition(Duration.seconds(time));
+        pause[0].setOnFinished(e -&gt; closeCard(index));
+        pause[0].play();
+    }
+
+    //turn a card down
+    private void closeCard(int index) {</B></FONT>
+        //let 0.5 seconds pause so that the user can actually see the card turning up
+        pause[1] = new PauseTransition(Duration.seconds(0.5));
+        pause[1].setOnFinished(e -&gt; {view.closeCard(downCardGrid, index);
+                                     model.emptyCardPicked();});
+        pause[1].play();
+    }
+
+    //display lose game interface
+    private void loseGame() {
+        view.loseGame(cardGrid, setUpInterface, gameScore, model.getNewScore(), winBox, loseBox, scoreBox);
+        endGame();
+    }
+
+<A NAME="6"></A>    //display win game interface
+    private void winGame() {
+        view.winGame(cardGrid, setUpInterface, gameScore, model.getNewScore(), winBox, loseBox, scoreResult, scoreBox, model.getGainScore());
+        <FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match19-1.html#6',3,'match19-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>endGame();
+    }
+
+    //display end game interface
+    private void endGame() {
+        textTimeline.stop();
+        textTimeline.getKeyFrames().clear();
+        barTimeline.stop();
+<A NAME="7"></A>        barTimeline.getKeyFrames().clear</B></FONT>();
+        model.resetMatchedCards();
+        model.resetTime();
+    <FONT color="#c58917"><A HREF="javascript:ZweiFrames('match19-1.html#7',3,'match19-top.html#7',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    //back to end game interface
+    public void continueGame(ActionEvent event) {
+         view.continueGame(setUpInterface, confirmQuitBox);
+    }
+
+    //display confirm box
+    public void confirmQuitGame(ActionEvent event) {
+        view.confirmQuitGame(confirmQuitBox);
+    }
+
+    public void quitGame(ActionEvent event) {
+        Platform.exit</B></FONT>();
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>CardGame/src/GameModel.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Nguyen Thi Thuy Tien
+  ID: s3757934
+  Created  date: 9/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+   T.Phạm, &quot;Lấy vàng SEA Games 30, 11 cầu thủ &quot;hot&quot; nhất U22 Việt Nam viết gì trên Facebook?&quot;, December 11, 2019. Available: &quot;https://www.24h.com.vn/cong-nghe-thong-tin/lay-vang-sea-games-30-11-cau-thu-hot-nhat-u22-viet-nam-viet-gi-tren-facebook-c55a1107519.html&quot;
+  T.Nhi, &quot;'Linh phá đội', 'Toản bánh bao' và biệt danh của cầu thủ U22 Việt Nam&quot;, December 7, 2019. Available: &quot;https://news.zing.vn/linh-pha-doi-toan-banh-bao-va-biet-danh-cua-cau-thu-u22-viet-nam-post1022089.html&quot;
+  T.Nhi, &quot;Văn Hậu, Văn Toản và các cầu thủ hơn 1,80 m của U22 Việt Nam&quot;, December 5, 2019. Available: &quot;https://news.zing.vn/van-hau-van-toan-va-cac-cau-thu-hon-1-80-m-cua-u22-viet-nam-post1021386.html&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=nPnWBNcFh3sbgM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=3wT4sfK0bfy5_M:&quot;
+  Available:  &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=Hg0Yc_JuqQ5cHM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=8UrEHkKlaZwfbM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=7iiXQyglplf2GM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=Yyl_tCobFWMi5M:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=nhIUKvI6gp_7nM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=lw2XqUkvWxQTnM:&quot;
+  Available: &quot;https://www.google.com/search?sa=G&amp;hl=en-VN&amp;q=zebra+oreo&amp;tbm=isch&amp;source=iu&amp;ictx=1&amp;tbs=simg:CAESmgIJe7zJ-MYARJwajgILELCMpwgaYgpgCAMSKJkH6BLLAqcHkxKvB8wCpR2nHY0GuTeSJO83nCfgNPMs-zmRKaE3gzUaMLEewnHn2FLd01iZcKQfEZBwLSAXnTZOQF81w97UUNS0JAAc2lBJYOVEs7O1sIu2EyAEDAsQjq7-CBoKCggIARIEod8xiQwLEJ3twQkahgEKFwoFemVicmHapYj2AwoKCC9tLzA4OThiChoKB2dyYXppbmfapYj2AwsKCS9tLzAzaGgyawoZCgZzYWZhcmnapYj2AwsKCS9tLzAxOTliMAoYCgVncmFzc9qliPYDCwoJL20vMDh0OWNfChoKB3NhdmFubmHapYj2AwsKCS9tLzAxYzdkMww&amp;fir=s5Ah6MdpkKLEsM%253A%252Ce0KYp3xiPV-j2M%252C_&amp;vet=1&amp;usg=AI4_-kRPLDxYEPjwtovaISXBKHndiUaXpw&amp;ved=2ahUKEwik077blrrmAhWLOnAKHZsFAHUQ9QEwAnoECAEQBA#imgrc=s5Ah6MdpkKLEsM:&quot;
+  Available: &quot;https://www.google.com/imgres?imgurl=https://zoo.sandiegozoo.org/sites/default/files/styles/landing_page_view_thumbnail/public/2019-01/thumb-amurleopard_0.jpg%3Fitok%3D2V5hBqxr&amp;imgrefurl=https://pixlcorps.com/info/animal-pictures&amp;h=540&amp;w=668&amp;tbnid=1Z2eb-yIs2UVHM&amp;tbnh=202&amp;tbnw=250&amp;usg=K_7zNEXOlHRdg1QQtf30mjb6wwQzo=&amp;hl=en-VN&amp;docid=gOOFMk57YY4rJM&amp;itg=1&quot;
+*/
+
+import java.util.ArrayList;
+
+public class GameModel {
+    private Cards playerCards = new Cards();
+    private Time timer = new Time();
+    private Score gameScore = new Score();
+<A NAME="14"></A>
+    //get 20 card names
+    public int[] getCardsNumber() {
+        return <FONT color="#f52887"><A HREF="javascript:ZweiFrames('match19-1.html#14',3,'match19-top.html#14',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>playerCards.getCardsName();
+    }
+
+    //get the list of picked cards
+    public ArrayList&lt;Integer&gt; getPickedCard() {
+        return playerCards.getPickedCard();
+    }</B></FONT>
+
+    //add the card has just been picked to the list of picked cards
+    public void addCardPicked(int cardIndex) {
+        playerCards.addCardPicked(cardIndex);
+    }
+
+    //get number of cards have been picked
+    public int getNumberOfCardPicked() {
+        return playerCards.getNumberOfCardPicked();
+    }
+<A NAME="15"></A>
+    //get the index of the newest card has just been picked
+    public int getNewestCardPickedIndex() {
+        return <FONT color="#3bb9ff"><A HREF="javascript:ZweiFrames('match19-1.html#15',3,'match19-top.html#15',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>playerCards.getNewestCardPickedIndex();
+    }
+
+    //reset the number of matched pair of cards to zero
+    public void resetMatchedCards() {
+        playerCards.resetNumberOfMatchedCards();
+    }
+
+    //check if 2 picked cards are matched
+    public boolean checkMatchedCard() {</B></FONT>
+        return playerCards.checkMatched();
+    }
+<A NAME="16"></A>
+    //get the number of matched pair of cards
+    public int getNumberOfMatchedCards() {
+        return <FONT color="#3090c7"><A HREF="javascript:ZweiFrames('match19-1.html#16',3,'match19-top.html#16',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>playerCards.getNumberOfMatchedCards();
+    }
+
+    //empty the list of picked card
+    public void emptyCardPicked() {
+        playerCards.emptyCardPicked();
+    }
+
+    //get the duration of time each photo turns up
+    public int getCardUpTime(int level) {</B></FONT>
+        return timer.getCardUpTime(level);
+    }
+
+    //reset the time to 2 minutes
+    public void resetTime() {
+        timer.resetTime();
+    }
+
+    //get the time (as text) to display
+    public String getTime() {return timer.getTime();}
+
+    //decrease the time by 1 hundredth of second
+    public String countDownText() {
+        return timer.countDownTime();
+    }
+
+    //return gained score for that game
+    public String getGainScore() {
+        //the score equals to the seconds left after the user has finished matching
+        return Integer.toString(timer.getSecondsLeft());
+    }
+
+    //return total score
+    public String getNewScore() {
+        return gameScore.getNewScore(timer.getSecondsLeft());
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>CardGame/src/GameView.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Nguyen Thi Thuy Tien
+  ID: s3757934
+  Created  date: 9/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+  T.Phạm, &quot;Lấy vàng SEA Games 30, 11 cầu thủ &quot;hot&quot; nhất U22 Việt Nam viết gì trên Facebook?&quot;, December 11, 2019. Available: &quot;https://www.24h.com.vn/cong-nghe-thong-tin/lay-vang-sea-games-30-11-cau-thu-hot-nhat-u22-viet-nam-viet-gi-tren-facebook-c55a1107519.html&quot;
+  T.Nhi, &quot;'Linh phá đội', 'Toản bánh bao' và biệt danh của cầu thủ U22 Việt Nam&quot;, December 7, 2019. Available: &quot;https://news.zing.vn/linh-pha-doi-toan-banh-bao-va-biet-danh-cua-cau-thu-u22-viet-nam-post1022089.html&quot;
+  T.Nhi, &quot;Văn Hậu, Văn Toản và các cầu thủ hơn 1,80 m của U22 Việt Nam&quot;, December 5, 2019. Available: &quot;https://news.zing.vn/van-hau-van-toan-va-cac-cau-thu-hon-1-80-m-cua-u22-viet-nam-post1021386.html&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=nPnWBNcFh3sbgM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=3wT4sfK0bfy5_M:&quot;
+  Available:  &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=Hg0Yc_JuqQ5cHM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=8UrEHkKlaZwfbM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=7iiXQyglplf2GM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=Yyl_tCobFWMi5M:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=nhIUKvI6gp_7nM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=lw2XqUkvWxQTnM:&quot;
+  Available: &quot;https://www.google.com/search?sa=G&amp;hl=en-VN&amp;q=zebra+oreo&amp;tbm=isch&amp;source=iu&amp;ictx=1&amp;tbs=simg:CAESmgIJe7zJ-MYARJwajgILELCMpwgaYgpgCAMSKJkH6BLLAqcHkxKvB8wCpR2nHY0GuTeSJO83nCfgNPMs-zmRKaE3gzUaMLEewnHn2FLd01iZcKQfEZBwLSAXnTZOQF81w97UUNS0JAAc2lBJYOVEs7O1sIu2EyAEDAsQjq7-CBoKCggIARIEod8xiQwLEJ3twQkahgEKFwoFemVicmHapYj2AwoKCC9tLzA4OThiChoKB2dyYXppbmfapYj2AwsKCS9tLzAzaGgyawoZCgZzYWZhcmnapYj2AwsKCS9tLzAxOTliMAoYCgVncmFzc9qliPYDCwoJL20vMDh0OWNfChoKB3NhdmFubmHapYj2AwsKCS9tLzAxYzdkMww&amp;fir=s5Ah6MdpkKLEsM%253A%252Ce0KYp3xiPV-j2M%252C_&amp;vet=1&amp;usg=AI4_-kRPLDxYEPjwtovaISXBKHndiUaXpw&amp;ved=2ahUKEwik077blrrmAhWLOnAKHZsFAHUQ9QEwAnoECAEQBA#imgrc=s5Ah6MdpkKLEsM:&quot;
+  Available: &quot;https://www.google.com/imgres?imgurl=https://zoo.sandiegozoo.org/sites/default/files/styles/landing_page_view_thumbnail/public/2019-01/thumb-amurleopard_0.jpg%3Fitok%3D2V5hBqxr&amp;imgrefurl=https://pixlcorps.com/info/animal-pictures&amp;h=540&amp;w=668&amp;tbnid=1Z2eb-yIs2UVHM&amp;tbnh=202&amp;tbnw=250&amp;usg=K_7zNEXOlHRdg1QQtf30mjb6wwQzo=&amp;hl=en-VN&amp;docid=gOOFMk57YY4rJM&amp;itg=1&quot;
+*/
+
+<A NAME="8"></A>import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
+<FONT color="#bce954"><A HREF="javascript:ZweiFrames('match19-1.html#8',3,'match19-top.html#8',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import java.io.File;
+
+public class GameView {
+    private MediaPlayer sound;
+    private ImageView[] upCards = new ImageView[20]</B></FONT>;
+    private ImageView[] downCards = new ImageView[20];
+
+    public GameView () {
+        setMediaPlayer();
+<A NAME="9"></A>    }
+
+    //set music for game
+    <FONT color="#f88017"><A HREF="javascript:ZweiFrames('match19-1.html#9',3,'match19-top.html#9',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>private void setMediaPlayer() {
+        String musicFile = &quot;src/backgroundMusic.mp3&quot;;
+        Media music = new Media(new File(musicFile).toURI().toString());
+        sound = new MediaPlayer(music);
+        sound.play</B></FONT>();
+    }
+
+    //notify the U22 theme is selected
+    public void U22Selected(ToggleButton animalToggleBtn, ToggleButton U22ToggleBtn) {
+        U22ToggleBtn.setStyle(&quot;-fx-border-color : blue;&quot; +
+                                 &quot;-fx-border-width : 1.5;&quot;);
+        animalToggleBtn.setStyle(&quot;-fx-border-color : white;&quot; +
+                              &quot;-fx-border-width : 0;&quot;);
+    }
+
+    //notify the animals theme is selected
+    public void animalsSelected(ToggleButton animalToggleBtn, ToggleButton U22ToggleBtn) {
+        animalToggleBtn.setStyle(&quot;-fx-border-color : blue;&quot; +
+                                 &quot;-fx-border-width : 1.5;&quot; +
+                &quot;-fx-border-radius : 4;&quot;);
+        U22ToggleBtn.setStyle(&quot;-fx-border-color : white;&quot; +
+                              &quot;-fx-border-width : 0;&quot;);
+    }
+
+    //display in game interface for the first game
+    public void newGame(ImageView quitGameImg, ImageView inGameImg, ImageView startGameImg, Button startNewGameBtn, VBox setUpInterface, VBox restartBox, GridPane downCardGrid, GridPane upCardGrid, int[] cardNumber, String theme) {
+        startGameImg.setVisible(false);
+        startNewGameBtn.setVisible(false);
+        restartBox.setVisible(true);
+        setUpInterface.setVisible(false);
+        setThemeImg(quitGameImg, inGameImg, theme);
+        setCards(upCardGrid, downCardGrid, cardNumber, theme);
+    }
+
+    //display in game interface for the later games when press restart
+    public void restartGame(ImageView quitGameImg, ImageView inGameImg, StackPane cardGrid, VBox setUpInterface, GridPane downCardGrid, GridPane upCardGrid, int[] cardNumber, String theme) {
+        cardGrid.setVisible(true);
+        setUpInterface.setVisible(false);
+        setThemeImg(quitGameImg, inGameImg, theme);
+        setCards(upCardGrid, downCardGrid, cardNumber, theme);
+    }
+
+    //set card images according to theme
+    private void setCards(GridPane upCardGrid, GridPane downCardGrid, int[] cardNumber, String theme) {
+        setUpCardGrid(upCardGrid, cardNumber, theme);
+        setDownCardGrid(downCardGrid, theme);
+    }
+
+    //set front images of the cards according to theme
+    private void setUpCardGrid(GridPane upCardGrid, int[] cardNumber, String theme) {
+        getUpCards(cardNumber, theme);
+        for (int row = 0; row &lt; 4; ++row) {
+            for (int column = 0; column &lt; 5; ++column) {
+                upCardGrid.add(upCards[row * 5 + column], column, row);
+            }
+        }
+    }
+
+    //get images from file according to theme
+    private void getUpCards(int[] cardNumber, String theme) {
+        for (int i = 0; i &lt; 20; ++i) {
+            upCards[i] = new ImageView(&quot;file:&quot; + theme + &quot;/&quot; + Integer.toString(cardNumber[i]) + &quot;.jpg&quot;);
+            upCards[i].setFitHeight(130.0);
+            upCards[i].setFitWidth(130.0);
+            upCards[i].setSmooth(true);
+        }
+    }
+
+    //set back image of the cards according to theme
+    private void setDownCardGrid(GridPane downCardGrid, String theme) {
+        downCardGrid.getChildren().clear();
+        for (int row = 0; row &lt; 4; ++row) {
+            for (int column = 0; column &lt; 5; ++column) {
+                downCards[row * 5 + column] = new ImageView(&quot;file:src/&quot; + theme + &quot;down.jpg&quot;);
+                downCards[row * 5 + column].setFitHeight(130.0);
+                downCards[row * 5 + column].setFitWidth(130.0);
+                downCards[row * 5 + column].setSmooth(true);
+                downCardGrid.add(downCards[row * 5 + column], column, row);
+                downCardGrid.getChildren().get(row * 5 + column).setVisible(true);
+            }
+        }
+    }
+
+    //set theme image
+    private void setThemeImg(ImageView quitGameImg, ImageView inGameImg, String theme) {
+        Image img = new Image(&quot;file:src/&quot; + theme + &quot;theme.jpg&quot;);
+        quitGameImg.setImage(img);
+        inGameImg.setImage(img);
+    }
+
+    //turn off sound
+    public void soundOff(Button musicOffBtn, Button musicOnBtn) {
+        musicOffBtn.setVisible(false);
+        musicOnBtn.setVisible(true);
+        sound.setMute(true);
+    }
+
+    //turn on sound
+    public void soundOn(Button musicOffBtn, Button musicOnBtn) {
+        musicOnBtn.setVisible(false);
+        musicOffBtn.setVisible(true);
+        sound.setMute(false);
+    }
+
+    //display time
+    public void setTimerText(String time, Label timer) {
+        timer.setText(time);
+    }
+
+    //display win game interface
+    public void winGame(StackPane cardGrid, VBox setUpInterface, Label score, String gameScore, VBox winBox, Label loseBox, Label scoreResult, HBox scoreBox, String gainScore) {
+        scoreResult.setText(gainScore);
+        loseBox.setVisible(false);
+        winBox.setVisible(true);
+        setUpInterface.setStyle(&quot;-fx-padding: 10;&quot; +
+                                &quot;-fx-border-style: solid inside;&quot; +
+                                &quot;-fx-border-width: 2;&quot; +
+                                &quot;-fx-border-radius: 5;&quot; +
+                                &quot;-fx-border-color: blue;&quot;);
+        endGame(cardGrid, setUpInterface, score, gameScore, scoreBox);
+    }
+
+    //display lose game interface
+    public void loseGame(StackPane cardGrid, VBox setUpInterface, Label score, String gameScore, VBox winBox, Label loseBox, HBox scoreBox) {
+        loseBox.setVisible(true);
+        winBox.setVisible(false);
+        setUpInterface.setStyle(&quot;-fx-padding: 10;&quot; +
+                                &quot;-fx-border-style: solid inside;&quot; +
+                                &quot;-fx-border-width: 2;&quot; +
+                                &quot;-fx-border-radius: 5;&quot; +
+                                &quot;-fx-border-color: grey;&quot;);
+        endGame(cardGrid, setUpInterface, score, gameScore, scoreBox);
+    }
+
+    //display end game interface
+    public void endGame(StackPane cardGrid, VBox setUpInterface, Label score, String gameScore, HBox scoreBox) {
+        cardGrid.setVisible(false);
+        score.setText(gameScore);
+        //notify when user reaches max score
+        if (gameScore.equals(&quot;MAX 9999&quot;)) {
+            scoreBox.setStyle(&quot;-fx-padding: 2;&quot; +
+                              &quot;-fx-border-style: solid inside;&quot; +
+                              &quot;-fx-border-width: 1;&quot; +
+                              &quot;-fx-border-radius: 5;&quot; +
+                              &quot;-fx-border-color: yellow;&quot;);
+        }
+        setUpInterface.setVisible(true);
+    }
+
+    //turn down card
+    public void closeCard(GridPane downCard, int index) {
+        downCard.getChildren().get(index).setVisible(true);
+<A NAME="10"></A>    }
+
+    //turn up card
+    public void openCard(<FONT color="#b041ff"><A HREF="javascript:ZweiFrames('match19-1.html#10',3,'match19-top.html#10',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>GridPane downCard, int index) {
+        downCard.getChildren().get(index).setVisible(false);
+    }
+
+    //display confirm box
+    public void confirmQuitGame(StackPane confirmQuitBox) {
+        confirmQuitBox.setVisible(true);
+    }
+
+    //back to end game interface box
+    public void continueGame(VBox setUpInterFace</B></FONT>, StackPane confirmQuitBox) {
+        setUpInterFace.setVisible(true);
+        confirmQuitBox.setVisible(false);
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>CardGame/src/Time.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Nguyen Thi Thuy Tien
+  ID: s3757934
+  Created  date: 9/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement:
+   T.Phạm, &quot;Lấy vàng SEA Games 30, 11 cầu thủ &quot;hot&quot; nhất U22 Việt Nam viết gì trên Facebook?&quot;, December 11, 2019. Available: &quot;https://www.24h.com.vn/cong-nghe-thong-tin/lay-vang-sea-games-30-11-cau-thu-hot-nhat-u22-viet-nam-viet-gi-tren-facebook-c55a1107519.html&quot;
+  T.Nhi, &quot;'Linh phá đội', 'Toản bánh bao' và biệt danh của cầu thủ U22 Việt Nam&quot;, December 7, 2019. Available: &quot;https://news.zing.vn/linh-pha-doi-toan-banh-bao-va-biet-danh-cua-cau-thu-u22-viet-nam-post1022089.html&quot;
+  T.Nhi, &quot;Văn Hậu, Văn Toản và các cầu thủ hơn 1,80 m của U22 Việt Nam&quot;, December 5, 2019. Available: &quot;https://news.zing.vn/van-hau-van-toan-va-cac-cau-thu-hon-1-80-m-cua-u22-viet-nam-post1021386.html&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=nPnWBNcFh3sbgM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=3wT4sfK0bfy5_M:&quot;
+  Available:  &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=Hg0Yc_JuqQ5cHM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=8UrEHkKlaZwfbM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=7iiXQyglplf2GM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=Yyl_tCobFWMi5M:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=nhIUKvI6gp_7nM:&quot;
+  Available: &quot;https://www.google.com/search?biw=1366&amp;bih=614&amp;tbm=isch&amp;sa=1&amp;ei=jUn2XaC5EteY4-EPyqC7qAI&amp;q=animals+hd&amp;oq=animals+hd&amp;gs_l=img.3..0l10.68226.69170..69386...1.0..0.80.451.6......0....1..gws-wiz-img.......0i67.n-cIdKCxXxg&amp;ved=0ahUKEwjgs8He9LfmAhVXzDgGHUrQDiUQ4dUDCAc&amp;uact=5#imgrc=lw2XqUkvWxQTnM:&quot;
+  Available: &quot;https://www.google.com/search?sa=G&amp;hl=en-VN&amp;q=zebra+oreo&amp;tbm=isch&amp;source=iu&amp;ictx=1&amp;tbs=simg:CAESmgIJe7zJ-MYARJwajgILELCMpwgaYgpgCAMSKJkH6BLLAqcHkxKvB8wCpR2nHY0GuTeSJO83nCfgNPMs-zmRKaE3gzUaMLEewnHn2FLd01iZcKQfEZBwLSAXnTZOQF81w97UUNS0JAAc2lBJYOVEs7O1sIu2EyAEDAsQjq7-CBoKCggIARIEod8xiQwLEJ3twQkahgEKFwoFemVicmHapYj2AwoKCC9tLzA4OThiChoKB2dyYXppbmfapYj2AwsKCS9tLzAzaGgyawoZCgZzYWZhcmnapYj2AwsKCS9tLzAxOTliMAoYCgVncmFzc9qliPYDCwoJL20vMDh0OWNfChoKB3NhdmFubmHapYj2AwsKCS9tLzAxYzdkMww&amp;fir=s5Ah6MdpkKLEsM%253A%252Ce0KYp3xiPV-j2M%252C_&amp;vet=1&amp;usg=AI4_-kRPLDxYEPjwtovaISXBKHndiUaXpw&amp;ved=2ahUKEwik077blrrmAhWLOnAKHZsFAHUQ9QEwAnoECAEQBA#imgrc=s5Ah6MdpkKLEsM:&quot;
+  Available: &quot;https://www.google.com/imgres?imgurl=https://zoo.sandiegozoo.org/sites/default/files/styles/landing_page_view_thumbnail/public/2019-01/thumb-amurleopard_0.jpg%3Fitok%3D2V5hBqxr&amp;imgrefurl=https://pixlcorps.com/info/animal-pictures&amp;h=540&amp;w=668&amp;tbnid=1Z2eb-yIs2UVHM&amp;tbnh=202&amp;tbnw=250&amp;usg=K_7zNEXOlHRdg1QQtf30mjb6wwQzo=&amp;hl=en-VN&amp;docid=gOOFMk57YY4rJM&amp;itg=1&quot;
+*/
+
+public class Time {
+    private int minutes = 2;
+    private int seconds = 0;
+    private int hundredthOfSeconds = 0;
+    private int longestTime = 3;
+
+    //reset the time to 2 minutes
+    public  void resetTime() {
+        minutes = 2;
+        seconds = 0;
+        hundredthOfSeconds = 0;
+    }
+
+    //decrease the time by 1 hundredth of second
+    public String countDownTime() {
+        if (seconds + minutes + hundredthOfSeconds == 0) {
+        } else if (seconds == 0 &amp;&amp; hundredthOfSeconds == 0) {
+            --minutes;
+            seconds = 59;
+            hundredthOfSeconds = 99;
+        } else if (hundredthOfSeconds == 0) {
+            --seconds;
+            hundredthOfSeconds = 99;
+        } else {
+            --hundredthOfSeconds;
+        }
+        return getTime();
+    }
+
+    //get the time (as text) to display
+    public String getTime() {
+        String textMinute = &quot;0&quot; + minutes;
+        String textSecond = (seconds &lt; 10) ? (&quot;0&quot; + seconds) : Integer.toString(seconds);
+        String textHundredOfSecond  = (hundredthOfSeconds &lt; 10) ? (&quot;0&quot; + hundredthOfSeconds) : Integer.toString(hundredthOfSeconds);
+        return textMinute + &quot; : &quot; + textSecond + &quot; : &quot; + textHundredOfSecond;
+    }
+
+    //return the second left (equal to score for that game) after the user has matches all pairs of photos
+    public int getSecondsLeft() {
+        if (getTime().equals(&quot;00 : 00 : 00&quot;)) {
+            return 0;
+        } else {
+<A NAME="11"></A>            //because the time is displayed in minutes : seconds : hundredOfSeconds so the second drops at the beginning not the end of that second.
+            return minutes * 60 + seconds + 1;
+        }
+    <FONT color="#571b7e"><A HREF="javascript:ZweiFrames('match19-1.html#11',3,'match19-top.html#11',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    //get the duration of time each photo turns up
+    public int getCardUpTime(int level) {
+        return longestTime - level + 1;
+    }
+}</B></FONT>
+</PRE>
+
+</BODY>
+</HTML>

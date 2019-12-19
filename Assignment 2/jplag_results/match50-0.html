@@ -1,0 +1,332 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>longdangtruon</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>Assignment2/src/program/Controller.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Dang Truong Nguyen Long
+  ID: s3757333
+  Created  date: 11/12/2019
+  Last modified: 15/12/2019
+  Acknowledgement: Acknowledgements are listed in README.md file
+<A NAME="0"></A>*/
+package program;
+
+<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match50-1.html#0',3,'match50-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.FadeTransition;
+
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Collections;
+import java.io.File;
+
+public class Controller {
+	@FXML private ArrayList&lt;ImageView&gt; images;
+	@FXML private Button startbutton;
+	@FXML private Button exitbutton;
+	@FXML private ImageView soundimage;
+	@FXML private ComboBox&lt;String&gt; difficulty_box;
+	@FXML private Label minute;
+	@FXML private Label second;
+	@FXML private Label hsecond;
+	@FXML private ProgressBar progress;
+	@FXML pr</B></FONT>ivate Label scorelabel;
+	@FXML
+<A NAME="1"></A>	public void initialize() {
+		audio.play();
+		audio.setCycleCount(MediaPlayer.INDEFINITE);
+		difficulty_box.getItems().removeAll(difficulty_box<FONT color="#f63526"><A HREF="javascript:ZweiFrames('match50-1.html#1',3,'match50-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.getItems());
+		difficulty_box.getItems().addAll(&quot;Difficulty: Easy (3s)&quot;, &quot;Difficulty: Medium (2s)&quot;, &quot;Difficulty: Hard (1s)&quot;);
+		difficulty_box.setValue(&quot;Difficulty: Easy (3s)&quot;);
+	}
+
+	private Model model = new Model();
+	private String[] imageurl = {&quot;/images/0.jpg&quot;, &quot;/images/1.jpg&quot;, &quot;/images/2.jpg&quot;, &quot;/images/3.jpg&quot;, &quot;/images/4.jpg&quot;,
+		&quot;/images/5.jpg&quot;, &quot;/images/6.jpg&quot;, &quot;/images/7.jpg&quot;, &quot;/images/8.jpg&quot;, &quot;/images/9.jpg&quot;, &quot;/images/0.jpg&quot;, &quot;/images/1.jpg&quot;,
+<A NAME="2"></A>		&quot;/images/2.jpg&quot;, &quot;/images/3.jpg&quot;, &quot;/images/4.jpg&quot;, &quot;/images/5.jpg&quot;, &quot;/images/6.jpg&quot;, &quot;/images/7.jpg&quot;, &quot;/images/8.jpg&quot;,
+		&quot;/images/9.jpg&quot;};
+	private MediaPlayer audio = new MediaP</B></FONT>layer(new Media(new File(&quot;src/sound/JingleBells.mp3&quot;).toURI().toString()));
+	private<FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match50-1.html#2',3,'match50-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B> List&lt;String&gt; imageurllist = Arrays.asList(imageurl);
+	private byte selectedcard = 0;
+	private String prev_string = &quot;&quot;;
+	private byte prev_index = 0;
+	private FadeTransition prev_fade;
+	private byte match_pair = 0;
+	private int difficulty_time_fade = 0;
+	private boolean mute = false;
+	private int score = 12000;
+	private byte minuteleft = 2;
+	private byte secondleft = 0;
+	private byte hsecondleft = 0;
+	private Timeline timeline = new Timeline();</B></FONT>
+
+	// Start/Restart Game timeline which control score, time left and progress bar
+	private void timerStart() {
+		score = 12000;
+		minuteleft = 2;
+		secondleft = 0;
+		hsecondleft = 0;
+		EventHandler&lt;ActionEvent&gt; countdown = new EventHandler&lt;ActionEvent&gt;() {
+			public void handle (ActionEvent t) {
+				score--;
+<A NAME="3"></A>				if (secondleft == 0 &amp;&amp; hsecondleft == 0) {
+					minuteleft--;
+					secondleft = 59;
+					hsecondleft = 99;<FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match50-1.html#3',3,'match50-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+					minute.setText(String.format(&quot;%02d&quot;, minuteleft));
+					second.setText(String.format(&quot;%02d&quot;, secondleft));
+				} else if (hsecondleft == 0) {
+					secondleft--;
+					hsecondleft = 99;
+					second.setText(String.format(&quot;%02d&quot;, secondleft));</B></FONT>
+				} else {
+<A NAME="4"></A>					hsecondleft--;
+					hsecond.setText(String.format(&quot;%02d&quot;, hsecondleft));
+				}
+				progress.setProgress((double<FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match50-1.html#4',3,'match50-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>) score/ (double) 12000);
+				if (score == 0) {
+					gameOver();
+					for (ImageView image : images) {
+						image.setDisable(true);
+					}
+				}</B></FONT>
+<A NAME="5"></A>			}
+		};
+		timeline.setCycleCount(Animation.INDEFINITE);
+		timeline.getKeyFrames().add(new KeyFrame(Duration.secon<FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match50-1.html#5',3,'match50-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>ds(0.01), countdown));
+		timeline.playFromStart();
+	}
+
+	// Game over when time run out or the player successfully choose 10 pair of matching images
+	private void gameOver() {
+		timeline.stop();
+		timeline.getKeyFrames().clear();
+		startbutton.setText(&quot;Restart&quot;);
+		difficulty_box.setDisable(false);
+		startbutton.setDisable(false);
+	}
+
+<A NAME="6"></A>	// Action when player start/restart game
+	public void startGame() {</B></FONT>
+		// Setting difficulty base on player choice
+		if (difficulty<FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match50-1.html#6',3,'match50-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>_box.getValue().equals(&quot;Difficulty: Easy (3s)&quot;)) {
+			difficulty_time_fade = 3000;
+		} else if (difficulty_box.getValue().equals(&quot;Difficulty: Medium (2s)&quot;)) {
+			difficulty_time_fade = 2000;
+		} else {</B></FONT>
+<A NAME="7"></A>			difficulty_time_fade = 1000;
+		}
+		// Randomize image and put image to ImageView object
+		Collections.sh<FONT color="#c58917"><A HREF="javascript:ZweiFrames('match50-1.html#7',3,'match50-top.html#7',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>uffle(imageurllist);
+		imageurllist.toArray(imageurl);
+		for (int i = 0; i &lt; imageurllist.size(); i++) {
+			images.get(i).setDisable(false);
+			images.get(i).setImage(new Imag</B></FONT>e(imageurl[i]));
+			images.get(i).setOpacity(0);
+		}
+		// Reset most variable
+		prev_string = &quot;&quot;;
+		prev_index = 0;
+		selectedcard = 0;
+		match_pair = 0;
+		// Disable difficulty box and start button
+<A NAME="8"></A>		difficulty_box.setDisable(true);
+		startbutton.setDisable(true);
+		timerStart();
+	}<FONT color="#bce954"><A HREF="javascript:ZweiFrames('match50-1.html#8',3,'match50-top.html#8',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+
+	// Exit Game
+	public void exitGame() {
+		Platform.exit();
+	}
+
+	// Mute/Unmute sound
+	public void soundAction () {
+		if (!mute) {
+			audio.setMute(true);
+			soundimage.setImage(new Image(&quot;/images/m</B></FONT>ute.jpg&quot;));
+			mute = true;
+		} else {
+<A NAME="9"></A>			audio.setMute(false);
+			soundimage.setImage(new Image(&quot;/images/audio.jpg&quot;));
+			mute = false;
+		}<FONT color="#f88017"><A HREF="javascript:ZweiFrames('match50-1.html#9',3,'match50-top.html#9',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+	}
+
+	// Allow user to select images that have not appear on screen
+	private void enableImage () {
+		for (ImageView image : images) {
+			if (image.getOpacity() == 0) {
+				image.setDisable(false);
+			}
+		}
+	}
+
+	// Event happen when user press an image
+<A NAME="10"></A>	public void OnMouse</B></FONT>Click (MouseEvent mouseEvent) {
+		selectedcard++;
+		// If 2 card are selected, disable all ImageView object
+		if (selectedca<FONT color="#b041ff"><A HREF="javascript:ZweiFrames('match50-1.html#10',3,'match50-top.html#10',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>rd == 2) {
+			for (ImageView image : images) {
+<A NAME="11"></A>				image.setDisable(true);
+			}
+		}
+		byte index = (byte) images.indexOf<FONT color="#571b7e"><A HREF="javascript:ZweiFrames('match50-1.html#11',3,'match50-top.html#11',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>((ImageView) mouseEvent.getSource());</B></FONT>
+		// Make the image appear and disable the image so the player can't select the image already appear
+		images.get(index).setDisable(true);
+		images.get(index).setOpacity(1);
+		// Fade the image after N second based on difficulty
+		FadeTransition fade = new FadeTransition();
+		fade.setDuration(Duration.millis(200));
+		fade.setFromValue(10);
+<A NAME="12"></A>		fade.setToValue(0);
+		fade.setDelay(Duration.millis(difficulty_ti</B></FONT>me_fade));
+		fade.setNode(images.get(index));
+		fade.setOnFinished(e -&gt; {<FONT color="#3b9c9c"><A HREF="javascript:ZweiFrames('match50-1.html#12',3,'match50-top.html#12',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+			// When the image finish fading, the amount of card appear on screen decrease by 1
+			selectedcard--;
+			// When no card appear on screen and score is not 0, reset the previous url_string and ImageView object index then enable image
+			// When there are still cards on screen, only enable image
+			if (selectedcard == 0 &amp;&amp; score != 0) {
+				prev_string = &quot;&quot;;
+				prev_index = 0;
+				enableImage();
+			} else if (score != 0) {</B></FONT>
+				enableImage();
+			}
+		});
+		fade.play();
+		// When the previous image url and current image url are equals, increase match pair, stop the previous and current image fading, enable image,
+<A NAME="13"></A>		// change the opacity to 1 so it will appear on screen, reset previous string, ImageView object index and card appear on screen
+		// If match pair is 10, stop the game and update the player score
+		// When the previous image url and current image url are not equals, save current ImageView object url, index and current fade object
+		if (prev_string.eq<FONT color="#842dce"><A HREF="javascript:ZweiFrames('match50-1.html#13',3,'match50-top.html#13',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>uals(images.get(index).getImage().getUrl())) {
+			match_pair++;
+			prev_fade.stop();
+			fade.stop();
+			images.get(index).setOpacity(1);
+			images.get(prev_index).setOpacity(1);
+			enableImage();</B></FONT>
+			prev_string = &quot;&quot;;
+<A NAME="14"></A>			prev_index = 0;
+			selectedcard = 0;
+			if (match_pair == 10) {
+				gameOver();<FONT color="#f52887"><A HREF="javascript:ZweiFrames('match50-1.html#14',3,'match50-top.html#14',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+				model.setPlayerscore(score/100);
+<A NAME="15"></A>				scorelabel.setText(Integer.toString(model.getPlayerscore()));
+			}
+		} else {
+			prev_string = images.get(index).get<FONT color="#3bb9ff"><A HREF="javascript:ZweiFrames('match50-1.html#15',3,'match50-top.html#15',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>Image().getUrl();</B></FONT>
+			prev_index = index;
+			prev_fade = fade;
+		}
+	}
+}</B></FONT>
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/program/Main.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Dang Truong Nguyen Long
+  ID: s3757333
+  Created  date: 11/12/2019
+  Last modified: 15/12/2019
+  Acknowledgement: Acknowledgements are listed in README.md file
+<A NAME="16"></A>*/
+package program;
+
+<FONT color="#3090c7"><A HREF="javascript:ZweiFrames('match50-1.html#16',3,'match50-top.html#16',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+<A NAME="17"></A>        Parent root = FXMLLoader.load</B></FONT>(getClass().getResource(&quot;view.fxml&quot;));
+        primaryStage.setTitle(&quot;Matching Game&quot;);
+        primaryStage.setScene(new Scene(root, 730, 595));
+        <FONT color="#800517"><A HREF="javascript:ZweiFrames('match50-1.html#17',3,'match50-top.html#17',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>primaryStage.setResizable(false);
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}</B></FONT>
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/program/Model.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Dang Truong Nguyen Long
+  ID: s3757333
+  Created  date: 13/12/2019
+  Last modified: 15/12/2019
+  Acknowledgement: Acknowledgements are listed in README.md file
+*/
+package program;
+
+<A NAME="18"></A>class Model {
+	private int playerscore;
+
+	int getPlayerscore() {<FONT color="#f62817"><A HREF="javascript:ZweiFrames('match50-1.html#18',3,'match50-top.html#18',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+		return playerscore;
+	}
+
+	void setPlayerscore(int currentscore) {
+		playerscore += currentscore;
+	}
+
+	Model() {}</B></FONT>
+}
+</PRE>
+
+</BODY>
+</HTML>

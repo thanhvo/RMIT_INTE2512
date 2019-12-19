@@ -1,0 +1,539 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>datduongtuan_</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>MatchingCardGame/src/sample/Controller.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Duong Tuan Dat
+  ID: s3636739
+  Created  date: 12/12/2019
+  Last modified: 16/12/2019
+<A NAME="0"></A>*/
+package sample;
+
+<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match36-1.html#0',3,'match36-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import javax.swing.*;
+import java.io.*;
+import java.net.URL;
+import java.sql.SQLOutput;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+public class Controller implements Initializable {
+    //@FXML private GridPane gridPane1;
+    //@FXML private GridPane gridPane2;
+    @FXML private MenuButton level;
+    //@FXML private MenuItem easyMode;
+    //@FXML private MenuItem mediumMode;
+   // @FXML private MenuItem hardMode;
+    @FXML private ToggleButton onOffSound;
+    //@FXML private ProgressBar time;
+    @FXML private MenuButton select;
+    //@FXML private MenuItem playAgain;
+    //@FXML private MenuItem exit;
+    @FXML private Label labelScore;
+    @FXML private Label label;
+
+    @FXML private Button btStart;
+    private final Integer startTime = 12000</B></FONT>;
+    private Integer timeCentiSeconds = startTime;
+    private Timeline timeline;
+
+    private MediaPlayer mediaPlayer;
+<A NAME="1"></A>    private Media music;
+    private Model model;
+
+    <FONT color="#f63526"><A HREF="javascript:ZweiFrames('match36-1.html#1',3,'match36-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>@FXML private ToggleButton bt1, bt2, bt3,
+            bt4, bt5, bt6,
+            bt7, bt8, bt9,
+            bt10, bt11, bt12,
+            bt13, bt14, bt15,
+            bt16, bt17, bt18,
+            bt19, bt20;
+    private List&lt;ToggleButton&gt; buttonPressed;
+    private int pairMatched;
+    private int totalScore = readFromScoreFile()</B></FONT>;
+    private int mode = readFromModeFile();
+
+    //Controller
+
+    public Controller()  throws FileNotFoundException {
+        music = new Media(new File(&quot;music/ost.mp3&quot;).toURI().toString());
+        mediaPlayer = new MediaPlayer(music);
+<A NAME="2"></A>        mediaPlayer.setCycleCount(99999);
+        mediaPlayer.setVolume(0.1);
+        mediaPlayer.setAutoPlay(true);
+        <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match36-1.html#2',3,'match36-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model = new Model(&quot;bt1&quot;, &quot;bt2&quot;, &quot;bt3&quot;, &quot;bt4&quot;, &quot;bt5&quot;,
+                &quot;bt6&quot;, &quot;bt7&quot;, &quot;bt8&quot;, &quot;bt9&quot;, &quot;bt10&quot;, &quot;bt11&quot;,
+                &quot;bt12&quot;, &quot;bt13&quot;, &quot;bt14&quot;, &quot;bt15&quot;, &quot;bt16&quot;,
+                &quot;bt17&quot;, &quot;bt18&quot;, &quot;bt19&quot;, &quot;bt20&quot;);
+        buttonPressed = new ArrayList&lt;&gt;();
+        pairMatched = 0;
+<A NAME="3"></A>    }
+
+    private void setGameDisabled(boolean b) {</B></FONT>
+        <FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match36-1.html#3',3,'match36-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>bt1.setDisable(b);
+        bt2.setDisable(b);
+        bt3.setDisable(b);
+        bt4.setDisable(b);
+        bt5.setDisable(b);
+        bt6.setDisable(b);
+        bt7.setDisable(b);
+        bt8.setDisable(b);
+        bt9.setDisable(b);
+        bt10.setDisable(b);
+        bt11.setDisable(b);
+        bt12.setDisable(b);
+        bt13.setDisable(b);
+        bt14.setDisable(b);
+        bt15.setDisable(b);
+        bt16.setDisable(b);
+        bt17.setDisable(b);
+        bt18.setDisable(b);
+        bt19.setDisable(b);
+        bt20.setDisable(b);
+    }
+
+    @FXML void clickedStart(ActionEvent event) {</B></FONT>
+        timeline = new Timeline();
+<A NAME="4"></A>        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.setAutoReverse(false);
+        timeline.getKeyFrames().add(
+                new KeyFrame(Duration.millis(10), <FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match36-1.html#4',3,'match36-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>actionEvent -&gt; {
+                    timeCentiSeconds--;
+                    int timeSeconds = timeCentiSeconds / 100;
+                    label.setText(String.format(&quot;%02d : %02d : %02d&quot;, (timeSeconds % 3600) / 60, (timeSeconds % 60) , timeCentiSeconds - timeSeconds*100));
+                    if (timeSeconds &lt;= 0) {
+                        timeline.stop();
+<A NAME="5"></A>                        mediaPlayer.stop</B></FONT>();
+                        try {
+                            select.getScene().setRoot(FXMLLoader.load(getClass().getResource(&quot;sample.fxml&quot;)));
+                        <FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match36-1.html#5',3,'match36-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>} catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    //showTime();
+
+                }));
+        timeline.playFromStart();
+        setGameDisabled(false);
+<A NAME="6"></A>        btStart.setDisable(true);
+    }
+
+    private boolean isButtonImagesSame (ToggleButton btn</B></FONT>) <FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match36-1.html#6',3,'match36-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{
+        return model.getImage(buttonPressed.get(0).getId()).equals(model.getImage(btn.getId()));
+    }
+
+<A NAME="7"></A>    private void writeToScoreFile(int score) {</B></FONT>
+        try {
+            FileWriter fileWriter = new FileWriter(&quot;Score.txt&quot;);
+            PrintWriter printWriter = <FONT color="#c58917"><A HREF="javascript:ZweiFrames('match36-1.html#7',3,'match36-top.html#7',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>new PrintWriter(fileWriter);
+
+            printWriter.println(Integer.toString(score));
+            printWriter.close();
+        } catch (IOException e) {
+            System.err.println(&quot;Error!&quot;);
+        }
+    }
+
+    private int readF</B></FONT>romScoreFile() {
+        try {
+            FileReader fileReader = new FileReader(&quot;Score.txt&quot;);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String string;
+            int score = 0;
+            while ((string = bufferedReader.readLine()) != null)
+<A NAME="8"></A>                score = Integer.parseInt(string);
+            bufferedReader.close();
+            return score;
+        <FONT color="#bce954"><A HREF="javascript:ZweiFrames('match36-1.html#8',3,'match36-top.html#8',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>} catch (IOException e) {
+            System.out.println(&quot;File Not Found&quot;);
+        }
+        return 0;
+    }
+
+    private void addButtonToButtonPressedList(ToggleButton btn) {</B></FONT>
+<A NAME="9"></A>        PauseTransition pause = new PauseTransition(Duration.seconds(mode));
+        if (buttonPressed.size() &lt; 1)
+            buttonPressed.add(btn);
+        else <FONT color="#f88017"><A HREF="javascript:ZweiFrames('match36-1.html#9',3,'match36-top.html#9',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (!isButtonImagesSame(btn)) {
+            ToggleButton btn2 = buttonPressed.get(0);
+            pause.setOnFinished(event -&gt; {
+<A NAME="10"></A>                btn.setSelected</B></FONT>(false);
+                btn2.setSelected(false);
+            });
+            <FONT color="#b041ff"><A HREF="javascript:ZweiFrames('match36-1.html#10',3,'match36-top.html#10',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>pause.play();
+            buttonPressed.clear();
+        }
+        else if (isButtonImagesSame(btn)) {
+            ToggleButton btn2 = buttonPressed.get(0);
+            buttonPressed.clear();
+            btn.setDisable(true);
+            btn2.setDisable</B></FONT>(true);
+            pairMatched++;
+<A NAME="11"></A>            if (pairMatched == 10) {
+                timeline.stop();
+                totalScore += timeCentiSeconds/100;
+                <FONT color="#571b7e"><A HREF="javascript:ZweiFrames('match36-1.html#11',3,'match36-top.html#11',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>writeToScoreFile(totalScore);
+                mediaPlayer.stop();
+<A NAME="12"></A>                try {
+                    select.getScene().setRoot(FXMLLoader.load(getClass().getResource(&quot;sample.fxml&quot;)));
+                } catch (IOException e) {</B></FONT>
+                    <FONT color="#3b9c9c"><A HREF="javascript:ZweiFrames('match36-1.html#12',3,'match36-top.html#12',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>e.printStackTrace();
+<A NAME="13"></A>                }
+            }
+        }</B></FONT>
+    <FONT color="#842dce"><A HREF="javascript:ZweiFrames('match36-1.html#13',3,'match36-top.html#13',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    private void writeToModeFile(int mode) {
+        try {
+<A NAME="14"></A>            FileWriter fileWriter = new FileWriter(&quot;Mode.txt&quot;);
+            PrintWriter printWriter = new</B></FONT> PrintWriter(fileWriter);
+
+            <FONT color="#f52887"><A HREF="javascript:ZweiFrames('match36-1.html#14',3,'match36-top.html#14',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>printWriter.println(Integer.toString(mode));
+            printWriter.close();
+        } catch (IOException e) {
+            System.err.println(&quot;Error!&quot;);
+        }
+    }
+
+    private int read</B></FONT>FromModeFile() {
+        try {
+            FileReader fileReader = new FileReader(&quot;Mode.txt&quot;);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            String string;
+<A NAME="15"></A>            int mode = 5;
+            while ((string = bufferedReader.readLine()) != null)
+                mode = Integer.parseInt(string);
+            <FONT color="#3bb9ff"><A HREF="javascript:ZweiFrames('match36-1.html#15',3,'match36-top.html#15',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>bufferedReader.close();
+            return mode;
+<A NAME="16"></A>        } catch (IOException e) {
+            System.out.println(&quot;File Not Found&quot;);
+        }</B></FONT>
+        <FONT color="#3090c7"><A HREF="javascript:ZweiFrames('match36-1.html#16',3,'match36-top.html#16',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>return 5;
+    }
+
+    //ToggleButton configure
+    @FXML void clickedBt1(ActionEvent event) {
+        if (bt1.isSelected()) {
+<A NAME="17"></A>            model.showImage(bt1, bt1.getId());
+            addButtonToButtonPressedList(bt1);
+        }</B></FONT>
+    <FONT color="#800517"><A HREF="javascript:ZweiFrames('match36-1.html#17',3,'match36-top.html#17',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+    @FXML void clickedBt2(ActionEvent event) {
+        if (bt2.isSelected()) {
+<A NAME="18"></A>            model.showImage(bt2, bt2.getId());
+            addButtonToButtonPressedList(bt2);
+        }</B></FONT>
+<A NAME="19"></A>    <FONT color="#f62817"><A HREF="javascript:ZweiFrames('match36-1.html#18',3,'match36-top.html#18',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+    @FXML void clickedBt3(ActionEvent event) {
+        if (bt3.isSelected()) {</B></FONT>
+            <FONT color="#4e9258"><A HREF="javascript:ZweiFrames('match36-1.html#19',3,'match36-top.html#19',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model.showImage(bt3, bt3.getId());
+            addButtonToButtonPressedList(bt3);
+        }
+<A NAME="20"></A>    }
+    @FXML void clickedBt4(ActionEvent event) {
+        if (bt4.isSelected()) {</B></FONT>
+            <FONT color="#d4a017"><A HREF="javascript:ZweiFrames('match36-1.html#20',3,'match36-top.html#20',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model.showImage(bt4, bt4.getId());
+            addButtonToButtonPressedList(bt4);
+        }
+<A NAME="21"></A>    }
+    @FXML void clickedBt5(ActionEvent event) {
+        if (bt5.isSelected()) {</B></FONT>
+            <FONT color="#00ff00"><A HREF="javascript:ZweiFrames('match36-1.html#21',3,'match36-top.html#21',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model.showImage(bt5, bt5.getId());
+            addButtonToButtonPressedList(bt5);
+        }
+<A NAME="22"></A>    }
+    @FXML void clickedBt6(ActionEvent event) {
+        if (bt6.isSelected()) {</B></FONT>
+            <FONT color="#4cc417"><A HREF="javascript:ZweiFrames('match36-1.html#22',3,'match36-top.html#22',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model.showImage(bt6, bt6.getId());
+            addButtonToButtonPressedList(bt6);
+        }
+<A NAME="23"></A>    }
+    @FXML void clickedBt7(ActionEvent event) {
+        if (bt7.isSelected</B></FONT>()) {
+            <FONT color="#f660ab"><A HREF="javascript:ZweiFrames('match36-1.html#23',3,'match36-top.html#23',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model.showImage(bt7, bt7.getId());
+            addButtonToButtonPressedList(bt7);
+        }
+<A NAME="24"></A>    }
+    @FXML void clickedBt8(ActionEvent event) {
+        if (bt8.isSelected</B></FONT>()) {
+            <FONT color="#ada96e"><A HREF="javascript:ZweiFrames('match36-1.html#24',3,'match36-top.html#24',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model.showImage(bt8, bt8.getId());
+            addButtonToButtonPressedList(bt8);
+        }
+<A NAME="25"></A>    }
+    @FXML void clickedBt9(ActionEvent event) {
+        if (bt9.isSelected</B></FONT>()) {
+            <FONT color="#87f717"><A HREF="javascript:ZweiFrames('match36-1.html#25',3,'match36-top.html#25',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model.showImage(bt9, bt9.getId());
+            addButtonToButtonPressedList(bt9);
+        }
+<A NAME="26"></A>    }
+    @FXML void clickedBt10(ActionEvent event) {
+        if (bt10.isSelected</B></FONT>()) {
+            <FONT color="#95b9c7"><A HREF="javascript:ZweiFrames('match36-1.html#26',3,'match36-top.html#26',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model.showImage(bt10, bt10.getId());
+            addButtonToButtonPressedList(bt10);
+        }
+<A NAME="27"></A>    }
+    @FXML void clickedBt11(ActionEvent event) {
+        if (bt11.isSelected</B></FONT>()) {
+            <FONT color="#e77471"><A HREF="javascript:ZweiFrames('match36-1.html#27',3,'match36-top.html#27',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model.showImage(bt11, bt11.getId());
+            addButtonToButtonPressedList(bt11);
+        }
+<A NAME="28"></A>    }
+    @FXML void clickedBt12(ActionEvent event) {
+        if (bt12.isSelected</B></FONT>()) {
+            <FONT color="#717d7d"><A HREF="javascript:ZweiFrames('match36-1.html#28',3,'match36-top.html#28',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model.showImage(bt12, bt12.getId());
+            addButtonToButtonPressedList(bt12);
+        }
+<A NAME="29"></A>    }
+    @FXML void clickedBt13(ActionEvent event) {
+        if (bt13.isSelected</B></FONT>()) {
+            <FONT color="#faafba"><A HREF="javascript:ZweiFrames('match36-1.html#29',3,'match36-top.html#29',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model.showImage(bt13, bt13.getId());
+            addButtonToButtonPressedList(bt13);
+        }
+<A NAME="30"></A>    }
+    @FXML void clickedBt14(ActionEvent event) {
+        if (bt14.isSelected</B></FONT>()) {
+            <FONT color="#f9966b"><A HREF="javascript:ZweiFrames('match36-1.html#30',3,'match36-top.html#30',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>model.showImage(bt14, bt14.getId());
+            addButtonToButtonPressedList(bt14);
+        }
+    }
+<A NAME="31"></A>    @FXML void clickedBt15(ActionEvent event) {
+        if (bt15.isSelected</B></FONT>()) {
+            model.showImage(bt15, bt15.getId());
+            <FONT color="#3ea99f"><A HREF="javascript:ZweiFrames('match36-1.html#31',3,'match36-top.html#31',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>addButtonToButtonPressedList(bt15);
+        }
+    }
+<A NAME="32"></A>    @FXML void clickedBt16(ActionEvent event) {
+        if (bt16.isSelected()) {
+            model.showImage</B></FONT>(bt16, bt16.getId());
+            <FONT color="#82cafa"><A HREF="javascript:ZweiFrames('match36-1.html#32',3,'match36-top.html#32',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>addButtonToButtonPressedList(bt16);
+        }
+    }
+<A NAME="33"></A>    @FXML void clickedBt17(ActionEvent event) {
+        if (bt17.isSelected()) {
+            model.showImage</B></FONT>(bt17, bt17.getId());
+            <FONT color="#736aff"><A HREF="javascript:ZweiFrames('match36-1.html#33',3,'match36-top.html#33',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>addButtonToButtonPressedList(bt17);
+        }
+    }
+<A NAME="34"></A>    @FXML void clickedBt18(ActionEvent event) {
+        if (bt18.isSelected()) {
+            model.showImage</B></FONT>(bt18, bt18.getId());
+            <FONT color="#827d6b"><A HREF="javascript:ZweiFrames('match36-1.html#34',3,'match36-top.html#34',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>addButtonToButtonPressedList(bt18);
+        }
+    }
+    @FXML void clickedBt19(ActionEvent event) {
+        if (bt19.isSelected()) {
+<A NAME="35"></A>            model.showImage</B></FONT>(bt19, bt19.getId());
+            addButtonToButtonPressedList(bt19);
+        }
+    <FONT color="#41a317"><A HREF="javascript:ZweiFrames('match36-1.html#35',3,'match36-top.html#35',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+    @FXML void clickedBt20(ActionEvent event) {
+        if (bt20.isSelected()) {
+            model.showImage(bt20, bt20.getId());
+            addButtonToButtonPressedList(bt20);
+        }</B></FONT>
+<A NAME="36"></A>    }
+    @FXML void clickedEasy(ActionEvent event) throws IOException {
+        writeToModeFile(5);
+        <FONT color="#ff00ff"><A HREF="javascript:ZweiFrames('match36-1.html#36',3,'match36-top.html#36',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>mediaPlayer.stop();
+        level.getScene().setRoot(FXMLLoader.load(getClass().getResource(&quot;sample.fxml&quot;)));
+    }
+    @FXML void clickedHard(ActionEvent event) throws IOException {
+        writeToModeFile(1);
+        mediaPlayer.stop();
+        level.getScene().setRoot(FXMLLoader.load(getClass().getResource(&quot;sample.fxml&quot;)));
+    }
+    @FXML void clickedMedium(ActionEvent event) throws IOException {
+        writeToModeFile(3);
+        mediaPlayer.stop();
+<A NAME="37"></A>        level.getScene().setRoot(FXMLLoader.load(getClass().getResource(&quot;sample.fxml&quot;)));
+    }</B></FONT>
+
+    <FONT color="#810541"><A HREF="javascript:ZweiFrames('match36-1.html#37',3,'match36-top.html#37',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>@FXML void exitProgram(ActionEvent event) {
+        Stage stage = (Stage) select.getScene().getWindow();
+        stage.close();
+    }
+<A NAME="38"></A>
+    @FXML void setPlayAgain(ActionEvent event) throws IOException {</B></FONT>
+        mediaPlayer.stop();
+        select.getScene().setRoot(FXMLLoader.load(<FONT color="#348781"><A HREF="javascript:ZweiFrames('match36-1.html#38',3,'match36-top.html#38',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>getClass().getResource(&quot;sample.fxml&quot;)));
+    }
+
+    @FXML void turnOnOffSound(ActionEvent event) {
+        if (onOffSound.isSelected()) {
+            mediaPlayer.stop();
+        } else {
+            mediaPlayer.play();
+        }
+    }
+
+
+
+    @Override
+<A NAME="39"></A>    public void initialize(URL url</B></FONT>, ResourceBundle resourceBundle) {
+        setGameDisabled(true);
+        labelScore.setText(&quot;Score: &quot; + Integer.toString(totalScore));
+    <FONT color="#152dc6"><A HREF="javascript:ZweiFrames('match36-1.html#39',3,'match36-top.html#39',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    class Model {
+        private List&lt;String&gt; buttons;
+        private List&lt;String&gt; urls;
+        private Map&lt;String, String&gt; dictionary;
+
+        public Model(String... btns) {
+            urls = createURLs();
+            buttons = Arrays.asList(btns);
+            //System.out.println(buttons.get(0));
+            d</B></FONT>ictionary = new HashMap&lt;&gt;();
+            mapURLs();
+        }
+
+<A NAME="40"></A>        private void mapURLs() {
+            Collections.shuffle(urls);
+            Collections.shuffle(buttons);
+            Iterator&lt;String&gt; iterator = <FONT color="#347235"><A HREF="javascript:ZweiFrames('match36-1.html#40',3,'match36-top.html#40',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>buttons.iterator();
+            for (String url : urls) {
+                dictionary.put(iterator.next(), url);
+                dictionary.put(iterator.next(), url);
+            }
+            dictionary.get(bt1);
+<A NAME="41"></A>        }
+
+        public S</B></FONT>tring getImage(String button) {
+            return <FONT color="#f87a17"><A HREF="javascript:ZweiFrames('match36-1.html#41',3,'match36-top.html#41',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>dictionary.get(button);
+        }
+
+        private void setImage(ToggleButton btn, String url) {
+            btn.getStyleClass().add(url);
+        }
+
+        private void showImage(ToggleButton btn, String button) {
+            setImage(btn, getImage(button));
+<A NAME="42"></A>        }
+
+        private void removeImage(ToggleButton btn</B></FONT>) {
+            <FONT color="#c57717"><A HREF="javascript:ZweiFrames('match36-1.html#42',3,'match36-top.html#42',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>setImage(btn, &quot;&quot;);
+        }
+
+        private List&lt;String&gt; createURLs() {
+            List&lt;String&gt; urls = new ArrayList&lt;&gt;();
+            urls.add(&quot;one-button&quot;);
+            urls.add(&quot;two-button&quot;);
+            urls.add(&quot;three-button&quot;);
+            urls.add(&quot;four-button&quot;);
+            urls.add(&quot;five-button&quot;);
+            urls.add(&quot;six-button&quot;);
+            urls.add(&quot;seven-button&quot;);
+            urls.add(&quot;eight-button&quot;);
+            urls.add(&quot;nine-button&quot;);
+            urls.add</B></FONT>(&quot;ten-button&quot;);
+            return urls;
+        }
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>MatchingCardGame/src/sample/Main.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Duong Tuan Dat
+  ID: s3636739
+  Created  date: 12/12/2019
+  Last modified: 16/12/2019
+<A NAME="43"></A>*/
+package sample;
+
+<FONT color="#c22817"><A HREF="javascript:ZweiFrames('match36-1.html#43',3,'match36-top.html#43',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
+
+import java.awt.event.ActionEvent;
+import java.io.File;
+
+public class Main extends Application {
+
+    @Override
+    public void start(Stage primaryStage) throws Exception{</B></FONT>
+<A NAME="44"></A>        Parent root = FXMLLoader.load(getClass().getResource(&quot;sample.fxml&quot;));
+        primaryStage.setTitle(&quot;Hello World&quot;);
+        Scene scene = new Scene(root, 1200, 800);
+        <FONT color="#e57ded"><A HREF="javascript:ZweiFrames('match36-1.html#44',3,'match36-top.html#44',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>scene.getStylesheets().add(getClass().getResource(&quot;Button.css&quot;).toExternalForm());
+        primaryStage.setScene(scene);
+
+
+        primaryStage.setResizable(false);
+        primaryStage.show();
+    }
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }</B></FONT>
+}
+</PRE>
+
+</BODY>
+</HTML>

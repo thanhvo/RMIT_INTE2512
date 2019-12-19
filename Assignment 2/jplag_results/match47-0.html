@@ -1,0 +1,594 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>trietbuiminh_</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>Assignment2_Win/src/models/Card.java</CENTER></H3><HR>
+<PRE>
+<A NAME="30"></A><FONT color="#f9966b"><A HREF="javascript:ZweiFrames('match47-1.html#30',3,'match47-top.html#30',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package models;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.util.Duration;
+import sample.Controller;
+
+
+public class Card extends ImageView {
+
+    String backSide = new String(&quot;file:///C:/Users/Triet%20Bui/IdeaProjects/Assignment2_Win/src/back.jpg&quot;);
+    Image frontSide;
+    int cardNum, difficulty;
+    boolean enable = false;
+    boolean cardGotPress = false;
+    boolean matched = false;
+    int flipTime = 3000;
+
+<A NAME="31"></A>    public Card(Image frontSide, int cardNum, int difficulty) {
+        this.frontSide = frontSide;
+        t</B></FONT>his.cardNum = cardNum;
+        this.setImage(<FONT color="#3ea99f"><A HREF="javascript:ZweiFrames('match47-1.html#31',3,'match47-top.html#31',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>getBackside());
+        switch (difficulty) {
+            case 1:
+                flipTime = 1000;
+                break;
+            case 2:
+                flipTime = 2000;
+                break;
+            case 3:
+                flipTime = 3000;
+                break;
+        }
+
+    }</B></FONT>
+<A NAME="32"></A>
+    public Image getBackside() {
+        return new Image(backSide);
+    <FONT color="#82cafa"><A HREF="javascript:ZweiFrames('match47-1.html#32',3,'match47-top.html#32',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    public Image getFrontSide() {
+        return frontSide;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
+
+    public int getCardNum() {
+        return cardNum;
+    }
+
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+
+    public void setMatched(boolean matched) {
+        this.matched = matched;
+    }
+
+    public int getFlipTime() {
+        return flipTime;
+    }</B></FONT>
+}
+
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_Win/src/models/CardList.java</CENTER></H3><HR>
+<PRE>
+<A NAME="27"></A>package models;
+
+<FONT color="#e77471"><A HREF="javascript:ZweiFrames('match47-1.html#27',3,'match47-top.html#27',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import java.util.ArrayList;
+
+//Class that create CardList and handle Cards as a whole
+public class CardList {
+    ArrayList&lt;Card&gt; cardList = new ArrayList&lt;&gt;();
+
+
+
+<A NAME="28"></A>    public CardList() {
+    }
+
+    public void a</B></FONT>ddToCardList(Card card) <FONT color="#717d7d"><A HREF="javascript:ZweiFrames('match47-1.html#28',3,'match47-top.html#28',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{
+        cardList.add(card);
+    }
+
+    public ArrayList getCardList() {
+        return cardList;
+    }
+
+    public Card getCard(int i) {
+<A NAME="29"></A>        return cardList.get(i);
+    }
+
+    public void setEna</B></FONT>bleOnAllCard(<FONT color="#faafba"><A HREF="javascript:ZweiFrames('match47-1.html#29',3,'match47-top.html#29',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>boolean enable) { //Set Enable Status for all cards
+        for (int i = 0; i &lt; 20; i++) {
+            cardList.get(i).setEnable(enable);
+        }
+    }</B></FONT>
+
+
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_Win/src/models/Difficulty.java</CENTER></H3><HR>
+<PRE>
+<A NAME="33"></A>package models;
+
+<FONT color="#736aff"><A HREF="javascript:ZweiFrames('match47-1.html#33',3,'match47-top.html#33',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>public class Difficulty {
+    String diff = &quot;&quot;;
+
+    public Difficulty(String diff) {
+        this.diff = diff;
+    }
+
+    public String getDiff() {
+        return diff;
+    }
+}</B></FONT>
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_Win/src/sample/Controller.java</CENTER></H3><HR>
+<PRE>
+<A NAME="0"></A>
+package sample;
+
+<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match47-1.html#0',3,'match47-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.animation.*;
+import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import models.Card;
+import models.CardList;
+import view.EditedButton;
+import view.EditedText;
+import models.Difficulty;
+
+import java.util.Collections;
+
+
+public class Controller {
+    @FXML
+<A NAME="1"></A>    Button hereButton; // from scencebuilder
+    volatile int noFlipped = 0</B></FONT>;
+    int lastCard;
+    <FONT color="#f63526"><A HREF="javascript:ZweiFrames('match47-1.html#1',3,'match47-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>int mute = 0;
+    int cardFlipTime;
+    int currentTime;
+    int matchedCard = 0;
+    int playerScore = 0;
+    AnchorPane EndPane;
+    AnchorPane GamePane;
+    AnchorPane StartPane;
+    Stage primaryStage;
+
+    GridPane grid = new GridPane();
+    CardList cardList = new CardList();
+    Media music = new Media(&quot;file:///C:/Users/Triet%20Bui/IdeaProjects/Assignment2_Win/src/Crush.mp3&quot;);
+    MediaPlayer player = new MediaPlayer(music);
+    CardList shownCardList = new CardList();
+    String buttonStyle = &quot;    -fx-font-size: 10pt;\n&quot; +</B></FONT>
+            &quot;    -fx-text-fill: white;\n&quot; +
+            &quot;    -fx-font-family: \&quot;Arial Narrow\&quot;;\n&quot; +
+            &quot;    -fx-font-weight: bold;\n&quot; +
+            &quot;    -fx-background-color: linear-gradient(#61a2b1, #2A5058);\n&quot; +
+            &quot;    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );&quot;;
+    String textStyle =
+            &quot;    -fx-text-fill: white;\n&quot; +
+                    &quot;    -fx-font-family: \&quot;Arial Narrow\&quot;;\n&quot; +
+                    &quot;    -fx-font-weight: bold;\n&quot; +
+                    &quot;    -fx-background-color: linear-gradient(#61a2b1, #2A5058);\n&quot; +
+                    &quot;    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );&quot;;
+    String progressStyle = &quot;-fx-background-color: yellow&quot;;
+    String titleStyle = &quot;    -fx-font-size: 32pt;\n&quot; +
+            &quot;    -fx-font-family: \&quot;Segoe UI Bold\&quot;;\n&quot; +
+            &quot;    -fx-effect: \&quot;glow\&quot;;\n&quot; +
+            &quot;-fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #61a2b1 0%, #2A5058 50%);&quot;;
+
+    Timeline gamePaneDuration = new Timeline(new KeyFrame(
+            Duration.minutes(2),
+            actionEvent -&gt; {
+                EndPane.setVisible(true);
+                GamePane.setVisible(false);
+            }
+    ));
+
+
+    public void setStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        player.play(); //Play the music
+        player.getOnRepeat();
+<A NAME="2"></A>        StackPane sp = new StackPane(); //Keep
+        EndPane = createEndPane();
+        GamePane = createGamePane(EndPane); //GamePane
+        StartPane = <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match47-1.html#2',3,'match47-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>createStartPane(GamePane); //StartPane
+
+        //Set the Hierarchy for StartPane
+        GamePane.setVisible(false);
+        EndPane.setVisible(false);
+        StartPane.toFront();
+        sp.getChildren().addAll(EndPane, StartPane, GamePane);
+
+        //Create new Scene
+        Scene newScene = new Scene(sp, 1280, 640);
+
+        //Initializing the Scene and the Stage
+        newScene.getStylesheets().addAll(this.getClass().getResource(&quot;style.css&quot;).toExternalForm());
+        primaryStage.setScene</B></FONT>(newScene);
+        primaryStage.setTitle(&quot;Zoo Memory Game&quot;);
+        primaryStage.show();
+    }
+
+    //Method to create the cardList
+    private void creatingCardList() {
+        CardList cardList = new CardList();
+        this.cardList = cardList;
+
+        for (int i = 0; i &lt;= 19; i++) { //Loop that ensure all 20 cards is added into the List
+
+<A NAME="3"></A>            Card c = new Card(new Image(&quot;file:///C:/Users/Triet%20Bui/IdeaProjects/Assignment2_Win/players/&quot; + (i + 1) + &quot;.jpg&quot;), i, cardFlipTime);
+            //Create a new CardFlip animation that will flipped based on the difficulty level
+            Timeline cardFlip = new Timeline(new KeyFrame(
+                    <FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match47-1.html#3',3,'match47-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>Duration.millis(c.getFlipTime()),
+                    actionEvent -&gt; {
+
+                        if ((c.getCardNum() == lastCard + 10) || (c.getCardNum() == lastCard - 10)) { //Check for equivalent cards (1 will equivalent to 11, 2 to 12,...)
+                            c.setImage(c.getFrontSide()); //If there has been an equivalent card, Card will only display the front
+                            c.setMatched</B></FONT>(true); //Set Matched to true
+<A NAME="4"></A>                            matchedCard++; //Increasing the checking value
+
+                            //Since there are 10 pairs of card, we will based on this to check for the Cards with fronside up
+                            <FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match47-1.html#4',3,'match47-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if ((matchedCard % 10) == 0) { //If all pair of cards on screen has been flipped. Initiate to the EndPane
+                                currentTime = (int) Math.round(gamePaneDuration.getCurrentTime().toMillis() / 1000); //Checking for current time
+                                gamePaneDuration.stop(); //Stop the countdown
+
+                                EndPane.setVisible(true);
+<A NAME="5"></A>                                GamePane.setVisible</B></FONT>(false);
+
+                                this.playerScore = playerScore + 120 - currentTime; //Calculate based on the currentTime to measure player score
+                                <FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match47-1.html#5',3,'match47-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>System.out.println(playerScore + 120 - currentTime);
+                                System.out.println(&quot;Code Score &quot; + playerScore);
+                            }
+                        } else {
+                            c.setImage(c.getBackside());//If not matched, flip back
+                        }
+<A NAME="6"></A>                        noFlipped--;
+                    }</B></FONT>)
+            );
+            <FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match47-1.html#6',3,'match47-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>cardList.addToCardList(c); //add the current card to the list
+            c.setOnMouseClicked(e -&gt; {
+                if (c.isEnable()) { //Only playable if the Star Game Button has been pressed
+                    if (noFlipped == 0) {</B></FONT> //To ensure that the last card of the first pair won't affect the first card the next pair
+                        lastCard = 30; //Insert a value that is not in the 20 cards
+                    }
+<A NAME="7"></A>
+                    //This part is to ensure that the second card will be kept after finding a match
+                    if ((c.getCardNum() == lastCard + 10) || (c.getCardNum() == lastCard - 10)) {
+                        <FONT color="#c58917"><A HREF="javascript:ZweiFrames('match47-1.html#7',3,'match47-top.html#7',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>c.setImage(c.getFrontSide());
+                    } else if (noFlipped &lt; 2) { //Ensure only two card is flipped at a time
+                        noFlipped++;
+                        c.setImage(c.getFrontSide());
+                        cardFlip.play(); //Call the countdown
+                    }
+
+                    l</B></FONT>astCard = c.getCardNum(); //Set the current card to be the lastCard for comparing when pressing for the next Card
+                }
+<A NAME="8"></A>            });
+        }
+        //Designing the Cards on the UI
+        <FONT color="#bce954"><A HREF="javascript:ZweiFrames('match47-1.html#8',3,'match47-top.html#8',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>for (int i = 0; i &lt; 20; i++) {
+            cardList.getCard(i).setSmooth(true);
+            cardList.getCard(i).setPreserveRatio(true);
+            cardList.getCard(i).setFitWidth(100);
+        }
+
+<A NAME="9"></A>        Collections.shuffle(cardList.getCardList</B></FONT>()); //Shuffe the cardList
+
+        // Add all the card from the cardList to the GridPane
+        <FONT color="#f88017"><A HREF="javascript:ZweiFrames('match47-1.html#9',3,'match47-top.html#9',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>int i = 0;
+        for (int a = 0; a &lt; 5; a++) {
+            for (int b = 0; b &lt; 4; b++) {
+                this.grid.add(cardList.getCard(i), a, b);
+                i++;
+<A NAME="10"></A>            }
+        }</B></FONT>
+        this.grid.setHgap(10);
+        <FONT color="#b041ff"><A HREF="javascript:ZweiFrames('match47-1.html#10',3,'match47-top.html#10',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>this.grid.setVgap(5);
+    }
+
+    //Method to create StartPane
+    private AnchorPane createStartPane(AnchorPane GamePane) {
+        //Creating the StartPane
+        AnchorPane StartPane = new AnchorPane();
+<A NAME="11"></A>        //Create welcomeText by using object Edited Text &amp; designing it in the UI
+        Text welcomeText = new EditedText(&quot;WELCOME TO \n ZOO MATCHING CARD GAME&quot;, titleStyle, new Glow()).getReturnText</B></FONT>();
+        welcomeText.setTextAlignment(TextAlignment.CENTER);
+        <FONT color="#571b7e"><A HREF="javascript:ZweiFrames('match47-1.html#11',3,'match47-top.html#11',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>setXandY(welcomeText, 350, 300);
+
+        Text diffLabel = new Text(&quot;Select Difficulty: &quot;);
+
+
+        //Create three objects correspond to the difficulty of the game
+        Difficulty easy = new Difficulty(&quot;Easy (3 seconds before card flips)&quot;);
+        Difficulty medium = new Difficulty(&quot;Medium (2 seconds before card flips)&quot;);
+        Difficulty hard = new Difficulty(&quot;Hard (1 seconds before card flips)&quot;);
+<A NAME="12"></A>
+        //Create a choicebox and add all the difficulty into it.
+        ChoiceBox difficultyOption = new</B></FONT> ChoiceBox();
+        <FONT color="#3b9c9c"><A HREF="javascript:ZweiFrames('match47-1.html#12',3,'match47-top.html#12',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>difficultyOption.getItems().addAll(easy.getDiff(), medium.getDiff(), hard.getDiff());
+
+        //Create a vbox and add the label along with the choicebox together
+        HBox diffBox = new HBox();
+        diffBox.getChildren().addAll(diffLabel, difficultyOption);
+
+        //Create new Button to handle the option choosing of the difficulty (Button is created by using EditedButton)
+<A NAME="13"></A>        Button mainGameButt = new EditedButton(&quot;Go To Main Game&quot;, buttonStyle).getButton</B></FONT>();
+        mainGameButt.setOnMouseClicked(e -&gt; {
+            if (difficultyOption.getValue() != null) {  //Only enabling the button if the user has chosen a difficulty
+                if ((String) difficultyOption.getValue() != null) <FONT color="#842dce"><A HREF="javascript:ZweiFrames('match47-1.html#13',3,'match47-top.html#13',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{
+                    switch ((String) difficultyOption.getValue()) {
+                        case &quot;Easy (3 seconds before card flips)&quot;: //For each case, a corresponding value will be passed to cardFlipTime
+                            this.cardFlipTime = 3;
+                            break;
+                        case &quot;Medium (2 seconds before card flips)&quot;:
+                            this.cardFlipTime = 2;
+                            break;
+                        case &quot;Hard (1 seconds before card flips)&quot;:
+                            this.cardFlipTime = 1;
+<A NAME="14"></A>                            break</B></FONT>;
+                    }
+
+                <FONT color="#f52887"><A HREF="javascript:ZweiFrames('match47-1.html#14',3,'match47-top.html#14',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+                //create the cardlist based on the Card Object
+                creatingCardList();
+                //Initiate GamePane
+                StartPane.setVisible(false);
+                GamePane.setVisible(true);
+                GamePane.toFront();
+            }
+<A NAME="15"></A>        }</B></FONT>);
+
+        VBox vBox = new VBox();
+        <FONT color="#3bb9ff"><A HREF="javascript:ZweiFrames('match47-1.html#15',3,'match47-top.html#15',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>setXandY(vBox, 450, 400);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(40);
+        vBox.getChildren().addAll(diffBox, mainGameButt);
+        //Add everything to StartPane
+        StartPane.getChildren().addAll(vBox, welcomeText);
+        return StartPane;
+    }
+
+<A NAME="16"></A>    //Method to create GamePane
+    private AnchorPane createGamePane(AnchorPane EndPane) {</B></FONT>
+        AnchorPane GamePane = new AnchorPane(); //GamePane
+        <FONT color="#3090c7"><A HREF="javascript:ZweiFrames('match47-1.html#16',3,'match47-top.html#16',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>Label gameDurationLabel = new Label();
+        gameDurationLabel.setTranslateX(500);
+
+        //Create a ProgressBar that correspond to the duration of the GamePane
+        ProgressBar progressBar = new ProgressBar(0);
+        progressBar.setProgress(0);
+        progressBar.setStyle(progressStyle);
+        progressBar.setPrefSize(350, 30);
+        progressBar.setRotate</B></FONT>(90);
+        Timeline progressBarRun = new Timeline( //Create new Timeline that initiate progressBar to run in 2 minutes
+                new KeyFrame(
+                        Duration.ZERO, //At 0, progressProperty = 0
+                        new KeyValue(progressBar.progressProperty(), 0)
+                ),
+                new KeyFrame(
+                        Duration.minutes(2),//At 2 minutes, progressProperty = 1
+                        new KeyValue(progressBar.progressProperty(), 1)
+                )
+        );
+        //On finish, refresh the progressBar
+        progressBarRun.setOnFinished(e -&gt; {
+            progressBar.setProgress(0.0);
+        });
+        setXandY(progressBar, 1085, 400);
+<A NAME="17"></A>
+        //Create new Button for muting
+        Button muteButt = new EditedButton(&quot;Mute&quot;, buttonStyle).getButton();
+        muteButt.setOnAction(<FONT color="#800517"><A HREF="javascript:ZweiFrames('match47-1.html#17',3,'match47-top.html#17',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>e2 -&gt; {
+            if (mute == 0) { //Mute the music
+                player.setVolume(0.0);
+                mute = 1;
+            } else { //Unmute music
+                player.setVolume(1.0);
+                mute = 0;
+            }
+        }</B></FONT>);
+        setXandY(muteButt, 1240, 600);
+        muteButt.setWrapText(true);
+
+        //Create a new Instrusction for player
+        Text gamePaneNote = new EditedText(&quot;INSTRUCTION\n1. To start the game, please hit button 'Start Game'\n&quot; +
+                &quot;2. After that, the match will begin, you will have 2 minutes to find all of the pair\n&quot; +
+                &quot;3. After choosing a card, you will have a few seconds before the card flips back.\n&quot; +
+                &quot;4. After each round, your score will be determined by how much time you got left&quot;, &quot;    -fx-font-size: 12pt;\n&quot;
+                + textStyle, new Glow()).getReturnText();
+        setXandY(gamePaneNote, 600, 200);
+<A NAME="18"></A>        gamePaneNote.setTextAlignment(TextAlignment.LEFT);
+
+        //Create a new button for starting the game
+        Button startgameButt = <FONT color="#f62817"><A HREF="javascript:ZweiFrames('match47-1.html#18',3,'match47-top.html#18',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>new EditedButton(&quot;Start Game&quot;, buttonStyle).getButton();
+        startgameButt.setOnAction(e -&gt; {
+            //When pressed, enable cardList for pressing, set ProgressBar to start at 0 and start counting down GamePane duration
+            progressBar.setProgress(0.0);
+            cardList.setEnableOnAllCard(true);
+<A NAME="19"></A>            progressBarRun.play();
+            gamePaneDuration.play();
+        }</B></FONT>);
+        <FONT color="#4e9258"><A HREF="javascript:ZweiFrames('match47-1.html#19',3,'match47-top.html#19',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>startgameButt.setPrefSize(90, 90);
+        setXandY(startgameButt, 600, 300);
+
+
+        setXandY(grid, 20, 20);
+        GamePane.getChildren().addAll(grid, gameDurationLabel, progressBar, muteButt, startgameButt, gamePaneNote);
+        GamePane.setLeftAnchor(grid, 2.0);
+        return GamePane;
+    }
+
+    //Method to create EndPane
+    private AnchorPane createEndPane() {
+        AnchorPane EndPane = new</B></FONT> AnchorPane();
+<A NAME="20"></A>
+        //Create button for user to quit the game and design it in the UI
+        Button closeButt = new EditedButton(&quot;Quit&quot;, buttonStyle).getButton();
+        <FONT color="#d4a017"><A HREF="javascript:ZweiFrames('match47-1.html#20',3,'match47-top.html#20',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>closeButt.setOnAction(e -&gt; {
+            this.primaryStage.close();
+        });
+        setXandY(closeButt, 630, 400);
+        closeButt.setPrefSize(90, 90);
+
+        //Create new note in the endPane to guide the user
+        Text endPaneNote = new EditedText(&quot;Thank you for playing our game.\n From this round, you have earned  points and &quot; +</B></FONT>
+                &quot;you now have two options: \n 1. Hit 'Reset' if you want to challenge your memory skill \n 2. Hit 'Quit' if you &quot; +
+                &quot;had enough Zoo Matchmaking Game for a day.&quot;, &quot;    -fx-font-size: 20pt;\n&quot; + textStyle, new Glow()).getReturnText();
+        setXandY(endPaneNote, 250, 250);
+        endPaneNote.setTextAlignment(TextAlignment.CENTER);
+
+        //Create new Button to reset the game
+        Button resetButt = new EditedButton(&quot;Reset&quot;, buttonStyle).getButton();
+        resetButt.setOnMouseClicked(e -&gt; {
+            //get StartPane to front and set EndPane to be invisible
+            StartPane.toFront();
+            StartPane.setVisible(true);
+<A NAME="21"></A>            EndPane.setVisible(false);
+            cardList.setEnableOnAllCard(false);
+        });
+        <FONT color="#00ff00"><A HREF="javascript:ZweiFrames('match47-1.html#21',3,'match47-top.html#21',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>setXandY(resetButt, 470, 400);
+        resetButt.setPrefSize(90, 90);
+
+        //Add everything to EndPane
+        EndPane.getChildren().add(resetButt);
+        EndPane.getChildren().addAll(closeButt, endPaneNote);
+        return EndPane;
+    }
+
+    //Method to set the X and Y of Nodes
+    private void setXandY(Node node, int x, int y) {</B></FONT>
+        node.setTranslateX(x);
+        node.setTranslateY(y);
+    }
+
+
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_Win/src/sample/Main.java</CENTER></H3><HR>
+<PRE>
+/*
+RMIT University VietnamCourse: INTE2512 Object-Oriented Programming
+Semester: 2019C
+Assessment: Assignment 2
+Student Name: Bui Minh Triet
+Student ID: s3694551
+ Created  date: 10/12/2019
+ Last modified: 16/12/2019
+ACKNOWLEDGEMENT:
+ buttonStyle, textStyle, titleStyle was given by this website: http://fxexperience.com/2011/12/styling-fx-buttons-with-css/
+*/
+<A NAME="22"></A>
+package sample;
+
+<FONT color="#4cc417"><A HREF="javascript:ZweiFrames('match47-1.html#22',3,'match47-top.html#22',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.application.Application;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+<A NAME="23"></A>
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(<FONT color="#f660ab"><A HREF="javascript:ZweiFrames('match47-1.html#23',3,'match47-top.html#23',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>getClass().getResource(&quot;sample.fxml&quot;))</B></FONT>; //Load the sample file
+        Parent root = fxmlLoader.load();
+        ((Controller) fxmlLoader.getController()).setStage(primaryStage); //Load the controller
+    }
+
+
+    public static void main(String[] args) {</B></FONT>
+        launch(args);
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_Win/src/view/EditedButton.java</CENTER></H3><HR>
+<PRE>
+
+package view;
+
+import javafx.scene.control.Button;
+
+import java.awt.*;
+
+//Class that create a Button with custom Style
+<A NAME="26"></A>public class EditedButton extends Button {
+    Button returnButt = new Button();
+
+    <FONT color="#95b9c7"><A HREF="javascript:ZweiFrames('match47-1.html#26',3,'match47-top.html#26',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>public EditedButton(String text, String style) {
+        returnButt.setText(text);
+        returnButt.setStyle(style);
+    }
+
+    public Button getButton() {
+        return returnButt;
+    }</B></FONT>
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2_Win/src/view/EditedText.java</CENTER></H3><HR>
+<PRE>
+<A NAME="24"></A>
+<FONT color="#ada96e"><A HREF="javascript:ZweiFrames('match47-1.html#24',3,'match47-top.html#24',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>package view;
+
+import javafx.scene.effect.Effect;
+import javafx.scene.text.Text;
+
+//Class that create a Text with custom Style
+public class EditedText extends Text {
+<A NAME="25"></A>    Text returnText;
+
+    public EditedText(String text, String style, Effect effect) {</B></FONT>
+        <FONT color="#87f717"><A HREF="javascript:ZweiFrames('match47-1.html#25',3,'match47-top.html#25',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>returnText = new Text(text);
+        returnText.setStyle(style);
+        returnText.setEffect(effect);
+    }
+
+    public Text getReturnText() {
+        return returnText;
+    }</B></FONT>
+}
+</PRE>
+
+</BODY>
+</HTML>

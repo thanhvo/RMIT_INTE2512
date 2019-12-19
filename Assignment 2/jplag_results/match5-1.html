@@ -1,0 +1,599 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>duynguyenhuu_</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff" style="margin-left:25">
+<HR>
+<H3><CENTER>assignment2/src/main/Controller.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Nguyen huu Duy
+  ID: 3703336
+  Created  date: 15/12/2019
+  Last modified: 18/12/2019
+<A NAME="1"></A>  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+
+<FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match5-0.html#1',2,'match5-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>package main;
+
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+<A NAME="0"></A>import</B></FONT> javafx.util.Duration;
+import org.jetbrains.annotations.NotNull;
+
+<FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match5-0.html#0',2,'match5-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import java.io.*;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
+public class Controller {
+
+    //Model
+<A NAME="2"></A>    private ArrayList&lt;Player&gt; players</B></FONT>;
+
+    //View
+    <FONT color="#77bfc7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match5-0.html#2',2,'match5-top.html#2',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>@FXML
+    private Pane pane;
+    @FXML
+    private GridPane gridPane;
+    @FXML
+    private Label scoreNum;
+    @FXML
+    private Label notiBox;
+    @FXML
+    private Label levelNum;
+    @FXML
+    private Label timeLabel;
+    @FXML
+    private Button startBtn;
+    @FXML
+    private Button restartBtn;
+    @FXML
+    private Button quitBtn;
+    @FXML
+    private Button levelBtn;
+    @FXML
+    private Button musicBtn;
+    @FXML
+    private HBox scoreHbox;
+    @FXML
+    private HBox timeHbox;
+    @FXML
+    private HBox levelHbox;
+    @FXML
+    private ProgressBar progressBar;
+    @FXML
+    private ImageView curPlayerImageView;
+
+
+    //Controller
+    private int GRID_VALUE_X = 82</B></FONT>;
+    private int GRID_VALUE_Y = 94;
+    private int DELAY;
+    private int SCORE;
+    private int LEVEL;
+    private String PATH = &quot;data/players.txt&quot;;
+    private Player[] playerContainer = new Player[20];
+    private ArrayList&lt;Player&gt; playerPair = new ArrayList&lt;&gt;();
+    private EventHandler&lt;MouseEvent&gt; handler = MouseEvent::consume;
+    private int DURATION;
+    private long durationInMilis;
+    private Timeline clock;
+
+
+
+    //===================[Core]===========================
+    private void init(){
+        SCORE = 0;
+        scoreNum.setText(String.valueOf(SCORE));
+        DURATION = 2;
+        LEVEL = 0;
+        levelNum.setText(&quot;\t&quot; + String.valueOf(LEVEL + 1));
+        DELAY = 1000;
+        durationInMilis = DURATION*60000; //reset
+
+        // set current player box
+        Image image = null;
+        try {
+            image = new Image(new FileInputStream(&quot;data/img/back_card.jpg&quot;), GRID_VALUE_X, GRID_VALUE_Y, false, false);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        curPlayerImageView.setImage(image);
+    }
+
+    /*
+    Load player from local image source then populate controller's player list with new Player
+     */
+    @NotNull
+    private ArrayList&lt;Player&gt; loadDataFromFile(String path) throws IOException {
+        File file = new File(path);
+        ArrayList&lt;Player&gt; rets = new ArrayList&lt;&gt;();
+//        System.out.println(new File(&quot;.&quot;).getAbsolutePath());
+        if (file.exists()) {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] container = line.split(&quot;;&quot;);
+                String url = &quot;&quot;;
+                url = &quot;data/img/&quot; + container[1] + &quot;.jpg&quot;;
+                Image playerImage = new Image(new FileInputStream(url), GRID_VALUE_X, GRID_VALUE_Y, false, false);
+                Player player = new Player(container[0], playerImage, container[2]);
+                rets.add(player);
+            }
+        }
+
+        return rets;
+    }
+
+    /*
+    Return shuffled array of duplicated players
+     */
+    @NotNull
+    private Player[] generateData(String path) throws IOException {
+        players = loadDataFromFile(path);
+        Player[] ret = new Player[20];
+        int j = 0;
+        //duplicate and dumb data into container
+        for (int i = 0; i &lt; playerContainer.length; i++) {
+            if (j == 10) j = 0;
+            playerContainer[i] = players.get(j);
+            j++;
+        }
+
+        //shuffle data indices
+        ArrayList&lt;Integer&gt; indices = randomIndex();
+        for (int i = 0; i &lt; ret.length; i++) {
+            ret[i] = playerContainer[indices.get(i)];
+        }
+
+        return ret;
+
+    }
+
+    /*
+    Randomized all indices location in a sized 20 array
+     */
+    @NotNull
+    private ArrayList&lt;Integer&gt; randomIndex() {
+        Random rand = new Random();
+        ArrayList&lt;Integer&gt; rets = new ArrayList&lt;&gt;();
+        int count = 0;
+        while (count &lt; 20) {
+            boolean flag = false;
+            int randomNum = rand.nextInt(20);
+            if (rets.size() &gt; 0) {
+                for (int i = 0; i &lt; rets.size(); i++) {
+                    if (randomNum == rets.get(i)) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!flag &amp;&amp; randomNum &gt;= 0 &amp;&amp; randomNum &lt; 20) {
+                rets.add(randomNum);
+                count++;
+            }
+        }
+
+
+        return rets;
+    }
+
+    /*
+    Image processing and wrap around with ImageView container
+    Also handles on click event from mouse
+     */
+    @NotNull
+    private ImageView processPlayerToImageView(@NotNull Player player) {
+        Image playerImage = player.getImg();
+        Image backCardImage = player.getBackCardImg();
+        //Normal view
+        ImageView ret = new ImageView(backCardImage);
+
+        // ========[event handler]=======
+        ret.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler&lt;MouseEvent&gt;() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                ret.setImage(playerImage);
+                playerPair.add(player);
+                gridPane.addEventFilter(MouseEvent.ANY, handler);
+                if (playerPair.size() == 1){
+                    curPlayerImageView.setImage(playerImage);
+                }
+
+
+                if (playerPair.size() == 2) {
+                    curPlayerImageView.setImage(playerImage);
+                    new Timer().schedule(
+                            new TimerTask() {
+                                @Override
+                                public void run() {
+                                    curPlayerImageView.setImage(backCardImage);
+                                }
+                            }, DELAY
+                    );
+                    if (comparePlayer(playerPair.get(0), playerPair.get(1))) {
+                        try {
+                            updateGridPane(); // re-shuffle and update the gameplay grid
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    playerPair.clear();
+                }
+
+
+                //Schedule to flip back
+                new Timer().schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                ret.setImage(backCardImage);
+                                gridPane.removeEventFilter(MouseEvent.ANY, handler);
+                            }
+                        }, DELAY
+                );
+
+
+<A NAME="7"></A>            }
+        });
+        // ========[event handler]=======
+        <FONT color="#c58917"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match5-0.html#7',2,'match5-top.html#7',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>ret.setFitWidth(GRID_VALUE_X);
+        ret.setFitHeight(GRID_VALUE_Y);
+        ret.setPreserveRatio(true);
+        ret.setSmooth(true);
+
+        return ret;
+    }
+
+    /*
+    Indicator for matching pair
+     */
+    private boolean comparePlayer(@NotNull Player p1</B></FONT>, @NotNull Player p2) {
+        if (p1.getName().contentEquals(p2.getName()) || p1.getNumber().contentEquals(p2.getNumber())) {
+            notiBox.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+            //reset color
+            new Timer().schedule(
+                    new TimerTask() {
+                        @Override
+                        public void run() {
+                            notiBox.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+                        }
+                    }, DELAY
+            );
+
+            //add score
+            SCORE += 500; // add 500 points
+            scoreNum.setText(String.valueOf(SCORE));
+
+            return true;
+        }
+        notiBox.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+        new Timer().schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        notiBox.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+                    }
+                }, DELAY
+        );
+        return false;
+    }
+
+
+
+    //========================[Front]============================
+    /*
+    Update the main gameplay grid
+     */
+    private void updateGridPane() throws IOException {
+        Player[] playerList = generateData(PATH); // randomized player index
+
+        int count = 0;
+        for (int x = 0; x &lt; gridPane.getRowCount() + 1; x++) {
+            for (int y = 0; y &lt; gridPane.getColumnCount() - 1; y++) {
+                ImageView iv = processPlayerToImageView(playerList[count]);
+                gridPane.add(iv, x, y);
+                count++;
+            }
+        }
+    }
+
+    /*
+<A NAME="6"></A>    Set visibility of main gameplay UI components
+     */
+    private void setDisplay(boolean enable) throws NullPointerException{
+        <FONT color="#50ebec"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match5-0.html#6',2,'match5-top.html#6',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>startBtn.setVisible(!enable);
+        gridPane.setVisible(enable);
+        restartBtn.setVisible(enable);
+        quitBtn.setVisible(enable);
+        levelBtn.setVisible(enable);
+        musicBtn.setVisible(enable);
+        notiBox.setVisible(enable);
+        scoreHbox.setVisible(enable);
+        levelHbox.setVisible(enable);
+        timeHbox.setVisible(enable);
+        curPlayerImageView.setVisible(enable);
+
+    }
+
+    //================[Display]==================
+
+    /*
+    Transition from start screen to the main game UI render
+     */
+    private vo</B></FONT>id displayAll(boolean enable) throws IOException {
+
+        if (enable){
+            displayTime();
+            // set game background
+            Image image = new Image(new FileInputStream(&quot;data/img/background.jpg&quot;), 800, 600, false, false);
+            pane.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(800, 600, false, false, false, false))));
+            updateGridPane();
+            setDisplay(true);
+        }
+    }
+
+    private void displayTime() {
+        durationInMilis = DURATION*60000; //reset
+        long initDuration = durationInMilis;
+        //create a scheduled timeline
+<A NAME="5"></A>        clock = new Timeline(new KeyFrame(Duration.ZERO, e -&gt; {
+            durationInMilis--;
+
+            String displayTime = <FONT color="#c8c2a7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match5-0.html#5',2,'match5-top.html#5',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>String.format(&quot;%02d:%02d&quot;,
+//                    TimeUnit.MILLISECONDS.toHours(durationInMilis), // hours
+                    TimeUnit.MILLISECONDS.toMinutes(durationInMilis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(durationInMilis)), // minutes
+                    TimeUnit.MILLISECONDS.toSeconds(durationInMilis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(durationInMilis)) // seconds
+//                    TimeUnit.MILLISECONDS.toMillis(durationInMilis)
+            );
+
+            timeLabel.setText(String.valueOf</B></FONT>(displayTime));
+            double progress = (double)durationInMilis/initDuration;
+            progressBar.setProgress(progress);
+            if (durationInMilis &lt;= 0){
+                clock.stop();
+                displayTime();
+            }
+        }), new KeyFrame(Duration.millis(1)));
+        clock.setCycleCount(Animation.INDEFINITE);
+        clock.play();
+
+    }
+
+
+    // ==========================[FMXL]============================
+    /*
+    Start Button function
+<A NAME="3"></A>     */
+    @FXML
+    private void startGame(MouseEvent mouseEvent) throws IOException {
+        <FONT color="#6cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match5-0.html#3',2,'match5-top.html#3',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>init();
+        toggleMusic();
+        displayAll(true);
+    }
+
+
+    /*
+
+     */
+    @FXML
+    private void restartGame() {
+        clock.stop</B></FONT>();
+        init();
+        clock.play();
+    }
+
+    /*
+
+     */
+    @FXML
+    private void quitGame(MouseEvent mouseEvent) throws IOException {
+        clock.stop();
+        System.out.println(&quot;Quit&quot;);
+        Stage stage = (Stage) quitBtn.getScene().getWindow();
+        stage.close();
+    }
+
+    /*
+    Adjust level button
+     */
+    @FXML
+<A NAME="4"></A>    private void adjustLevel() {
+        LEVEL++;
+        if (LEVEL &gt; 2) LEVEL = 0;
+        <FONT color="#151b8d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match5-0.html#4',2,'match5-top.html#4',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>switch (LEVEL) {
+            case 0:
+                DELAY = 3000;
+                break;
+            case 1:
+                DELAY = 2000;
+                break;
+            case 2:
+                DELAY = 1000;
+                break;
+        }</B></FONT>
+        levelNum.setText(&quot;\t&quot; + String.valueOf(LEVEL + 1));
+    }
+
+    /*
+    Toggle music
+     */
+    @FXML
+    private void toggleMusic() {
+        System.out.println(&quot;Music pressed ! &quot;);
+        try{
+            final URL resource = getClass().getResource(&quot;data/music.wav&quot;);
+            final Media media = new Media(resource.toString());
+            final MediaPlayer mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setOnError(new Runnable() {
+                @Override
+                public void run() {
+                    final String errorMessage = media.getError().getMessage();
+                    System.out.println(errorMessage);
+                }
+            });
+            mediaPlayer.play();
+        } catch (RuntimeException re){
+            System.out.println(&quot;Cannot find resource, Error message: &quot; + re);
+        }
+
+    }
+
+}
+
+
+</PRE>
+<HR>
+<H3><CENTER>assignment2/src/main/Main.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Nguyen huu Duy
+  ID: 3703336
+  Created  date: 15/12/2019
+  Last modified: 18/12/2019
+  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+
+package main;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+
+import javafx.stage.Stage;
+
+import java.io.File;
+<A NAME="9"></A>
+public class Main extends Application {
+
+    <FONT color="#f88017"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match5-0.html#9',2,'match5-top.html#9',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>@Override
+    public void start(Stage primaryStage) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource(&quot;view.fxml&quot;));
+        primaryStage.setTitle(&quot;Viet Nam Football Club Game&quot;);
+        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.show();
+    }
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}</B></FONT>
+
+</PRE>
+<HR>
+<H3><CENTER>assignment2/src/main/Player.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Nguyen huu Duy
+  ID: 3703336
+  Created  date: 15/12/2019
+  Last modified: 18/12/2019
+  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+
+package main;
+
+import javafx.scene.Node;
+import javafx.scene.image.Image;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+public class Player extends Node {
+    private String name;
+    private Image img;
+    private String number;
+    private Image backCardImg =  new Image(new FileInputStream(&quot;data/img/back_card.jpg&quot;), 82, 94, false,false );
+
+    public Player() throws FileNotFoundException {
+        this.name = null;
+        this.img = null;
+        this.number = null;
+    }
+
+    public Player(String name, Image img, String number) throws FileNotFoundException {
+        this.name = name;
+        this.img = img;
+        this.number = number;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Image getImg() {
+        return img;
+    }
+
+    public void setImg(Image img) {
+        this.img = img;
+    }
+
+    public String getNumber() {
+<A NAME="8"></A>        return number;
+    }
+
+    <FONT color="#bce954"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match5-0.html#8',2,'match5-top.html#8',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public Image getBackCardImg() {
+        return backCardImg;
+    }
+}</B></FONT>
+
+
+</PRE>
+
+</BODY>
+</HTML>

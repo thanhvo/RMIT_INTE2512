@@ -1,0 +1,667 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>baotrankim_14</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff" style="margin-left:25">
+<HR>
+<H3><CENTER>Assignment2/src/sample/Main.java</CENTER></H3><HR>
+<PRE>
+package sample;
+
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+<A NAME="47"></A>public class Main extends Application {
+    private Main_Scene scene = new Main_Scene();        //Call the object
+    @Override
+    public void start(<FONT color="#d16587"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#47',2,'match53-top.html#47',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>Stage primaryStage) throws Exception{
+        scene.sound_On();           //Turn on the sound
+        primaryStage.setScene(scene.main());    //Set scene for the main stage
+        primaryStage.show();
+    }
+    public static void main(String[] args) {
+        launch(args);
+    }</B></FONT>
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/sample/Main_Scene.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Tran Kim Bao
+  ID: s3740819
+  Created  date: 10/12/2019
+  Last modified: 16/12/2019
+  Acknowledgement: Lectures and tutorial sessions in class
+<A NAME="3"></A>*/
+package sample;
+
+<FONT color="#6cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#3',2,'match53-top.html#3',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.RotateTransition;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Rotate;
+import javafx.util.Duration;
+
+<A NAME="45"></A>import java.io.File;
+
+public class Main_Scene {
+    private Media sound = new</B></FONT> Media(<FONT color="#79d867"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#45',2,'match53-top.html#45',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>new File(&quot;sound.mp3&quot;).toURI().toString());      // Using to import music
+    private MediaPlayer sound_player = new MediaPlayer(sound);          //Using to play music
+    private Pane background = new Pane();                                   //The main Pane
+    private Button start_button = new Button(&quot;difficult&quot;);         //button for starting game
+    private Scene scene = new Scene(background, 1950, 1000);    //the main scene
+<A NAME="30"></A>    private Timeline count_down;                                    //Total time (2s) for playing
+    private TextField difficulty = new TextField();                 // Text for displaying the difficulty you are choosing
+    private double duration</B></FONT>;                                        //duration will be change in every difficulty option
+    <FONT color="#f9966b"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#30',2,'match53-top.html#30',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>private Image default_image = new Image(&quot;choose.JPG&quot;);      //Default image for the front of cards
+    private Text score = new Text(&quot;0&quot;);                             //Score for each game
+    private int[] checking = new int[20];                           //For checking whether the card is flipped or not, and whether the cards are correct or not
+<A NAME="28"></A>    private int time_passed = 0;                                    //your time play
+    private int point = 0;                                          // point of each game round
+    private TextField highest_score = new TextField()</B></FONT>;              // text for displaying highest score
+    <FONT color="#717d7d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#28',2,'match53-top.html#28',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>private int correct_streak = 0;                                 //for counting the streak
+    private int extra_point = 0;                                    //is plus to point whenever get the specific streak
+    private Text streaks = new Text(1500, 300, &quot;No Streak: + 0&quot;);       // Text for displaying type of streak for user
+    private TextField time_done = new TextField();                              //Time done after finish the game
+
+    Main_Scene() {
+    }
+<A NAME="0"></A>
+    //////////////////////////////////////////////////////////////////////////////
+    private void setHighest_score() {</B></FONT>                       //setting for the title
+        <FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#0',2,'match53-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>Model model = new Model();
+        highest_score.setMaxWidth(1200);
+        highest_score.setAlignment(Pos.CENTER);
+        highest_score.setLayoutY(45);
+        highest_score.setLayoutX(100);
+<A NAME="13"></A>        highest_score.setStyle(&quot;-fx-font: 40 INTFREE;&quot;);
+        highest_score.setText(model.highest_Score(duration, 119 - time_passed + extra_point));   //get text from the object model
+        highest_score.setDisable</B></FONT>(true);             //not allow to edit
+    <FONT color="#842dce"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#13',2,'match53-top.html#13',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+
+    private void set_Score_Performance() {          // setting for displaying score
+        score.setX(1790);
+        score.setY(45);
+        score.setStyle(&quot;-fx-font: 30 INTFREE;&quot;);
+    }
+
+    private void set_Back_Ground(Node node) {           //For add more nodes to the pane
+        background.getChildren().add(node);
+<A NAME="48"></A>    }
+
+    private void display_Streaks() {
+        if</B></FONT> (correct_streak == 2) <FONT color="#c57726"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#48',2,'match53-top.html#48',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>{                  //Continuously correct for fixed time, the player will get extra points
+            point = point + 20;
+            extra_point = extra_point + 20;
+            streaks.setText(&quot;Streak 2: + 20&quot;);
+<A NAME="31"></A>        } else if (correct_streak &gt;= 3) {
+            point = point + 40;
+            e</B></FONT>xtra_point = extra_point + 40;
+            <FONT color="#3ea99f"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#31',2,'match53-top.html#31',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>streaks.setText(&quot;Streak 3: + 40&quot;);
+        } else if (correct_streak == 1) {
+            streaks.setText(&quot;Streak 1: + 0&quot;);
+        } else {
+            streaks.setText(&quot;Streak 0: + 0&quot;);
+        }
+    }</B></FONT>
+
+<A NAME="27"></A>    private boolean finish() {          //After correctly choosing all the cards, game over
+        int check = 0;
+        for (int i = 0; i &lt; 20; i++) {
+            <FONT color="#e77471"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#27',2,'match53-top.html#27',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>if (checking[i] == 0) {
+                check++;
+            }
+        }
+        return check &lt;= 0;
+<A NAME="14"></A>    }
+
+    private void set_Time_Done() {</B></FONT>              //Setting for displaying time done
+        <FONT color="#f52887"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#14',2,'match53-top.html#14',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>time_done.setLayoutX(1600);
+        time_done.setLayoutY(80);
+        time_done.setAlignment(Pos.CENTER);
+        time_done.setStyle(&quot;-fx-font: 25 INTFREE;&quot;);
+        time_done.setDisable(true);
+    }
+
+    private void set_Difficulty_Performing() {      //Setting for displaying difficult the user are playing
+        difficulty.setMaxWidth(160);
+        difficulty.setAlignment(Pos.CENTER);
+        difficulty.setStyle(&quot;-fx-font: 30 INTFREE;&quot;);
+        difficulty.setLayoutY(10);
+        difficulty.setLayoutX(900);
+        difficulty.setDisable(true);
+    }
+
+    private void set_Start_Button() {           //Setting for start button
+<A NAME="4"></A>        start_button.setLayoutX(1800);
+        start_button.setText(&quot;Start&quot;);
+        start_button.setLayoutY</B></FONT>(500);
+        <FONT color="#151b8d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#4',2,'match53-top.html#4',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>start_button.setStyle(&quot;-fx-font: 30 INTFREE;&quot;);
+        start_button.setOnAction(e -&gt; {
+            count_down.playFromStart();
+            count_down.play();
+        });
+<A NAME="25"></A>    }
+
+    private void r</B></FONT>eset_Checking() {     //Reset the checker in every game
+        <FONT color="#87f717"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#25',2,'match53-top.html#25',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>for (int i = 0; i &lt; 20; i++) {
+            checking[i] = 0;
+        }
+    }
+
+<A NAME="7"></A>    ////////////////////////////////////////////////
+    private M</B></FONT>ediaPlayer get_Sound() {       //set sound
+        return sound_player;
+    <FONT color="#c58917"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#7',2,'match53-top.html#7',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+
+    protected void sound_On() {
+        MediaPlayer sound = get_Sound(); //Turn on the sound
+        sound.setCycleCount(Timeline.INDEFINITE);
+        sound.play();
+    }
+
+    private void sound_Off() {
+        MediaPlayer sound = get_Sound</B></FONT>();  //Turn off the sound
+        sound.pause();
+    }
+
+    /////////////////////////////////////////////////
+    protected void opening_Scene() {                //Initial scene
+<A NAME="15"></A>        time_passed = 0;                            // reset time pass
+        ImageView back = new ImageView(&quot;open.JPG&quot;);     //set new background image
+        back.setSmooth(true);
+        <FONT color="#3bb9ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#15',2,'match53-top.html#15',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>back.setFitWidth(1950);
+        back.setFitHeight(1000);
+        background.getChildren().clear();                   //Clear background to make a new background
+        set_Back_Ground(back);
+        set_Back_Ground(welcome_Title());
+        set_Back_Ground(easy());
+        set_Back_Ground(medium());
+        set_Back_Ground(hard());
+    }
+
+    private Text welcome_Title() {                  //Setting for welcome Message
+        Text text = new Text();
+        text.setX(550);
+        text.setY(50);
+        text.setText</B></FONT>(&quot;Welcome to \&quot;Matching Football Player\&quot; game&quot;);
+        text.setFill(Color.YELLOW);
+<A NAME="10"></A>        text.setStroke(Color.BLACK);
+        text.setStyle(&quot;-fx-font: 40 INTFREE;&quot;);
+        return text;
+    <FONT color="#b041ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#10',2,'match53-top.html#10',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+
+    private Button medium() {           //Setting for button which is choose medium option
+        Button medium = new Button(&quot;Medium&quot;);
+        medium.setLayoutX(900);
+        medium.setLayoutY(915);
+        medium.setStyle(&quot;-fx-font: 30 INTFREE;&quot;);
+        medium.setOnAction(e -&gt; {</B></FONT>
+            duration = 2000;            //set fixed duration which the card is flipped
+            get_Scene();
+<A NAME="8"></A>            difficulty.setText(&quot;MEDIUM&quot;);   //Set for text
+        });
+        return medium;
+    <FONT color="#bce954"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#8',2,'match53-top.html#8',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+
+    private Button easy() {         //The same as the medium button
+        Button easy = new Button(&quot;Easy&quot;);
+        easy.setLayoutX(300);
+        easy.setLayoutY(915);
+        easy.setStyle(&quot;-fx-font: 30 INTFREE;&quot;);
+        easy.setOnAction</B></FONT>(e -&gt; {
+            duration = 3000;            //set duration
+            get_Scene();
+<A NAME="11"></A>            difficulty.setText(&quot;EASY&quot;); //Set text
+        });
+        return easy;
+    <FONT color="#571b7e"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#11',2,'match53-top.html#11',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+
+    private Button hard() {         //The same as the medium button
+        Button hard = new Button(&quot;Hard&quot;);
+        hard.setLayoutX(1500);
+        hard.setLayoutY(915);
+        hard.setStyle(&quot;-fx-font: 30 INTFREE;&quot;);
+        hard.setOnAction</B></FONT>(e -&gt; {
+            duration = 1000;        //Set duration
+            get_Scene();
+            difficulty.setText(&quot;HARD&quot;);     //Set text
+        });
+        return hard;
+    }
+
+    ///////////////////////////////////////////////////
+    private void get_Scene() {              //The main scene which is used for playing game rounds
+<A NAME="44"></A>        extra_point = 0;                    // reset extra point
+        count_down = new Timeline();        //reset count down
+        ImageView back = new ImageView(&quot;back.JPG&quot;);     //set new background image
+        <FONT color="#e57ded"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#44',2,'match53-top.html#44',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>back.setSmooth(true);
+        back.setPreserveRatio(true);
+        back.setFitWidth(2500);
+        set_Score_Performance();
+        streaks.setText(&quot;No Streak: + 0&quot;);
+        reset_Checking();                   //reset checker
+        set_Difficulty_Performing();        //reset the difficulty text
+        background.getChildren().clear();   //clear the old background for making a new one
+        set_Start_Button();
+        set_Back_Ground(back);
+        set_Back_Ground(start_button);
+        set_Back_Ground(difficulty);
+        set_Back_Ground(get_Play_Field());
+        set_Back_Ground(get_Time_Bar());
+        set_Back_Ground(time_Bar_Run());
+        set_Back_Ground(get_Title_Time());
+        set_Back_Ground(get_Score_Field());
+        set_Back_Ground(get_Score_Title());
+        set_Back_Ground(get_Button_Sound());
+        set_Back_Ground(score);
+        set_Back_Ground(streaks_Notification());
+        set_Back_Ground(timer());
+
+    }
+
+    private GridPane get_Play_Field() {</B></FONT>                 //Main part for playing games
+        GridPane pane = new GridPane();
+        pane.setLayoutY(150);
+        pane.setLayoutX(50);
+        pane.setHgap(10);
+<A NAME="36"></A>        pane.setVgap(10);
+        ImageView[] image = new ImageView[20];          //Set number of image
+        pane.setStyle(&quot;-fx-background-color: #020101;&quot;);
+        <FONT color="#ff00ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#36',2,'match53-top.html#36',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>Model model = new Model();                      //Call for model object
+        String[] random = model.random_Card();          //Get the random id of cards in every round
+        int[] index = new int[2];                       //Use to store 2 id of 2 cards which are opened at the same time
+        Timeline[] timeline = new Timeline[20];         //Each timeline for each image
+        String[] url = {&quot;choose.JPG&quot;, &quot;choose.JPG&quot;}</B></FONT>;    //Store url of the card for checking whether they are the same or not
+        var ref = new Object() {
+            int check = 0;
+        };
+        for (int i = 0, ii = 0, iii = 0; i &lt; 20; i++, iii++) {
+            image[i] = new ImageView(&quot;choose.JPG&quot;);         //Set the default image
+            image[i].setSmooth(true);
+            image[i].setFitWidth(240);
+            image[i].setFitHeight(150);
+            timeline[i] = new Timeline();                       //Set for new time line
+            int id_of_card = i;
+            image[i].setOnMouseClicked(e -&gt; {                   //Set mouse clicked
+                if (ref.check &lt; 2 &amp;&amp; ref.check &gt; -1 &amp;&amp; checking[id_of_card] == 0) {     //Conditions for limiting the number of cards is allowed to opened at one time, and only the closed card is allowed to click
+                    index[ref.check] = id_of_card;                                      //store the id of this card to the array
+                    RotateTransition rotator = rotate_Image(image[id_of_card], random[id_of_card]);             //animation for turning cards
+                    url[ref.check] = random[id_of_card];                                //store the url of this card
+<A NAME="19"></A>                    checking[id_of_card] = 1;                                           //equal 1 means that card is opening
+                    rotator.play();                                                     //start the animation
+                    ref.check++;                                                        //increase for taking another card
+                    KeyFrame key = new KeyFrame(<FONT color="#4e9258"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#19',2,'match53-top.html#19',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>Duration.millis(duration), new EventHandler&lt;ActionEvent&gt;() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            RotateTransition rotate = rotate_Back(image[id_of_card]);       //Turning back to the default image
+                            rotate.play</B></FONT>();                                                  //start turning
+                            ref.check--;                                                    //decrease the counter for taking another card
+<A NAME="33"></A>                            checking[id_of_card] = 0;                                       // equal 0 means that the card is closed
+                            timeline[id_of_card].stop();                                    //stop the timeline after 3s
+                            index[0] = index[1];                                            //change the order of card for checking continuously
+                            <FONT color="#736aff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#33',2,'match53-top.html#33',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>if (ref.check == 1) {
+                                correct_streak = 0;                                         //lose the streak
+                                display_Streaks();                                          //update the streak
+                                url[0] = url[1];                                            //change the order also
+                            } else {
+                                url[1] = &quot;-&quot;;                                               //using to avoid duplicated url while player opens the card multiple times
+                            }
+<A NAME="1"></A>                        }</B></FONT>
+
+                    });
+                    <FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#1',2,'match53-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>timeline[id_of_card].getKeyFrames().add(key);                           //set the key for timeline and start
+                    timeline[id_of_card].play();
+<A NAME="12"></A>                }
+                if (url[1].equals(url[0])) {                                                //If there is a card which is the same with the previous one
+                    timeline[index[0]].stop</B></FONT>();                                              //Stop the timer of the previous one
+<A NAME="9"></A>                    <FONT color="#3b9c9c"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#12',2,'match53-top.html#12',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>KeyFrame correct = new KeyFrame(Duration.millis(200), new EventHandler&lt;ActionEvent&gt;() {
+                        @Override
+                        public void handle(ActionEvent event) {</B></FONT>
+                            for (int indexx = 0; indexx &lt; 20; indexx++) <FONT color="#f88017"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#9',2,'match53-top.html#9',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>{
+                                if (checking[indexx] == 1) {                                 //Find and keep the 2 correct ones
+                                    RotateTransition rotate = correct(image[indexx]);        //Animation for the correct couple
+                                    rotate.play();
+                                }
+                            }</B></FONT>
+                            correct_streak++;                                                   //Increase the streak
+                            display_Streaks();                                                  //update streak
+                            checking[index[0]] = 2;                                             //equal 2 means that this cards is totally disable because it is selected correctly
+                            checking[index[1]] = 2;
+                            ref.check = 0;                                                      //reset the checker
+                            timeline[id_of_card].stop();                                        //stop the time line after the animation is done
+                        }
+                    });
+                    timeline[id_of_card].getKeyFrames().add(correct);                           //get the new key
+                    timeline[id_of_card].play();                                                //play
+<A NAME="35"></A>
+                }
+            });
+            <FONT color="#41a317"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#35',2,'match53-top.html#35',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>if (iii == 4) {                                         //Set up the grid pane with 4 rows and 5 cols
+                iii = 0;
+                ii++;
+            }
+            pane.add(image[i], iii, ii);
+        }
+
+
+        return pane;
+<A NAME="17"></A>    }
+
+    private RotateTransition rotate_Image(ImageView image</B></FONT>, String url) {            //setting for the animation
+        RotateTransition rotator = <FONT color="#800517"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#17',2,'match53-top.html#17',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>new RotateTransition(Duration.millis(500), image);
+        rotator.setAxis(Rotate.Y_AXIS);
+        rotator.setFromAngle(0);
+        rotator.setToAngle(90);
+        image.setImage(new Image(url));             //change to the back image
+        rotator.setInterpolator(Interpolator.LINEAR);
+        rotator.setCycleCount(1);
+        rotator.setFromAngle(90);
+        rotator.setToAngle</B></FONT>(0);
+<A NAME="43"></A>        return rotator;
+    }
+
+    private RotateTransition correct(<FONT color="#c22817"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#43',2,'match53-top.html#43',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>ImageView image) {                 //Setting the animation for noticing the player know that is the correct answer
+        RotateTransition rotator = new RotateTransition(Duration.millis(300), image);
+        rotator.setAxis(Rotate.X_AXIS);
+        rotator.setFromAngle(0);
+        rotator.setToAngle(360);
+        rotator.setInterpolator(Interpolator.LINEAR);
+        rotator.setCycleCount(1);
+        return rotator;
+<A NAME="29"></A>    }
+
+    private RotateTransition rotate_Back(ImageView image</B></FONT>) { //Setting for the animation when the time is out
+        <FONT color="#faafba"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#29',2,'match53-top.html#29',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>RotateTransition rotator = new RotateTransition(Duration.millis(200), image);
+        rotator.setAxis(Rotate.Y_AXIS);
+        rotator.setFromAngle(0);
+        rotator.setToAngle(90);
+        image.setImage(default_image);                  //Change back to the default image
+        rotator.setFromAngle(90);
+        rotator.setToAngle(0);
+        rotator.setInterpolator(Interpolator.LINEAR);
+        rotator.setCycleCount(1);
+<A NAME="34"></A>        return rotator;
+    }
+
+    private Text ge</B></FONT>t_Score_Title() <FONT color="#827d6b"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#34',2,'match53-top.html#34',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>{            //Setting for the title
+        Text text_score = new Text(1500, 55, &quot;SCORE : &quot;);
+        text_score.setStyle(&quot;-fx-font: 50 INTFREE;&quot;);
+        return text_score;
+    }
+
+<A NAME="41"></A>    private Rectangle get_Score_Field() {</B></FONT>           //Setting for the bar
+        Rectangle score = new Rectangle(200, 50, Color.WHITE);
+        score.setStroke(Color.BLACK);
+        <FONT color="#f87a17"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#41',2,'match53-top.html#41',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>score.setStrokeWidth(10);
+        score.setArcHeight(10);
+        score.setLayoutX(1700);
+        score.setLayoutY(10);
+        return score;
+    }
+
+    private Button get_Button_Sound() {         //Setting for the button which is used to turn on and off the music
+        ImageView sound = new ImageView(&quot;bao.JPG&quot;);
+        sound.setFitWidth(50);
+<A NAME="23"></A>        sound.setSmooth(true);
+        sound.setPreserveRatio(true);
+        sound.setFitHeight</B></FONT>(50);
+        <FONT color="#f660ab"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#23',2,'match53-top.html#23',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>Button button = new Button(&quot;&quot;, sound);
+        button.setLayoutX(1850);
+        button.setLayoutY(900);
+        button.setOnAction(e -&gt; {
+            sound_On();
+            sound_Off();
+        }</B></FONT>);
+
+        return button;
+    }
+
+    private Text streaks_Notification() {           //Setting for displaying streak whenever there is the answer
+<A NAME="37"></A>        streaks.setFill(Color.YELLOW);
+        streaks.setStroke(Color.BLACK);
+        streaks.setStyle(&quot;-fx-font: 35 INTFREE;&quot;);
+        <FONT color="#810541"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#37',2,'match53-top.html#37',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>return streaks;
+    }
+
+    private Text get_Title_Time() {             //Setting for displaying Title time
+        Text text = new Text(1300, 935, &quot;Time&quot;);
+        text.setStyle(&quot;-fx-font: 30 INTFREE;&quot;);
+        return text;
+    }
+
+<A NAME="42"></A>    private Recta</B></FONT>ngle get_Time_Wave() {     //Time Wave which will be reduce over the time
+        Rectangle rectangle = new Rectangle();
+        rectangle.setX(1200);
+        <FONT color="#c57717"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#42',2,'match53-top.html#42',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>rectangle.setY(905);
+        rectangle.setWidth(600);
+        rectangle.setHeight(40);
+        rectangle.setFill(Color.YELLOW);
+        rectangle.setArcHeight(30);
+        rectangle.setArcWidth(30);
+
+        return rectangle;
+    }
+
+    private Rectangle get_Time_Bar() {      //The bar of the time wave
+        Rectangle rectangle = new Rectangle();
+        rectangle.setX(1200);
+        rectangle.setY(900);
+        rectangle.setWidth(600);
+        rectangle.setHeight(50);
+        rectangle.setStroke(Color.BLACK);
+        rectangle.setFill</B></FONT>(Color.WHITE);
+<A NAME="20"></A>        rectangle.setArcHeight(30);
+        rectangle.setArcWidth(30);
+        rectangle.setStrokeWidth(10);
+        <FONT color="#d4a017"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#20',2,'match53-top.html#20',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>return rectangle;
+    }
+
+    private Rectangle time_Bar_Run() {
+        Rectangle rectangle = get_Time_Wave();
+        count_down.setCycleCount(Timeline.INDEFINITE);
+<A NAME="5"></A>        KeyFrame key = new</B></FONT> KeyFrame(Duration.millis(10), new EventHandler&lt;ActionEvent&gt;() {
+            @Override
+            public void handle(ActionEvent event) {
+                <FONT color="#c8c2a7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#5',2,'match53-top.html#5',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>rectangle.setWidth(rectangle.getWidth() - 0.05);        //The width of the wave will be restricted time by time
+                if (rectangle.getWidth() &lt;= 0) {
+                    count_down.stop();
+                }
+            }
+        });
+        count_down.getKeyFrames</B></FONT>().add(key);
+        return rectangle;
+    }
+
+    private TextField timer() {
+        int start_time = 120;       //default start time
+        int sec = start_time / 2 - 1;       //for displaying second
+        TextField textField = new TextField();  //Text for displaying whole time over the time
+        textField.setDisable(true);
+<A NAME="32"></A>        textField.setAlignment(Pos.CENTER);
+        final int[] min = {start_time / 60 - 1};    //for displaying min
+        count_down.setCycleCount(Timeline.INDEFINITE);
+        <FONT color="#82cafa"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#32',2,'match53-top.html#32',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>final int[] second = {sec};
+        final int[] hundred_of_sec = {99};
+<A NAME="38"></A>        KeyFrame key = new KeyFrame(Duration.millis</B></FONT>(10), new EventHandler&lt;ActionEvent&gt;() {              //In every &quot;hundred of second&quot;
+            @Override
+            public void handle(ActionEvent event) {
+                textField.setText(<FONT color="#348781"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#38',2,'match53-top.html#38',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>Integer.toString(min[0]) + &quot; : &quot; + Integer.toString(second[0]) + &quot; : &quot; + Integer.toString(hundred_of_sec[0]));    //Set the text for displaying
+                if (hundred_of_sec[0] &lt; 0) {            //After 99 &quot;hundred of sec&quot;
+                    time_passed++;                      //time pass will increase
+                    second[0]--;                        //reduce second
+                    hundred_of_sec[0] = 99;             //reset the hundred of sec
+                }
+                if (second[0] &lt; 0 &amp;&amp; min[0] != 0) {
+<A NAME="40"></A>                    min[0]--;                           //whenever 60 seconds is passed, the minite will be decreased
+                    second[0] = 59;                     //reset the second
+                }
+                if</B></FONT> ((min[0] == 0 &amp;&amp; second[0] == 0) || finish()) <FONT color="#347235"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#40',2,'match53-top.html#40',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>{      //Whenever the cards are all correct or the time is out
+                    point = point + 119 - time_passed;                  //store the point
+                    count_down.stop();                                  //stop count down
+                    setHighest_score();                                 //set the score the the highest score to check with the score of another round
+                    score.setText(Integer.toString(point));             //Set the text for highest score
+                    hundred_of_sec[0] = 0;
+                    time_done.setText(&quot;Time left:   &quot; + Integer.toString(min[0]) + &quot; : &quot; + Integer.toString(second[0]) + &quot; : 00&quot;);  //Set the time done for displaying it
+<A NAME="16"></A>                    game_Over_Scene();                                  //Move to another scene
+                }</B></FONT>
+                hundred_of_sec[0]--;
+            <FONT color="#3090c7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#16',2,'match53-top.html#16',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+        });
+        textField.setStyle(&quot;-fx-font: 30 INTFREE;&quot;);
+        textField.setMaxWidth(190);
+        textField.setLayoutX(105);
+<A NAME="46"></A>        textField.setLayoutY(50);
+        count_down.getKeyFrames</B></FONT>().add(key);
+        return textField;
+    <FONT color="#92c7c7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#46',2,'match53-top.html#46',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+
+    ///////////////////////////////////////////////////
+    private void game_Over_Scene() {
+        ImageView back = new ImageView(&quot;gameover.JPG&quot;);         //Set another background image
+        back.setSmooth(true);
+        back.setFitWidth(1950);
+        back.setFitHeight(1000);
+        set_Time_Done();                                            //Storing the time done
+        background.getChildren().clear();                           //clear for creating a new background
+        set_Back_Ground(back);
+        set_Back_Ground(time_done);
+        set_Back_Ground(highest_score);
+        set_Back_Ground(get_Score_Field());
+        set_Back_Ground(score);
+        set_Back_Ground(title_Highest());
+        set_Back_Ground(play_Again());
+<A NAME="21"></A>        set_Back_Ground(exit</B></FONT>());
+    }
+
+    private Button play_Again() <FONT color="#00ff00"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#21',2,'match53-top.html#21',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>{           //Setting for button which is used to playing more games
+        Button yes = new Button(&quot;Play again&quot;);
+        yes.setStyle(&quot;-fx-font: 30 INTFREE;&quot;);
+        yes.setLayoutX(400);
+        yes.setLayoutY(900);
+        yes.setOnAction(e -&gt; {
+            opening_Scene</B></FONT>();            //Return to the opening scene to choose the difficulty
+        });
+<A NAME="24"></A>        return yes;
+    }
+
+    private Button exit() <FONT color="#ada96e"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#24',2,'match53-top.html#24',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>{             //Setting for exit the whole game
+        Button no = new Button(&quot;Exit&quot;);
+        no.setStyle(&quot;-fx-font: 30 INTFREE;&quot;);
+        no.setLayoutX(1550);
+        no.setLayoutY(900);
+        no.setOnAction(e -&gt; {
+            Platform.exit</B></FONT>();
+        });
+<A NAME="22"></A>        return no;
+    }
+
+    private Text title_Highest() <FONT color="#4cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#22',2,'match53-top.html#22',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>{              //The title of displaying highest score
+        Text title = new Text(280, 185, &quot;Highest Score&quot;);
+        title.setStyle(&quot;-fx-font: 30 INTFREE;&quot;);
+        title.setFill(Color.RED);
+        title.setStroke(Color.YELLOW);
+        title.setStrokeWidth(2);
+        return title;
+    }
+
+    /////////////////////////////////////////////////////
+    Scen</B></FONT>e main() {                  //Start with the initial scene
+        opening_Scene();
+        return scene;
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>Assignment2/src/sample/Model.java</CENTER></H3><HR>
+<PRE>
+<A NAME="6"></A><FONT color="#50ebec"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#6',2,'match53-top.html#6',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>package sample;
+
+import java.util.Random;
+
+class Model {
+    private String highest_score = &quot;0&quot;;
+    private int round=0;
+    Model(){
+
+<A NAME="26"></A>    }
+    prot</B></FONT>ected String[] card(){          //store the cards
+        String[] u22 = {&quot;1.jpg&quot;,&quot;2.jpg&quot;,&quot;3.jpg&quot;,&quot;4.jpg&quot;,&quot;5.jpg&quot;,&quot;6.jpg&quot;,&quot;7.jpg&quot;,&quot;8.jpg&quot;,&quot;9.jpg&quot;,&quot;10.jpg&quot;};      //url of 10 cards
+        <FONT color="#95b9c7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#26',2,'match53-top.html#26',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>String[] random = new String[20];
+        for (int i = 0; i &lt;10;i++){
+                random[i] = u22[i];
+<A NAME="18"></A>        }
+        for (int i = 10</B></FONT>, ii =0; i &lt;20;i++,ii++){                //store all the cards to a string array with 20 indexs
+            random[i] = u22[ii];
+        <FONT color="#f62817"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#18',2,'match53-top.html#18',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+        return random;
+    }
+    protected String[] random_Card(){   //random the cards
+        String[] cards = card();
+        String[] random = new String[20]</B></FONT>;       //get cards
+        Random ran = new Random();          //random function
+<A NAME="39"></A>        int get;
+        for (int i = 0; i&lt; 20;) {
+            get = ran.nextInt(cards.length);    //random with card length
+            if (!cards[get].equals(&quot;&quot;))<FONT color="#152dc6"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#39',2,'match53-top.html#39',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>{        //If there is no url, ignore
+                random[i] = cards[get];         //get url
+                cards[get] = &quot;&quot;;                //set that index contains empty url
+                i++;
+            }
+        }
+        return random;                      //return the random array order
+    }
+<A NAME="2"></A>    protected String highest_Score(double duration, int score){     //Text for highest score
+        round++;                                                    //round will be increase one by one
+        String level=&quot;None&quot;;</B></FONT>
+        if (score &gt; highest_score.indexOf(0))<FONT color="#77bfc7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match53-0.html#2',2,'match53-top.html#2',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>{                      // if there is any score higher than the score is set, it will be the next highest score
+            highest_score = Integer.toString(score);
+            if (duration == 1000){                                  //display the difficulty as well
+                level = &quot;Hard&quot;;
+            }
+            else if (duration == 2000){                                  //display the difficulty as well
+                level = &quot;Medium&quot;;
+            }
+            else if (duration == 3000){                              //display the difficulty as well
+                level = &quot;Easy&quot;;
+            }</B></FONT>
+        }
+        return highest_score +&quot; points: round &quot; + Integer.toString(round) + &quot;: &quot;+level+&quot;&quot;;          //Return the whole detail of the round which the player reach the highest score
+    }
+}
+</PRE>
+
+</BODY>
+</HTML>

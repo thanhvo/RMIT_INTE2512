@@ -1,0 +1,676 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>eunseolee_142</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>ass2Final/src/GamePanelController.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Lee Eunseo
+  ID: s3740941
+  Created  date: 10/12/2019
+<A NAME="8"></A>  Last modified: 16/12/2019
+  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+<FONT color="#bce954"><A HREF="javascript:ZweiFrames('match39-1.html#8',3,'match39-top.html#8',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static javafx.stage.StageStyle.*;
+
+public class GamePanelController implements Initializable {
+    private Timer timer = new Timer();
+    private int counter = 0; //hundred seconds count
+    private String prevCard = &quot;&quot;;
+    private int prevCardIndex;
+    private int matchedGameCount = 0;
+    private int flag = 0;
+    private int score = 120;
+    private int cardRunnning = 0; //flipped card count
+
+    private int musicOnOffCount = 0;
+    private URL song = getClass().getResource(&quot;christmas.mp3&quot;)</B></FONT>;
+    private String mediaStringUrl = song.toExternalForm();
+    private Media media = new Media(mediaStringUrl);
+    private MediaPlayer player = new MediaPlayer(media);
+
+    public  static String[] playerCards = {&quot;file:src/players/1Nguyen Quang Hai.jpg&quot;, &quot;file:src/players/2Nguyen Cong Phuong.jpg&quot;,
+            &quot;file:src/players/3Luong Xuan Truong.jpg&quot;, &quot;file:src/players/4Bui Tien Dung.jpg&quot;,
+            &quot;file:src/players/5Nguyen Van Toan.jpg&quot;, &quot;file:src/players/6Doan Van Hau.jpg&quot;,
+            &quot;file:src/players/7Nguyen Van Quyet.jpg&quot;, &quot;file:src/players/8Phan Van Duc.jpg&quot;,
+            &quot;file:src/players/9Que Ngoc Hai.jpg&quot;, &quot;file:src/players/10Vu Van Thanh.jpg&quot;,
+            &quot;file:src/players/1Nguyen Quang Hai.jpg&quot;, &quot;file:src/players/2Nguyen Cong Phuong.jpg&quot;,
+            &quot;file:src/players/3Luong Xuan Truong.jpg&quot;, &quot;file:src/players/4Bui Tien Dung.jpg&quot;,
+<A NAME="9"></A>            &quot;file:src/players/5Nguyen Van Toan.jpg&quot;, &quot;file:src/players/6Doan Van Hau.jpg&quot;,
+            &quot;file:src/players/7Nguyen Van Quyet.jpg&quot;, &quot;file:src/players/8Phan Van Duc.jpg&quot;,
+            &quot;file:src/players/9Que Ngoc Hai.jpg&quot;, &quot;file:src/players/10Vu Van Thanh.jpg&quot;};
+    <FONT color="#f88017"><A HREF="javascript:ZweiFrames('match39-1.html#9',3,'match39-top.html#9',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>@FXML
+    private Button bt1;
+
+    @FXML
+    private Button bt2;
+
+    @FXML
+    private Button bt3;
+
+    @FXML
+    private Button bt4;
+
+    @FXML
+    private Button bt5;
+
+    @FXML
+    private Button bt6;
+
+    @FXML
+    private Button bt7;
+
+    @FXML
+    private Button bt8;
+
+    @FXML
+    private Button bt9;
+
+    @FXML
+    private Button bt10;
+
+    @FXML
+    private Button bt11;
+
+    @FXML
+    private Button bt12;
+
+    @FXML
+    private Button bt13;
+
+    @FXML
+    private Button bt14;
+
+    @FXML
+    private Button bt15;
+
+    @FXML
+    private Button bt16;
+
+    @FXML
+    private Button bt17;
+
+    @FXML
+    private Button bt18;
+
+    @FXML
+    private Button bt19;
+
+    @FXML
+    private Button bt20;
+
+    @FXML
+    private Text levelDisplay;
+
+    @FXML
+    private Button btExit;
+
+    @FXML
+    private Button btNewGame;
+
+    @FXML
+    private Rectangle remainTime;
+
+    @FXML
+    private Text timeText;
+
+    @FXML
+    private Text scoreText;
+
+    @FXML
+    private Button musicOnOff;
+
+<A NAME="10"></A>    @FXML</B></FONT>
+    void bt1Event(ActionEvent event) throws IOException {
+        setCardImage(1, bt1);
+    <FONT color="#b041ff"><A HREF="javascript:ZweiFrames('match39-1.html#10',3,'match39-top.html#10',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    @FXML
+    void bt2Event(ActionEvent event) throws IOException {
+        setCardImage(2, bt2);
+    }
+
+    @FXML
+    void bt3Event(ActionEvent event) throws IOException {
+        setCardImage(3, bt3);
+    }
+
+    @FXML
+    void bt4Event(ActionEvent event) throws IOException {
+        setCardImage(4, bt4);
+    }
+
+    @FXML
+    void bt5Event(ActionEvent event) throws IOException {
+        setCardImage(5, bt5);
+    }
+
+    @FXML
+    void bt6Event(ActionEvent event) throws IOException {
+        setCardImage(6, bt6);
+<A NAME="11"></A>    }</B></FONT>
+
+    @FXML
+    void bt7Event(<FONT color="#571b7e"><A HREF="javascript:ZweiFrames('match39-1.html#11',3,'match39-top.html#11',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>ActionEvent event) throws IOException {
+        setCardImage(7, bt7);
+    }
+
+    @FXML
+    void bt8Event(ActionEvent event) throws IOException {
+        setCardImage(8, bt8);
+    }
+
+    @FXML
+    void bt9Event(ActionEvent event) throws IOException {
+        setCardImage(9, bt9);
+    }
+
+    @FXML
+    void bt10Event(ActionEvent event) throws IOException {
+        setCardImage(10, bt10);
+    }
+
+    @FXML
+    void bt11Event(ActionEvent event</B></FONT>) throws IOException {
+<A NAME="12"></A>        setCardImage(11, bt11);
+    }
+
+    <FONT color="#3b9c9c"><A HREF="javascript:ZweiFrames('match39-1.html#12',3,'match39-top.html#12',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>@FXML
+    void bt12Event(ActionEvent event) throws IOException {
+        setCardImage(12, bt12);
+    }
+
+    @FXML
+    void bt13Event(ActionEvent event) throws IOException {
+        setCardImage(13, bt13);
+    }
+
+    @FXML
+    void bt14Event(ActionEvent event) throws IOException {
+        setCardImage(14, bt14);
+    }
+
+    @FXML
+    void bt15Event(ActionEvent event) throws IOException {
+        setCardImage(15, bt15);
+    }</B></FONT>
+<A NAME="13"></A>
+    @FXML
+    void bt16Event(ActionEvent event) throws IOException {
+        <FONT color="#842dce"><A HREF="javascript:ZweiFrames('match39-1.html#13',3,'match39-top.html#13',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>setCardImage(16, bt16);
+    }
+
+    @FXML
+    void bt17Event(ActionEvent event) throws IOException {
+        setCardImage(17, bt17);
+    }
+
+    @FXML
+    void bt18Event(ActionEvent event) throws IOException {
+        setCardImage(18, bt18);
+    }
+
+    @FXML
+    void bt19Event(ActionEvent event) throws IOException {
+        setCardImage(19, bt19);
+    }
+
+<A NAME="14"></A>    @FXML
+    void bt20Event(ActionEvent event</B></FONT>) throws IOException {
+        setCardImage(20, bt20);
+    <FONT color="#f52887"><A HREF="javascript:ZweiFrames('match39-1.html#14',3,'match39-top.html#14',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+    @FXML
+    void exit(ActionEvent actionEvent) {
+        Platform.exit();
+    }
+
+    @FXML
+    void newGame(ActionEvent event) {
+
+    }
+
+<A NAME="15"></A>    @FXML
+    void musicEvent(ActionEvent event){</B></FONT>
+        musicOnOffCount++;
+        <FONT color="#3bb9ff"><A HREF="javascript:ZweiFrames('match39-1.html#15',3,'match39-top.html#15',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (musicOnOffCount % 2 == 0){
+            ImageView musicOn = new ImageView(&quot;file:src/images/soundOn.jpeg&quot;);
+            musicOn.setSmooth(true);
+            musicOn.setPreserveRatio(true);
+            musicOn.setFitWidth(50);
+            musicOnOff.setGraphic(musicOn);
+<A NAME="16"></A>            player.play();
+        }</B></FONT> else if (musicOnOffCount % 2 == 1){
+            ImageView musicOff = new ImageView(&quot;file:src/images/soundOff.png&quot;);
+            <FONT color="#3090c7"><A HREF="javascript:ZweiFrames('match39-1.html#16',3,'match39-top.html#16',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>musicOff.setSmooth(true);
+            musicOff.setPreserveRatio(true);
+            musicOff.setFitWidth(50);
+            musicOnOff.setGraphic(musicOff);
+            player.stop();
+        }
+<A NAME="17"></A>    }
+
+    void setCardImage(int cardNum, Button bt</B></FONT>) throws IOException {
+        try <FONT color="#800517"><A HREF="javascript:ZweiFrames('match39-1.html#17',3,'match39-top.html#17',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{
+            if (cardRunnning &lt; 2){ //two buttons can be pressed
+                cardRunnning++;
+                if (cardNum == prevCardIndex){
+                    return;
+                }
+                ImageView changeCardPic = new ImageView(playerCards[cardNum - 1]);
+                changeCardPic.setPreserveRatio(true);
+<A NAME="18"></A>                changeCardPic.setSmooth</B></FONT>(true);
+                changeCardPic.setFitWidth(100);
+                bt.setGraphic(changeCardPic);
+                <FONT color="#f62817"><A HREF="javascript:ZweiFrames('match39-1.html#18',3,'match39-top.html#18',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (prevCard.equals(playerCards[cardNum - 1])){
+                    matchedGameCount++;
+                    if (matchedGameCount == 10){ //count how many pairs were matched and if 10 pairs are matched, show winGame
+                        winGame();
+                        return;
+                    }</B></FONT>
+                    cardRunnning--; //if matched, count one down
+                    prevCard = playerCards[cardNum - 1]; //set current image as prevCard
+                    flag = 1;
+                    return;
+                }
+                prevCard = playerCards[cardNum - 1];
+<A NAME="19"></A>                prevCardIndex = cardNum;
+                //turn back
+                setTimer(bt);
+            <FONT color="#4e9258"><A HREF="javascript:ZweiFrames('match39-1.html#19',3,'match39-top.html#19',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+        } catch(NullPointerException e) {
+            System.out.println(&quot;error: &quot; + e.getMessage());
+        }
+    }
+
+    void setTimer(Button bt){
+<A NAME="20"></A>        Timer timer = new Timer()</B></FONT>;
+        int levelTime = 0;
+        //setting time by level
+        <FONT color="#d4a017"><A HREF="javascript:ZweiFrames('match39-1.html#20',3,'match39-top.html#20',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (MainPanelController.levelIn == 1){
+            levelTime = 3000;
+        } else if (MainPanelController.levelIn == 2){
+            levelTime = 2000;
+        } else if (MainPanelController.levelIn == 3){
+<A NAME="21"></A>            levelTime = 1000;
+        }</B></FONT>
+        timer.schedule(new TimerTask() {
+            <FONT color="#00ff00"><A HREF="javascript:ZweiFrames('match39-1.html#21',3,'match39-top.html#21',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>@Override
+            public void run() {
+                if (flag == 1){
+                    cardRunnning--;
+<A NAME="22"></A>                    flag = 0;
+                    return;
+                }</B></FONT>
+                Platform.runLater(() -&gt; <FONT color="#4cc417"><A HREF="javascript:ZweiFrames('match39-1.html#22',3,'match39-top.html#22',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{ //turn back after set time
+                    turnCardBack(bt);
+                    cardRunnning--;
+                });
+            }
+        }, levelTime);
+    }
+
+<A NAME="23"></A>    void turnCar</B></FONT>dBack(Button bt){
+        try {
+            ImageView cardBack = new ImageView(&quot;file:src/images/soccerBall.png&quot;);
+            <FONT color="#f660ab"><A HREF="javascript:ZweiFrames('match39-1.html#23',3,'match39-top.html#23',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>cardBack.setPreserveRatio(true);
+            cardBack.setSmooth(true);
+            cardBack.setFitWidth(100);
+            bt.setGraphic(cardBack);
+        } catch (NullPointerException e){
+            System.out.println(&quot;Error: &quot; + e.getMessage());
+        }
+<A NAME="24"></A>    }</B></FONT>
+
+    void timeBar(){ //graphical time count
+        try <FONT color="#ada96e"><A HREF="javascript:ZweiFrames('match39-1.html#24',3,'match39-top.html#24',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (flag == 2){</B></FONT> //if win game before time done, don't count down anymore
+                        counter = 120001;
+                    } else if (counter &lt;= 119999){
+                        Platform.runLater(() -&gt; {
+                            timeBar();
+                            stringTime();
+<A NAME="25"></A>                            remainTime.setWidth(remainTime.getWidth() - 0.00333);
+                            counter++;
+                        });
+                    } else <FONT color="#87f717"><A HREF="javascript:ZweiFrames('match39-1.html#25',3,'match39-top.html#25',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (counter == 120000){ //if not finished until count down, show lose game panel
+                        try {
+                            stringTime();
+                            loseGame();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+<A NAME="26"></A>                    }</B></FONT>
+                }
+            }, 1);
+        <FONT color="#95b9c7"><A HREF="javascript:ZweiFrames('match39-1.html#26',3,'match39-top.html#26',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>} catch (NullPointerException e){
+            System.out.println(&quot;error: &quot; + e.getMessage());
+        }
+<A NAME="27"></A>    }</B></FONT>
+
+    void stringTime() { //timer
+        <FONT color="#e77471"><A HREF="javascript:ZweiFrames('match39-1.html#27',3,'match39-top.html#27',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>try{
+            timeText.setText(String.format(&quot;%02d:%02d:%02d&quot;, counter / 1000 / 60, (counter / 1000) % 60, (counter % 1000) / 10));
+            scoreCount();
+        } catch (NullPointerException e){
+            System.out.println(&quot;error &quot;);
+        }
+<A NAME="28"></A>    }
+
+    void wi</B></FONT>nGame() throws IOException { //win game panel
+        Parent root = <FONT color="#717d7d"><A HREF="javascript:ZweiFrames('match39-1.html#28',3,'match39-top.html#28',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>FXMLLoader.load(getClass().getResource(&quot;WinPanel.fxml&quot;));
+        Scene scene = new Scene(root);
+<A NAME="29"></A>        Stage stage = new Stage(UNDECORATED);
+        stage.setScene(scene);
+        stage.show</B></FONT>();
+        <FONT color="#faafba"><A HREF="javascript:ZweiFrames('match39-1.html#29',3,'match39-top.html#29',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>flag = 2;
+    }
+
+    void loseGame() throws IOException{ //lose game panel
+        Parent root = FXMLLoader.load(getClass().getResource(&quot;LosePanel.fxml&quot;));
+        Scene scene = new Scene(root)</B></FONT>;
+        Stage stage = new Stage(UNDECORATED);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+<A NAME="30"></A>     void scoreCount() { //counting score
+        try{
+            int scoreTemp = 0;
+            <FONT color="#f9966b"><A HREF="javascript:ZweiFrames('match39-1.html#30',3,'match39-top.html#30',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>int temp;
+            int scoreDigitCount = 0;
+            String scoreStringTemp = &quot;&quot;;
+            String scoreString = &quot;&quot;;
+            if (counter % 1000 == 0){ //point decrease at every second
+                score -= 1;
+                if (score &lt; 1){
+                    return;
+                }
+                //convert int score to sting to show up in panel because setText only accept String type
+                s</B></FONT>coreTemp = score;
+                while (scoreTemp != 0){
+                    temp = scoreTemp % 10;
+                    scoreTemp -= temp;
+<A NAME="31"></A>                    scoreTemp /= 10;
+                    scoreDigitCount++;
+                }
+                <FONT color="#3ea99f"><A HREF="javascript:ZweiFrames('match39-1.html#31',3,'match39-top.html#31',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>scoreTemp = score;
+                for (int i = 0; i &lt; scoreDigitCount; i++) {
+                    temp = scoreTemp % 10;
+                    scoreTemp -= temp;
+                    scoreTemp /= 10;
+                    temp += 48;
+                    scoreStringTemp += (char)temp;
+                }
+<A NAME="32"></A>                for (int i = scoreDigitCount - 1; i &gt;= 0; i--) {</B></FONT>
+                    scoreString += scoreStringTemp.charAt(i);
+                }
+                <FONT color="#82cafa"><A HREF="javascript:ZweiFrames('match39-1.html#32',3,'match39-top.html#32',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>scoreText.setText(scoreString); //change score in panel
+            }
+<A NAME="33"></A>        }catch (NullPointerException e){
+            System.out.println(&quot;error: &quot; + e.getMessage());
+        }</B></FONT>
+     <FONT color="#736aff"><A HREF="javascript:ZweiFrames('match39-1.html#33',3,'match39-top.html#33',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1){
+        String temp = &quot;&quot;;
+        temp += (char)(MainPanelController.levelIn + 48);
+        levelDisplay.setText(temp);
+        timeBar();
+        player.play</B></FONT>();
+    }
+}
+</PRE>
+<HR>
+<H3><CENTER>ass2Final/src/LosePanelController.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Lee Eunseo
+  ID: s3740941
+  Created  date: 10/12/2019
+<A NAME="0"></A>  Last modified: 16/12/2019
+  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match39-1.html#0',3,'match39-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+
+public class LosePanelController {
+
+    @FXML
+    private Button btPlayAgain;
+
+<A NAME="1"></A>    @</B></FONT>FXML
+    private Button btExit;
+
+    <FONT color="#f63526"><A HREF="javascript:ZweiFrames('match39-1.html#1',3,'match39-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>@FXML
+    void btExitEvent(ActionEvent event) {
+        Platform.exit();
+    }
+
+    @FXML
+    void btPlayAgainEvent(ActionEvent event) {
+
+    }</B></FONT>
+
+}
+</PRE>
+<HR>
+<H3><CENTER>ass2Final/src/Main.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Lee Eunseo
+  ID: s3740941
+  Created  date: 10/12/2019
+<A NAME="36"></A>  Last modified: 16/12/2019
+  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+<FONT color="#ff00ff"><A HREF="javascript:ZweiFrames('match39-1.html#36',3,'match39-top.html#36',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+import java.io.IOException;
+
+public class Main extends Application {
+<A NAME="37"></A>    @Override
+    public void start(Stage primaryStage) throws IOException {
+        Parent root = FXMLLoader.load</B></FONT>(getClass().getResource(&quot;MainPanel.fxml&quot;));
+        Scene scene = <FONT color="#810541"><A HREF="javascript:ZweiFrames('match39-1.html#37',3,'match39-top.html#37',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>new Scene(root);
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+    public static void main(String[] args){
+        launch(args);
+    }</B></FONT>
+
+}
+</PRE>
+<HR>
+<H3><CENTER>ass2Final/src/MainPanelController.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Lee Eunseo
+  ID: s3740941
+  Created  date: 10/12/2019
+<A NAME="2"></A>  Last modified: 16/12/2019
+  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+<FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match39-1.html#2',3,'match39-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
+
+public class MainPanelController implements Initializable {
+
+    @FXML
+    private ComboBox&lt;Integer&gt; levelInput;
+
+<A NAME="3"></A>    @</B></FONT>FXML
+    private Button startButton;
+
+    <FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match39-1.html#3',3,'match39-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>@FXML
+    void levelInputEvent(ActionEvent event) {
+        levelIn = levelInput.getValue();
+    }
+
+    @FXML
+    void starts(ActionEvent event) throws IOException {</B></FONT>
+        try {
+<A NAME="4"></A>            Parent root = FXMLLoader.load(getClass().getResource(&quot;GamePanel.fxml&quot;));
+            Scene scene = new Scene(root);
+            Stage stage = new Stage(StageStyle.UNDECORATED);
+            <FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match39-1.html#4',3,'match39-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>stage.setScene(scene);
+            stage.show();
+            cardShuffle();
+        } catch (NullPointerException e){
+            System.out.println(&quot;Error: &quot; + e.getMessage());
+        }
+        //GamePanelController.paneSetting();
+    }</B></FONT>
+
+    public static int levelIn;
+    private void cardShuffle() {
+        try {
+            Random rnd = new Random();
+<A NAME="5"></A>            String temp;
+            ArrayList&lt;Integer&gt; num = new ArrayList&lt;&gt;();
+            for (int k = 0; k &lt; 20; k++) {
+                int l = <FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match39-1.html#5',3,'match39-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>rnd.nextInt(20);
+                if (num.contains(l)){
+                    while(num.contains(l)){
+                        l = rnd.nextInt(20);
+                    }
+                }</B></FONT>
+                num.add(l);
+                temp = GamePanelController.playerCards[k];
+                GamePanelController.playerCards[k] = GamePanelController.playerCards[l];
+<A NAME="6"></A>                GamePanelController.playerCards[l] = temp;
+            }
+        } catch (NullPointerException e ){
+            System.out.println(&quot;Error: &quot; + <FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match39-1.html#6',3,'match39-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>e.getMessage());
+        }
+    }
+<A NAME="7"></A>    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {</B></FONT>
+        ObservableList&lt;Integer&gt; levelList = FXCollections.observableArrayList();
+        <FONT color="#c58917"><A HREF="javascript:ZweiFrames('match39-1.html#7',3,'match39-top.html#7',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>levelInput.setItems(levelList);
+        for (int i = 0; i &lt; 4; i++) {
+            if (i != 0){
+                levelList.add(i);
+            }
+        }
+    }</B></FONT>
+}
+</PRE>
+<HR>
+<H3><CENTER>ass2Final/src/WinPanelController.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Lee Eunseo
+  ID: s3740941
+  Created  date: 10/12/2019
+<A NAME="34"></A>  Last modified: 16/12/2019
+  Acknowledgement: If you use any resources, acknowledge here. Failure to do so will be considered as plagiarism.
+*/
+<FONT color="#827d6b"><A HREF="javascript:ZweiFrames('match39-1.html#34',3,'match39-top.html#34',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+
+public class WinPanelController {
+
+    @FXML
+    private Button playAgain;
+
+<A NAME="35"></A>    @</B></FONT>FXML
+    private Button exit;
+
+    <FONT color="#41a317"><A HREF="javascript:ZweiFrames('match39-1.html#35',3,'match39-top.html#35',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>@FXML
+    void exitEvent(ActionEvent event) {
+        Platform.exit();
+    }
+
+    @FXML
+    void playAgainEvent(ActionEvent event) {
+
+    }</B></FONT>
+
+}
+</PRE>
+
+</BODY>
+</HTML>

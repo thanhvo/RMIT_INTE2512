@@ -1,0 +1,289 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>phuocninhvanh</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>NinhVanHoangPhuoc_Assignment2/src/sample/Main.java</CENTER></H3><HR>
+<PRE>
+<A NAME="18"></A>package sample;
+
+<FONT color="#f62817"><A HREF="javascript:ZweiFrames('match58-1.html#18',3,'match58-top.html#18',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+<A NAME="19"></A>    View view = new View();
+    @Override
+    public void start(Stage primaryStage) throws Exception{</B></FONT>
+        view.stage.setScene(new Scene(<FONT color="#4e9258"><A HREF="javascript:ZweiFrames('match58-1.html#19',3,'match58-top.html#19',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>view.getOpenPane(), 600, 600));
+        view.stage.show();
+    }
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}</B></FONT>
+</PRE>
+<HR>
+<H3><CENTER>NinhVanHoangPhuoc_Assignment2/src/sample/View.java</CENTER></H3><HR>
+<PRE>
+/*
+  RMIT University Vietnam
+  Course: INTE2512 Object-Oriented Programming
+  Semester: 2019C
+  Assessment: Assignment 2
+  Author: Ninh Van Hoang Phuoc
+  ID: s3777323
+  Created  date: 12/12/2019
+  Last modified: 18/12/2019
+  Acknowledgement: Tran Vu Hoang Viet (s3740797), Quang Tran's lecture slide.
+<A NAME="0"></A>*/
+package sample;
+
+<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match58-1.html#0',3,'match58-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import javax.print.attribute.standard.PrinterName;
+import java.awt.*;
+import java.io.File;
+import java.sql.Time;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+public class View {
+    Text time = new Text();
+    Stage stage = new Stage();
+    Button play = new Button(&quot;Play&quot;);
+    Button sound = new Button();
+    Media mD = new</B></FONT> Media(new File(&quot;music.mp3&quot;).toURI().toString());
+    MediaPlayer mP = new MediaPlayer(mD);
+<A NAME="1"></A>    String level;
+    Text mode = new Text();
+    int levelValue;
+    <FONT color="#f63526"><A HREF="javascript:ZweiFrames('match58-1.html#1',3,'match58-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>Image image = new Image(&quot;backGround.jpg&quot;);
+    Image cardImage = new Image(&quot;cardIcon.jpg&quot;);
+    Image playingBackground = new Image(&quot;playingBackGround.jpg&quot;);
+    ImageView[] imageViews = new ImageView[20];
+    GridPane gridPane = new GridPane();
+<A NAME="2"></A>    Image unMute = new Image(&quot;unMute.jpg&quot;);
+    Image mute = new Image(&quot;mute.jpg&quot;);
+    Timeline timer = new Timeline()</B></FONT>;
+    <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match58-1.html#2',3,'match58-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>ChoiceBox&lt;String&gt; choiceBox = new ChoiceBox&lt;&gt;();
+    List&lt;String&gt; random;
+    TextField score = new TextField(&quot;Score: &quot;);
+
+    void setScore(){ // Score table
+        score.setEditable(false);
+        score.setLayoutX</B></FONT>(250);
+<A NAME="3"></A>        score.setLayoutY(80);
+    }
+
+    <FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match58-1.html#3',3,'match58-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>void setSound(){ //Button for mute or unmute the background music
+        ImageView muteButton = new ImageView(mute);
+        muteButton.setFitHeight(30);
+        muteButton.setFitWidth(30);
+        ImageView unMuteButton = new ImageView(unMute);
+<A NAME="4"></A>        unMuteButton.setFitHeight(30);
+        unMuteButton.setFitWidth(30);
+        sound.setGraphic(unMuteButton);
+        sound.setOnAction(actionEvent -&gt; <FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match58-1.html#4',3,'match58-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{</B></FONT>
+            if (sound.getGraphic().equals(unMuteButton)){
+                sound.setGraphic(muteButton);
+                mP.setVolume(0);
+            }else{
+                sound.setGraphic(unMuteButton);
+<A NAME="5"></A>                mP.setVolume(1);
+            }
+        }</B></FONT>);
+        <FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match58-1.html#5',3,'match58-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>sound.setLayoutX(50);
+        sound.setLayoutY(550);
+    }
+
+    void setTimer(){ //Time countdown for player to know the time left
+        final int[] second = {120};
+        time.setFill(Color.GREEN);
+        time.setStyle</B></FONT>(&quot;-fx-font: 24 arial;&quot;);
+        time.setText(Integer.toString(second[0]));
+        timer.setCycleCount(Timeline.INDEFINITE);
+        timer.getKeyFrames().add(new KeyFrame(Duration.seconds(1),actionEvent -&gt; {
+            second[0]--;
+<A NAME="6"></A>            time.setText(Integer.toString(second[0]));
+            if (second[0]==0){
+                stage.setScene(new Scene(endingScene(),600,500));
+                <FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match58-1.html#6',3,'match58-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>timer.stop();
+            }
+        }));
+        time.setLayoutX(300);
+        time.setLayoutY(550);
+    }
+
+
+<A NAME="7"></A>    Pane getOpenPane(){</B></FONT> //The open scene of the game
+        Pane openPane = new Pane();
+        ImageView imageView = new ImageView(playingBackground);
+        <FONT color="#c58917"><A HREF="javascript:ZweiFrames('match58-1.html#7',3,'match58-top.html#7',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>imageView.setFitWidth(600);
+        imageView.setFitHeight(600);
+        mP.play();
+        setSound();
+        setPlayButton();
+        choiceBox.getItems().addAll(&quot;Beginner&quot;,&quot;Amateur&quot;,&quot;Advanced&quot;);
+        choiceBox.setValue(&quot;Beginner&quot;);
+        choiceBox.setLayoutX(250);
+        choiceBox.setLayoutY(300);
+        play.setLayoutY(250);
+        play.setLayoutX(250);
+        openPane.getChildren().addAll(imageView,play,choiceBox,sound);
+        return openPane;
+    }
+
+    void setCardImage(){</B></FONT> //image of the card in the game
+        random = randomImages();
+        for (int i = 0; i &lt; 20; i++) {
+            imageViews[i] = new ImageView();
+            imageViews[i].setImage(cardImage);
+            imageViews[i].setFitHeight(80);
+            imageViews[i].setFitWidth(80);
+            int finalI = i;
+            Timeline time = new Timeline();
+<A NAME="8"></A>            time.setCycleCount(Timeline.INDEFINITE);
+            imageViews[i].setOnMouseClicked(mouseEvent -&gt; {
+                imageViews[finalI].setImage(new Image(random.get(finalI)));
+                time.getKeyFrames().add(new KeyFrame(Duration.seconds(levelValue), <FONT color="#bce954"><A HREF="javascript:ZweiFrames('match58-1.html#8',3,'match58-top.html#8',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>new EventHandler&lt;ActionEvent&gt;() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                       imageViews[finalI].setImage(cardImage);
+                       time.stop();
+                    }
+                }</B></FONT>));time.play();
+<A NAME="9"></A>
+            });
+        }
+    <FONT color="#f88017"><A HREF="javascript:ZweiFrames('match58-1.html#9',3,'match58-top.html#9',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    Pane endingScene(){ // Scene when the game is finished
+        Pane ending= new Pane();
+        Image endingImage = new Image(&quot;ending.jpg&quot;);
+        ImageView endingView = new</B></FONT> ImageView(endingImage);
+        Button playAgain = new Button(&quot;Play Again&quot;); //Button to play again
+        playAgain.setLayoutX(150);
+        playAgain.setLayoutY(400);
+        playAgain.setOnAction(actionEvent -&gt; {
+<A NAME="10"></A>            stage.setScene(new Scene(getOpenPane(),600,600));
+        });
+        Button quitGame = new Button(&quot;Quit Game&quot;);
+        <FONT color="#b041ff"><A HREF="javascript:ZweiFrames('match58-1.html#10',3,'match58-top.html#10',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>quitGame.setOnAction(actionEvent -&gt; {
+            Platform.exit(); //Quit
+        });
+        quitGame.setLayoutX(350);
+        quitGame.setLayoutY(400);
+        ending.getChildren().addAll(endingView,playAgain,quitGame);
+        return ending;
+    }
+<A NAME="11"></A>
+    void setGridPane(){</B></FONT> // player will flip to see the image
+        int i =0;
+        <FONT color="#571b7e"><A HREF="javascript:ZweiFrames('match58-1.html#11',3,'match58-top.html#11',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>for (int row = 0; row &lt; 4; row++) {
+            for (int column = 0; column &lt; 5; column++) {
+                gridPane.add(imageViews[i],row,column);
+                i++;
+            }
+        }</B></FONT>
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setLayoutX(150);
+        gridPane.setLayoutY(115);
+<A NAME="12"></A>    }
+
+    List&lt;String&gt; randomImages(){
+        <FONT color="#3b9c9c"><A HREF="javascript:ZweiFrames('match58-1.html#12',3,'match58-top.html#12',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>String[] images = new String[20];
+        for (int i = 0; i &lt; 10; i++) {
+<A NAME="13"></A>            images[i] = String.valueOf(i) + &quot;.jpg&quot;;
+            images[i+10] = String.valueOf(i) + &quot;.jpg&quot;;
+        }</B></FONT>
+        <FONT color="#842dce"><A HREF="javascript:ZweiFrames('match58-1.html#13',3,'match58-top.html#13',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>List&lt;String&gt; randomImages = Arrays.asList(images);
+        Collections.shuffle(randomImages);
+        return randomImages;
+    }
+
+    void setPlayButton(){
+        play.setOnAction(actionEvent -&gt; {</B></FONT>
+<A NAME="14"></A>            if (choiceBox.getValue().equals(&quot;Beginner&quot;)){
+                levelValue = 3;
+                level=&quot;Beginner&quot;;
+                stage.setScene(new Scene(<FONT color="#f52887"><A HREF="javascript:ZweiFrames('match58-1.html#14',3,'match58-top.html#14',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>getPlayingPane(),600,600));
+                timer.play();}
+<A NAME="15"></A>            else if (choiceBox.getValue().equals(&quot;Amateur&quot;)){
+                l</B></FONT>evelValue = 2;
+                level=&quot;Amateur&quot;;
+                stage.setScene(new Scene(<FONT color="#3bb9ff"><A HREF="javascript:ZweiFrames('match58-1.html#15',3,'match58-top.html#15',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>getPlayingPane(),600,600));
+                timer.play();}
+            else if (choiceBox.getValue().equals(&quot;Advanced&quot;)){
+                l</B></FONT>evelValue = 1;
+                level=&quot;Advanced&quot;;
+<A NAME="16"></A>            stage.setScene(new Scene(getPlayingPane(),600,600));
+            timer.play();}
+        });
+    <FONT color="#3090c7"><A HREF="javascript:ZweiFrames('match58-1.html#16',3,'match58-top.html#16',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+    Text setMode(){
+        mode.setLayoutX(430);
+        mode.setLayoutY(550);
+        mode.setText(&quot;Mode: &quot; + level);
+        mode.setFill(Color.GREEN);
+        mode.setStyle(&quot;-fx-font: 18 arial;&quot;);
+        return mode ;
+    }
+<A NAME="17"></A>
+    Pane getPlayingPane(){</B></FONT>
+        setScore();
+        <FONT color="#800517"><A HREF="javascript:ZweiFrames('match58-1.html#17',3,'match58-top.html#17',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>setMode();
+        setCardImage();
+        setGridPane();
+        setTimer();
+        Pane pane = new Pane();
+        ImageView playingImage = new ImageView(playingBackground);
+        playingImage.setFitWidth(600);
+        playingImage.setFitHeight(600);
+        pane.getChildren().add(playingImage);
+        pane.getChildren</B></FONT>().addAll(gridPane,sound,time,mode,score);
+        return pane;
+    }
+}
+</PRE>
+
+</BODY>
+</HTML>
